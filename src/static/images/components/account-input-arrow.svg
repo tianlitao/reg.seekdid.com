@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="20px" viewBox="0 0 72 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>箭头</title>
+    <defs>
+        <linearGradient x1="50%" y1="85.6060312%" x2="50%" y2="85.7951789%" id="linearGradient-1">
+            <stop stop-color="#DBDEEB" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+        <path d="M37.4314139,3.46688649 L47.5008652,13.7858743 C51.183652,17.5599261 56.2078997,19.7268306 61.4803373,19.8150715 L72,19.9911315 L72,19.9911315 L36,23 L0,19.9911315 L10.5354357,19.8093412 C15.8042283,19.7184275 20.824247,17.5518052 24.5045233,13.7803323 L34.5685849,3.46688529 C35.340017,2.67633722 36.6062522,2.66084069 37.3968002,3.43227283 C37.4084789,3.44366908 37.4200176,3.45520783 37.4314139,3.46688649 Z" id="path-2"></path>
+        <filter x="-144.1%" y="-176.8%" width="388.5%" height="800.7%" filterUnits="objectBoundingBox" id="filter-3">
+            <feMorphology radius="2" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="44" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="14" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.0694938606 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="DAS-解析组件-气泡卡片（推荐）" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="状态表现" transform="translate(-640.000000, -726.000000)">
+            <g id="编组" transform="translate(90.000000, 90.000000)">
+                <g id="编组-3" transform="translate(0.000000, 562.000000)">
+                    <g id="解析结果-ToolToast" transform="translate(0.000000, 74.000000)">
+                        <g id="箭头" transform="translate(550.000000, 0.000000)">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                            <path stroke="url(#linearGradient-1)" stroke-width="2" d="M35.9632867,1.86391136 C36.7351393,1.85446522 37.510615,2.14106001 38.1047847,2.72595893 L38.1047847,2.72595893 L48.2165728,13.0874742 C51.7152202,16.6728234 56.4882555,18.7313826 61.4970712,18.8152116 L61.4970712,18.8152116 L91.9731607,19.3252679 L36,24.0034867 L-19.8704744,19.3338504 L10.5181831,18.80949 C15.5235361,18.723122 20.2925538,16.6648308 23.7888164,13.0819316 L23.7888164,13.0819316 L33.8528779,2.76848457 C34.431452,2.17557352 35.1955773,1.8733068 35.9632867,1.86391136 Z" fill="#FFFFFF" fill-rule="evenodd"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
