@@ -19,11 +19,6 @@ $ npm run generate
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
-## pm2 deployment
-```bash
-$ npm run reload_production
-```
-
 ## api doc
 https://github.com/DeAccountSystems/das-register
 
