@@ -56,7 +56,7 @@ export const actions: ActionTree<CommonState, CommonState> = {
         commit(keys.setTokens, res && [...otherToken, {
           ...portalWalletCkb,
           logo: '/images/components/das-balance.svg',
-          name: 'DAS Balance',
+          name: '.bit Balance',
           token_id: DASBalanceTokenId
         }, portalWalletCkb])
       }

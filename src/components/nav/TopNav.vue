@@ -2,7 +2,7 @@
   <div class="top-nav">
     <div class="top-nav__container">
       <a
-        href="https://da.systems"
+        href="https://did.id"
         target="_blank"
       >
         <img class="top-nav__logo" src="/images/explorer/das-logo.png" alt="logo">
@@ -23,11 +23,11 @@
         </nuxt-link>
         <a
           class="top-nav__item"
-          href="https://bestdas.com/"
+          :href="didtop"
           target="_self"
         >
           <span class="top-nav__item__text top-nav__item__marketplace">
-            {{ $t('MarketPlace') }}
+            {{ $t('Marketplace') }}
             <Iconfont
               class="top-nav__item__marketplace__icon"
               name="arrow-right-up"
@@ -47,6 +47,7 @@ import Vue from 'vue'
 import NavMixin from '~/components/nav/Nav.mixin.vue'
 import LangSwitcher from '~/components/LangSwitcher.vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
+import { didtop } from '~~/config'
 
 export default Vue.extend({
   name: 'TopNav',
@@ -54,7 +55,12 @@ export default Vue.extend({
     LangSwitcher,
     Iconfont
   },
-  mixins: [NavMixin]
+  mixins: [NavMixin],
+  data () {
+    return {
+      didtop
+    }
+  }
 })
 </script>
 
@@ -79,7 +85,6 @@ export default Vue.extend({
 }
 
 .top-nav__logo {
-  width: 82px;
   height: 28px;
 }
 

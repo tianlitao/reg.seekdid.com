@@ -9,6 +9,9 @@
     <div class="debug__item">
       isMobileDevices: <span class="debug__value">{{ isMobileDevices }}</span>
     </div>
+    <div class="debug__item">
+      computedEvmChainId: <span class="debug__value">{{ computedEvmChainId }}</span>
+    </div>
     <div>-----------</div>
     <div class="debug__item">
       ethereumStatic
@@ -78,7 +81,7 @@ export default Vue.extend({
   data () {
     return {
       ethereumStatic: '',
-      mmJson: '{"primaryType":"Mail","types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"},{"name":"verifyingContract","type":"address"}],"Mail":[{"name":"contents","type":"string"}]},"domain":{"chainId":1,"name":"CCTip","verifyingContract":"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC","version":"1"},"message":{"contents":"0xtest"}}',
+      mmJson: '{"types":{"EIP712Domain":[{"name":"chainId","type":"uint256"},{"name":"name","type":"string"},{"name":"verifyingContract","type":"address"},{"name":"version","type":"string"}],"Action":[{"name":"action","type":"string"},{"name":"params","type":"string"}],"Cell":[{"name":"capacity","type":"string"},{"name":"lock","type":"string"},{"name":"type","type":"string"},{"name":"data","type":"string"},{"name":"extraData","type":"string"}],"Transaction":[{"name":"DAS_MESSAGE","type":"string"},{"name":"inputsCapacity","type":"string"},{"name":"outputsCapacity","type":"string"},{"name":"fee","type":"string"},{"name":"action","type":"Action"},{"name":"inputs","type":"Cell[]"},{"name":"outputs","type":"Cell[]"},{"name":"digest","type":"bytes32"}]},"primaryType":"Transaction","domain":{"chainId":5,"name":"da.systems","verifyingContract":"0x0000000000000000000000000000000020210722","version":"1"},"message":{"DAS_MESSAGE":"TRANSFER FROM 0x54366bcd1e73baf55449377bd23123274803236e(906.74221046 CKB) TO ckt1qyqvsej8jggu4hmr45g4h8d9pfkpd0fayfksz44t9q(764.13228446 CKB), 0x54366bcd1e73baf55449377bd23123274803236e(142.609826 CKB)","inputsCapacity":"906.74221046 CKB","outputsCapacity":"906.74211046 CKB","fee":"0.0001 CKB","digest":"0x29cd28dbeb470adb17548563ceb4988953fec7b499e716c16381e5ae4b04021f","action":{"action":"transfer","params":"0x00"},"inputs":[],"outputs":[]}}',
       mmHash: '',
       signDataRes: '' as (string | Error | undefined),
       hexString: '0xtest',
@@ -110,7 +113,7 @@ export default Vue.extend({
       return window.location.origin
     },
     localStorageValue (): string {
-      return localStorage.getItem('app.da.systems') || ''
+      return localStorage.getItem(config.appNmae) || ''
     }
   },
   beforeMount () {
@@ -170,7 +173,7 @@ export default Vue.extend({
       })
     },
     onClearCache () {
-      localStorage.removeItem('app.da.systems')
+      localStorage.removeItem(config.appNmae)
       window.location.href = config.domain
     }
   }

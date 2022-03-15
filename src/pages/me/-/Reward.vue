@@ -82,7 +82,7 @@
             slot="faq"
           >
             <a
-              :href="$i18n.locale === 'zh' ? 'https://docs.da.systems/docs/v/chinese-1/faq#yao-qing-ren-qu-dao-jiang-li-de-jie-suan-shi-zhong-xin-hua-de-ma-wei-shen-me-yao-man-yi-ding-shuezhi' : 'https://docs.da.systems/docs/faq#is-the-settlement-of-inviter-channel-rewards-centralized-and-why-are-they-paid-out-only-after-a-cert'"
+              :href="$i18n.locale === 'zh' ? 'https://docs.did.id/zh/faq#%E9%82%80%E8%AF%B7%E4%BA%BA-%E6%B8%A0%E9%81%93%E5%A5%96%E5%8A%B1%E7%9A%84%E7%BB%93%E7%AE%97%E6%98%AF%E4%B8%AD%E5%BF%83%E5%8C%96%E7%9A%84%E5%90%97-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%BB%A1%E4%B8%80%E5%AE%9A%E6%95%B0%E9%A2%9D%E4%B9%8B%E5%90%8E%E6%89%8D%E4%BC%9A%E5%8F%91%E6%94%BE' : 'https://docs.did.id/faq#is-the-settlement-of-inviter-channel-rewards-centralized-and-why-are-they-paid-out-only-after-a-certain-amount-is-reached'"
               target="_blank"
             >
               <Iconfont
@@ -357,7 +357,7 @@ export default Vue.extend({
       }
     },
     onShareTwitter () {
-      const text = `\uD83E\uDD29I have got a cool DAS "${this.invitationAccount}"! @realDASystems\n\n\uD83D\uDE80Come get your .bit now!\n\nRegister & Get a ✨5% discount:\n${config.domain}explorer?inviter=${this.invitationAccount}`
+      const text = `\uD83E\uDD29I have got a cool "${this.invitationAccount}"! @dotbitHQ\n\n\uD83D\uDE80Come get your .bit now!\n\nRegister & Get a ✨5% discount:\n${config.domain}explorer?inviter=${this.invitationAccount}`
       const url = `https://twitter.com/compose/tweet?text=${encodeURIComponent(text)}`
       window.open(url)
     },

@@ -3,7 +3,7 @@
     <BottomSheet
       :showing="showing"
       :title="loggedIn ? i18n.t('Switch wallet') : i18n.t('Connect wallet')"
-      :closeButton="loggedIn"
+      closeButton
       @close="onClose"
     >
       <div v-if="!config.isProdData" class="wallets-connect__test-tip">

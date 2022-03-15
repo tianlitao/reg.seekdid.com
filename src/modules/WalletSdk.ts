@@ -122,7 +122,7 @@ export default class WalletSdk {
 
   walletsConnect () {
     // no login page
-    const noLoginPage = ['explorer-account-account', 'debug', 'me-award-ranking', 'me-invitation-link-account']
+    const noLoginPage = ['explorer', 'explorer-account-account', 'debug', 'me-award-ranking', 'me-invitation-link-account']
     if (noLoginPage.includes(this.context.route.name as string)) {
       return
     }

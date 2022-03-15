@@ -16,7 +16,7 @@
     </nuxt-link>
     <a
       class="bottom-nav__item"
-      href="https://bestdas.com/"
+      :href="didtop"
       target="_self"
     >
       <Iconfont
@@ -24,7 +24,7 @@
         color="#A0A1AB"/>
       <span
         class="bottom-nav__item__text">
-        {{ $t('MarketPlace') }}
+        {{ $t('Marketplace') }}
       </span>
     </a>
   </nav>
@@ -34,13 +34,19 @@
 import Vue from 'vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import NavMixin from '~/components/nav/Nav.mixin.vue'
+import { didtop } from '~~/config'
 
 export default Vue.extend({
   name: 'BottomNav',
   components: {
     Iconfont
   },
-  mixins: [NavMixin]
+  mixins: [NavMixin],
+  data () {
+    return {
+      didtop
+    }
+  }
 })
 </script>
 

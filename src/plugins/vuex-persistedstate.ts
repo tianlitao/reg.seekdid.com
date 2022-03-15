@@ -1,11 +1,11 @@
 import { Context } from '@nuxt/types'
 import createPersistedState from 'vuex-persistedstate'
-import { VUEX_PERSISTEDSTATE_KEY } from '~/constant'
+import config from '~~/config'
 import { COMMON_KEYS } from '~/store/common'
 
 export default ({ store }: Context) => {
   createPersistedState({
-    key: VUEX_PERSISTEDSTATE_KEY,
+    key: config.appNmae,
     paths: [
       COMMON_KEYS.namespace,
       'reverse.config',

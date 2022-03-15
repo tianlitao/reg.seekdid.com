@@ -269,7 +269,7 @@ export default Vue.extend({
       this.$emit('renewal')
     },
     onSale () {
-      window.open(`${config.bestdas}/account/${this.accountInfo.account}`)
+      window.open(`${config.didtop}/account/${this.accountInfo.account}`)
     },
     gotoCc () {
       if (this.$i18n.locale === 'zh') {
@@ -280,7 +280,7 @@ export default Vue.extend({
       }
     },
     gotoReservedDasList () {
-      window.open('https://github.com/DeAccountSystems/cell-data-generator/blob/master/data/reserved_accounts.txt')
+      window.open('https://github.com/dotbitHQ/cell-data-generator/blob/master/data/reserved_accounts.txt')
     },
     gotoRegistration () {
       this.$router.push(`/account/register/${this.accountInfo.account}`)

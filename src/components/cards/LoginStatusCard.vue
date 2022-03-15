@@ -171,7 +171,7 @@ export default Vue.extend({
       this.$walletSdk.walletsConnect()
     },
     goDasReverse () {
-      this.$router.push('/reverse')
+      this.$router.push('/alias')
     },
     onCopyAddress (address: string) {
       if (!address) {

@@ -1,4 +1,4 @@
-# app.da.systems
+# app.did.id
 
 ## build setup
 
@@ -20,7 +20,7 @@ $ npm run generate
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
 ## api doc
-https://github.com/DeAccountSystems/das-register
+https://github.com/dotbitHQ/das-register
 
 ## identicons service
-https://github.com/DeAccountSystems/identicons
+https://github.com/dotbitHQ/identicons

@@ -31,7 +31,7 @@ export const state = () => ({
     address: ''
   } as IConnectedAccount,
   loggedIn: false,
-  registeringAccounts: [] as IAccountInfo[],
+  registeringAccounts: [] as IAccountInfo[]
 })
 
 export type MeState = ReturnType<typeof state>
