@@ -61,7 +61,7 @@
             {{ $t('It is not recommended to use hardware wallets. You may not be able to use DAS normally.') }}
             <a
               class="manage-permission-bottom-sheet__tips__link"
-              :href="$i18n.locale === 'zh' ? 'https://talk.da.systems/t/bestdas-com/115#heading-30' : 'https://talk.da.systems/t/faq-bestdas-com/116#why-is-it-not-recommended-to-use-a-hardware-wallet-30'"
+              :href="$i18n.locale === 'zh' ? 'https://talk.did.id/t/bestdas-com/115#h-30' : 'https://talk.did.id/t/faq-bestdas-com/116#it-is-not-recommended-to-use-hardware-wallets-why-30'"
               target="_self"
             >
               {{ $t('Why?') }}

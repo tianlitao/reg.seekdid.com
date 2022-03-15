@@ -6,7 +6,7 @@
     </div>
     <img class="explorer__logo" src="/images/explorer/das-logo.png" alt="logo">
     <div class="explorer__full-name">
-      {{ $t('Decentralized Account Systems') }}
+      {{ $t('Your decentralized identity (DID) for Web3.0 life') }}
       <span
         v-if="!config.isProdData"
         class="explorer__full-name__beta"
@@ -27,7 +27,7 @@
       {{ $t('Account names can only contain lowercase letters, numbers and partial Emoji') }}
       <a
         class="explorer__rules-details"
-        :href="$i18n.locale === 'zh' ? 'https://docs.da.systems/docs/v/chinese-1/zhu-ce-das/charsets' : 'https://docs.da.systems/docs/register-das/charsets'"
+        :href="$i18n.locale === 'zh' ? 'https://docs.did.id/zh/register-das/charsets' : 'https://docs.did.id/register-das/charsets'"
         :target="isMobile ? '_self' : '_blank'"
       >
         {{ $t('[Rules Details]') }}
@@ -43,7 +43,8 @@
       v-else-if="notOpenForRegistrationShowing"
       class="explorer__error-tip"
     >
-      {{ $t('Try another one. This account is not open for registration yet') }}
+      {{ $t('Try another one. This account is not open for registration yet.') }}
+      {{ registrableDate ? $t('Available time: {date}.', { date: registrableDate }) : '' }}
     </div>
     <div class="explorer__search_result">
       <ul
@@ -60,36 +61,47 @@
       <div class="explorer__open-registration-rules__title">
         {{ $t('Updates for the release:') }}
       </div>
-      <div>{{ $t('10 characters and above: All released;') }}</div>
-      <div>{{ $t('4 ~ 9 characters: Randomly release 35%;') }}</div>
-      <div>
-        {{ $t('1 ~ 3 characters: Not released yet.') }}
-        <a
-          class="explorer__rules-details"
-          :href="$i18n.locale === 'zh' ? 'https://docs.da.systems/docs/v/chinese-1/zhu-ce-das/open-registration-rules' : 'https://docs.da.systems/docs/register-das/open-registration-rules'"
-          :target="isMobile ? '_self' : '_blank'"
-        >
-          {{ $t('Why?') }}
-        </a>
+      <div class="explorer__open-registration-rules__item">
+        <span class="explorer__open-registration-rules__item__dot">•</span>
+        {{ $t('10 characters and above: All released.') }}
       </div>
-      <i18n
-        path="{joinDiscord} to keep updated about the release."
-        tag="div"
-      >
-        <a
-          slot="joinDiscord"
-          class="explorer__rules-details"
-          href="https://discord.gg/dascommunity"
-          :target="isMobile ? '_self' : '_blank'"
-        >
-          {{ $t('Join Discord') }}
-        </a>
-      </i18n>
+      <div class="explorer__open-registration-rules__item">
+        <span class="explorer__open-registration-rules__item__dot">•</span>
+        <span>
+          {{ $t('4~9 characters: Randomly release 35%.') }}
+          <i18n
+            path="More will be released gradually until {percentage} from {date}."
+            tag="span"
+          >
+            <span
+              slot="percentage"
+              class="explorer__open-registration-rules__item__high-brightness"
+            >60%</span>
+            <span
+              slot="date"
+              class="explorer__open-registration-rules__item__high-brightness"
+            >
+              {{ $t('21st March') }}
+            </span>
+          </i18n>
+          <a
+            class="explorer__rules-details"
+            :href="$i18n.locale === 'zh' ? 'https://docs.did.id/zh/register-das/open-registration-rules' : 'https://docs.did.id/register-das/open-registration-rules'"
+            :target="isMobile ? '_self' : '_blank'"
+          >
+            {{ $t('Releasing plan.') }}
+          </a>
+        </span>
+      </div>
+      <div class="explorer__open-registration-rules__item">
+        <span class="explorer__open-registration-rules__item__dot">•</span>
+        <span>{{ $t('1~3 characters: Not released yet.') }}</span>
+      </div>
     </div>
     <a
       v-if="!searchWord"
       class="explorer__faq"
-      href="https://da.systems"
+      href="https://did.id"
       :target="isMobile ? '_self' : '_blank'"
     >
       {{ $t('What is DAS?') }}
@@ -98,10 +110,15 @@
 </template>
 
 <script lang="ts">
+// @ts-ignore
+import { Buffer } from 'buffer'
 import Vue from 'vue'
 import debounce from 'lodash.debounce'
 import { mapState, mapGetters } from 'vuex'
+import { blake2b } from '@nervosnetwork/ckb-sdk-utils'
 import uts46 from 'idna-uts46-hx'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import LangSwitcher from '~/components/LangSwitcher.vue'
 import ExplorerSearch from '~/pages/explorer/-/ExplorerSearch.vue'
 import { ACCOUNT_STATUS, ACCOUNT_SUFFIX, CHAR_TYPE, DEBOUNCE_WAIT_TIME } from '~/constant'
@@ -114,6 +131,8 @@ import { IConfig } from '~/services/Common'
 import PublicBetaTips from '~/components/PublicBetaTips.vue'
 import config from '~~/config'
 import errno from '~/constant/errno'
+
+dayjs.extend(utc)
 
 export default Vue.extend({
   name: 'Explorer',
@@ -131,7 +150,8 @@ export default Vue.extend({
       loading: false,
       showIncorrectAccountFormat: false,
       showIllegalStringLength: false,
-      notOpenForRegistrationShowing: false
+      notOpenForRegistrationShowing: false,
+      registrableDate: ''
     }
   },
   computed: {
@@ -150,8 +170,14 @@ export default Vue.extend({
       return this.common.config
     }
   },
-  mounted () {
-    this.$store.dispatch(COMMON_KEYS.fetchConfig)
+  async mounted () {
+    await this.$store.dispatch(COMMON_KEYS.fetchConfig)
+    const _searchWord = this.$route.query.searchWord
+    if (_searchWord) {
+      this.searchWord = (_searchWord as string)
+      this.onInput()
+      this.onSearch(this.searchWord)
+    }
   },
   methods: {
     checkSearchWord (value: string) {
@@ -179,6 +205,7 @@ export default Vue.extend({
       this.showIncorrectAccountFormat = false
       this.showIllegalStringLength = false
       this.notOpenForRegistrationShowing = false
+      this.registrableDate = ''
       try {
         let _searchWord = this.searchWord.toLowerCase()
         _searchWord = uts46.toAscii(_searchWord, { useStd3ASCII: true, transitional: false, verifyDnsLength: false })
@@ -197,6 +224,7 @@ export default Vue.extend({
       this.showIllegalStringLength = false
       this.showIncorrectAccountFormat = false
       this.notOpenForRegistrationShowing = false
+      this.registrableDate = ''
 
       if (!value) {
         return
@@ -240,6 +268,29 @@ export default Vue.extend({
           if (res.status === ACCOUNT_STATUS.notOpenRegister) {
             this.searchResult = {}
             this.notOpenForRegistrationShowing = true
+            const buf = Buffer.from(value + ACCOUNT_SUFFIX)
+            const personal = Buffer.from('2021-07-22 12:00')
+            const hasher = blake2b(32, null, null, personal)
+            hasher.update(buf)
+            const hash = hasher.digest('binary') as Uint8Array
+            const first4Bytes = Buffer.from(hash.slice(0, 4)) as Buffer
+            const luckyNum = first4Bytes.readUInt32BE(0)
+
+            if (luckyNum <= 1717986918) {
+              this.registrableDate = dayjs.utc('2022-03-21 12:00:00').local().format('YYYY-MM-DD hh:mm:ssA')
+            }
+            else if (luckyNum <= 1932735282) {
+              this.registrableDate = dayjs.utc('2022-03-28 12:00:00').local().format('YYYY-MM-DD hh:mm:ssA')
+            }
+            else if (luckyNum <= 2147483647) {
+              this.registrableDate = dayjs.utc('2022-04-04 12:00:00').local().format('YYYY-MM-DD hh:mm:ssA')
+            }
+            else if (luckyNum <= 2362232012) {
+              this.registrableDate = dayjs.utc('2022-04-11 12:00:00').local().format('YYYY-MM-DD hh:mm:ssA')
+            }
+            else if (luckyNum <= 2576980377) {
+              this.registrableDate = dayjs.utc('2022-04-18 12:00:00').local().format('YYYY-MM-DD hh:mm:ssA')
+            }
           }
           else {
             this.searchResult = {
@@ -286,7 +337,7 @@ export default Vue.extend({
 }
 
 .explorer__logo {
-  width: 129px;
+  width: 116px;
   min-height: 44px;
   margin-top: 24px;
 }
@@ -338,17 +389,38 @@ export default Vue.extend({
 
 .explorer__open-registration-rules {
   margin-top: 20px;
-  border-radius: 8px;
-  border: 1px solid #EFF2F5;
-  padding: 12px;
+  padding: 12px 12px 6px 12px;
   text-align: left;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
-  color: #636D85;
+  color: #10152D;
   line-height: 17px;
+  background: #D9F8E4;
+  border-radius: 12px;
+  border: 1px solid rgba(143, 225, 166, 0.4);
 }
 
 .explorer__open-registration-rules__title {
-  margin-bottom: 4px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #10152D;
+  line-height: 17px;
+}
+
+.explorer__open-registration-rules__item {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.explorer__open-registration-rules__item__dot {
+  width: 8px;
+  margin-right: 8px;
+  color: #636D85;
+}
+
+.explorer__open-registration-rules__item__high-brightness {
+  color: #22C493;
+  font-weight: 600;
 }
 </style>

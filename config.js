@@ -9,7 +9,7 @@ module.exports = {
   domain: `https://${hostname}/`,
   servicesApi: isProdData ? '' : '',
   identiconServe: '',
-  bestdas: isProdData ? 'https://bestdas.com' : 'https://bestdas.com',
-  dasBalance: isProdData ? 'https://balance.da.systems' : 'https://balance.da.systems',
+  didtop: isProdData ? 'https://did.top' : 'https://test.did.top',
+  dasBalance: isProdData ? 'https://balance.did.id' : 'https://testbalance.did.id',
   ckbNode: isProdData ? '' : ''
 }

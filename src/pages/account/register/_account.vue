@@ -53,7 +53,7 @@
           <span>
             {{ $t('Storage deposit') }}
             <a
-              :href="$i18n.locale === 'zh' ? 'https://docs.da.systems/docs/v/chinese-1/faq#shen-me-shi-cun-chu-ya-jin' : 'https://docs.da.systems/docs/faq#what-is-the-storage-deposit'"
+              :href="$i18n.locale === 'zh' ? 'https://docs.did.id/zh/faq#%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E6%8A%BC%E9%87%91' : 'https://docs.did.id/faq#what-is-the-storage-deposit'"
               target="_blank"
             >
               <Iconfont
@@ -122,7 +122,7 @@
       </a>
       <a
         class="account-register__register-with-ckb"
-        :href="$i18n.locale === 'zh' ? 'https://talk.da.systems/t/ckb-das-das-0-gas-ckb/284' : 'https://talk.da.systems/t/how-do-i-register-das-account-with-ckb-0-gas-no-ckb-wallet-needed/285'"
+        :href="$i18n.locale === 'zh' ? 'https://talk.did.id/t/ckb-das-das-0-gas-ckb/284' : 'https://talk.did.id/t/how-do-i-register-das-account-with-ckb-0-gas-no-ckb-wallet-needed/285'"
         target="_blank"
       >
         <span>
@@ -318,6 +318,9 @@ export default Vue.extend({
       }, {
         text: this.$t('Register')
       }]
+    },
+    loggedIn (): boolean {
+      return this.me.loggedIn
     }
   },
   watch: {
@@ -467,19 +470,34 @@ export default Vue.extend({
       }
     },
     async onRegister () {
-      if (this.isSafePalWallet && [CHAIN_ID.eth, CHAIN_ID.bsc, CHAIN_ID.polygon].includes(this.computedChainId)) {
-        this.$alert({
-          title: this.$t('Tips'),
-          message: this.$t('The wallet does not support EIP-712 signature algorithm. Please use another wallet App and try again.')
-        })
-        return
+      if (this.loggedIn) {
+        if (this.isSafePalWallet && [CHAIN_ID.eth, CHAIN_ID.bsc, CHAIN_ID.polygon].includes(this.computedChainId)) {
+          this.$alert({
+            title: this.$t('Tips'),
+            message: this.$t('The wallet does not support EIP-712 signature algorithm. Please use another wallet App and try again.')
+          })
+          return
+        }
+        await this.checkInviter()
+        if (this.inviterErrorTipShowing) {
+          return
+        }
+        if (this.inviter) {
+          this.$store.commit(ME_KEYS.setInviter, this.inviter + ACCOUNT_SUFFIX)
+        }
+        this.confirmRegisterShowing = true
+        this.$ga.event('account', 'click', 'register')
       }
-      await this.checkInviter()
-      if (this.inviterErrorTipShowing) {
-        return
+      else {
+        await this.checkInviter()
+        if (this.inviterErrorTipShowing) {
+          return
+        }
+        if (this.inviter) {
+          this.$store.commit(ME_KEYS.setInviter, this.inviter + ACCOUNT_SUFFIX)
+        }
+        this.$walletSdk.init()
       }
-      this.confirmRegisterShowing = true
-      this.$ga.event('account', 'click', 'register')
     },
     async onConfirm () {
       // todo split this function

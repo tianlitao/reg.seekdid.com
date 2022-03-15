@@ -11,27 +11,27 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'DAS - Cross-chain decentralized account',
+    title: '.bit - DID system for the entire Web3.0 ecosystem.',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover' },
       { name: 'apple-mobile-web-app-capable', content: 'yes' },
-      { hid: 'description', name: 'description', content: 'DAS is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. DAS can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
-      { hid: 'keyword', name: 'keywords', content: 'domain, domain name, blockchain domain, nervos, ckb, das, domain name registration, purchase domain name, website domain, domain name service, domain name hosting, timyang, .bit, domain investment, DNS, buy domain name' },
+      { hid: 'description', name: 'description', content: '.bit is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. .bit can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
+      { hid: 'keyword', name: 'keywords', content: 'domain, domain name, blockchain domain, nervos, ckb, .bit, domain name registration, purchase domain name, website domain, domain name service, domain name hosting, timyang, .bit, domain investment, DNS, buy domain name' },
       // The Open Graph protocol
-      { hid: 'og:description', property: 'og:description', content: 'DAS is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. DAS can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
-      { hid: 'og:title', property: 'og:title', content: 'DAS - Cross-chain decentralized account' },
-      { hid: 'og:site_name', property: 'og:site_name', content: 'DAS - Cross-chain decentralized account' },
+      { hid: 'og:description', property: 'og:description', content: '.bit is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. .bit can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
+      { hid: 'og:title', property: 'og:title', content: '.bit - DID system for the entire Web3.0 ecosystem.' },
+      { hid: 'og:site_name', property: 'og:site_name', content: '.bit - DID system for the entire Web3.0 ecosystem.' },
       { hid: 'og:type', property: 'og:type', content: 'article' },
-      { hid: 'og:url', property: 'og:url', content: 'https://da.systems/' },
+      { hid: 'og:url', property: 'og:url', content: 'https://did.id/' },
       { hid: 'og:image', property: 'og:image', content: `https://${abcConfig.hostname}/images/seo-thumbnail-image.png` },
       // Twitter
       { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
-      { hid: 'twitter:site', name: 'twitter:site', content: 'DAS - Cross-chain decentralized account' },
-      { hid: 'twitter:title', name: 'twitter:title', content: 'DAS - Cross-chain decentralized account' },
-      { hid: 'twitter:description', name: 'twitter:description', content: 'DAS is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. DAS can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
+      { hid: 'twitter:site', name: 'twitter:site', content: '.bit - DID system for the entire Web3.0 ecosystem.' },
+      { hid: 'twitter:title', name: 'twitter:title', content: '.bit - DID system for the entire Web3.0 ecosystem.' },
+      { hid: 'twitter:description', name: 'twitter:description', content: '.bit is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. .bit can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
       { hid: 'twitter:image', name: 'twitter:image', content: `https://${abcConfig.hostname}/images/seo-thumbnail-image.png` },
-      { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: 'DAS - Cross-chain decentralized account' }
+      { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: '.bit - DID system for the entire Web3.0 ecosystem.' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -111,48 +111,48 @@ export default {
         iso: 'zh-CN',
         name: '简体中文'
       },
-      {
-        code: 'ru',
-        file: 'ru.json',
-        iso: 'ru-RU',
-        name: 'русский'
-      },
-      {
-        code: 'ja',
-        file: 'ja.json',
-        iso: 'ja-JP',
-        name: '日本語'
-      },
-      {
-        code: 'de',
-        file: 'de.json',
-        iso: 'de-DE',
-        name: 'Deutsch'
-      },
-      {
-        code: 'ko',
-        file: 'ko.json',
-        iso: 'ko-KR',
-        name: '한국어'
-      },
-      {
-        code: 'fr',
-        file: 'fr.json',
-        iso: 'fr-FR',
-        name: 'français'
-      },
-      {
-        code: 'es',
-        file: 'es.json',
-        iso: 'es-ES',
-        name: 'Español'
-      },
-      {
-        code: 'pt',
-        file: 'pt.json',
-        iso: 'pt-PT',
-        name: 'português'
-      }
+      // {
+      //   code: 'ru',
+      //   file: 'ru.json',
+      //   iso: 'ru-RU',
+      //   name: 'русский'
+      // },
+      // {
+      //   code: 'ja',
+      //   file: 'ja.json',
+      //   iso: 'ja-JP',
+      //   name: '日本語'
+      // },
+      // {
+      //   code: 'de',
+      //   file: 'de.json',
+      //   iso: 'de-DE',
+      //   name: 'Deutsch'
+      // },
+      // {
+      //   code: 'ko',
+      //   file: 'ko.json',
+      //   iso: 'ko-KR',
+      //   name: '한국어'
+      // },
+      // {
+      //   code: 'fr',
+      //   file: 'fr.json',
+      //   iso: 'fr-FR',
+      //   name: 'français'
+      // },
+      // {
+      //   code: 'es',
+      //   file: 'es.json',
+      //   iso: 'es-ES',
+      //   name: 'Español'
+      // },
+      // {
+      //   code: 'pt',
+      //   file: 'pt.json',
+      //   iso: 'pt-PT',
+      //   name: 'português'
+      // }
     ],
     strategy: 'no_prefix',
     defaultLocale: 'en',

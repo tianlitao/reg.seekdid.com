@@ -88,7 +88,7 @@ export default Vue.extend({
         }
       }
       else if (account.status === ACCOUNT_STATUS.onePriceSell) {
-        window.location.href = `${config.bestdas}/account/${account.account}`
+        window.location.href = `${config.didtop}/account/${account.account}`
       }
       else {
         this.$router.push(`${ACCOUNT_STATUS_LIST[account.status].href}${account.account}`)

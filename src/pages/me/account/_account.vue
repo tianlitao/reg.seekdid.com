@@ -58,7 +58,7 @@
         <div class="account-info__registrar-info">
           <img class="account-info__registrar-info__logo" src="/icon.png">
           <div>
-            <h1 class="account-info__registrar-info__title">DAS</h1>
+            <h1 class="account-info__registrar-info__title">.bit</h1>
             <div class="account-info__registrar-info__desc">{{ $t('Supports ETH, TRX, CKB, BNB, MATIC payments') }}</div>
           </div>
         </div>

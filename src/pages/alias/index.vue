@@ -107,7 +107,7 @@
     </div>
     <a
       class="reverse__action__faq"
-      :href="$i18n.locale === 'zh' ? 'https://talk.da.systems/t/topic/229/4' : 'https://talk.da.systems/t/reverse-resolution-comes/232'"
+      :href="$i18n.locale === 'zh' ? 'https://talk.did.id/t/bit/400' : ' https://talk.did.id/t/bit-alias-comes/401'"
     >
       <span class="reverse__action__faq__text">
         <span class="reverse__action__faq__icon">📖</span>
@@ -131,7 +131,7 @@
         {{ $t("Once it's set, your Apps will display DAS account name wherever it currently displays addresses. For example, when you log in the DApp, it will show your DAS account name as if it is your username.") }}
         <a
           class="reverse__tips__link"
-          href="https://da.systems/reverse-record"
+          href="https://www.did.id/bit-as-alias"
         >
           {{ $t('Learn more') }}
         </a>
@@ -154,7 +154,7 @@
       </div>
       <a
         class="reverse__ineffective-faq__link"
-        :href="$i18n.locale === 'zh' ? 'https://talk.da.systems/t/topic/229#h-8' : 'https://talk.da.systems/t/reverse-resolution-comes/232#reasons-for-failure-8'"
+        :href="$i18n.locale === 'zh' ? 'https://talk.did.id/t/bit/400#h-8' : 'https://talk.did.id/t/bit-alias-comes/401#reasons-for-failure-8'"
       >
         {{ $t('Learn more') }}
       </a>
@@ -184,11 +184,11 @@ import { IConnectedAccount, ME_KEYS } from '~/store/me'
 import { IReverseLatestRes } from '~/services/DasReverse'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import Dialog from '~/components/Dialog.vue'
-import TxPendingDialog from '~/pages/reverse/-/TxPendingDialog.vue'
+import TxPendingDialog from '~/pages/alias/-/TxPendingDialog.vue'
 import { REVERSE_KEYS } from '~/store/reverse'
-import SetDasReverseDialog from '~/pages/reverse/-/SetDasReverseDialog.vue'
-import EditDasReverseDialog from '~/pages/reverse/-/EditDasReverseDialog.vue'
-import DeleteDasReverseDialog from '~/pages/reverse/-/DeleteDasReverseDialog.vue'
+import SetDasReverseDialog from '~/pages/alias/-/SetDasReverseDialog.vue'
+import EditDasReverseDialog from '~/pages/alias/-/EditDasReverseDialog.vue'
+import DeleteDasReverseDialog from '~/pages/alias/-/DeleteDasReverseDialog.vue'
 import LoginStatusCard from '~/components/cards/LoginStatusCard.vue'
 import { CYCLE_CALL_FUNCTION_TIME, ORDER_ACTION_TYPE, TRX_STATUS } from '~/constant'
 import errno from '~/constant/errno'

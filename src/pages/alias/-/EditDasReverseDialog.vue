@@ -6,7 +6,7 @@
     closeButton
     @close="onClose"
   >
-    <label class="edit-das-reverse-dialog__label">DAS</label>
+    <label class="edit-das-reverse-dialog__label">.bit</label>
     <SelectDas
       v-model="account"
       :placeholder="$t('Select or enter the DAS account')"
@@ -31,7 +31,7 @@
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import Dialog from '~/components/Dialog.vue'
-import SelectDas from '~/pages/reverse/-/SelectDas.vue'
+import SelectDas from '~/pages/alias/-/SelectDas.vue'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
 import { IReverseLatestRes } from '~/services/DasReverse'
 import { fromSatoshi, mmJsonHashAndChainIdHex, sleep, thousandSplit } from '~/modules/tools'

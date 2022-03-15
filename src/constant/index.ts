@@ -4,8 +4,6 @@ import { BSC, ETH, Polygon, TRON } from '~/constant/chain'
 
 export const IDENTICON_SERVE = config.identiconServe
 
-export const VUEX_PERSISTEDSTATE_KEY = config.appNmae
-
 export const DEBOUNCE_WAIT_TIME = 600
 
 export const CYCLE_CALL_FUNCTION_TIME = 5000
