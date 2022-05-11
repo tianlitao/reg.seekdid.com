@@ -80,7 +80,7 @@ export default {
   ],
 
   sentry: {
-    disabled: !abcConfig.isProd,
+    disabled: true,
     dsn: abcConfig.sentryDsn,
     config: {
       autoSessionTracking: false
