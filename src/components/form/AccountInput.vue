@@ -56,7 +56,7 @@
         alt="arrow"
       >
       <div class="account-input__parsing-records__label">
-        {{ currentChainParsingRecords.length > 1 ? $t('Multiple results exist, please select') : $t('Results') }}
+        {{ currentChainParsingRecords.length > 1 ? $tt('Multiple results exist, please select') : $tt('Results') }}
       </div>
       <ul class="account-input__parsing-records__list">
         <li
@@ -161,7 +161,7 @@ export default Vue.extend({
   },
   watch: {
     chain (newVal, oldVal) {
-      if (newVal.chainId !== oldVal.chainId) {
+      if (newVal.coinType !== oldVal.coinType) {
         this.onInput()
       }
     }
@@ -221,11 +221,11 @@ export default Vue.extend({
             this.showParsingRecords = true
           }
           else {
-            this.addressErrors = [(this.$t('No {symbol} related parsing records', { symbol: this.chain.symbol }) as string)]
+            this.addressErrors = [(this.$tt('No {symbol} related parsing records', { symbol: this.chain.symbol }) as string)]
           }
         }
         else {
-          this.addressErrors = [(this.$t('No {symbol} related parsing records', { symbol: this.chain.symbol }) as string)]
+          this.addressErrors = [(this.$tt('No {symbol} related parsing records', { symbol: this.chain.symbol }) as string)]
         }
       }
       catch (err) {

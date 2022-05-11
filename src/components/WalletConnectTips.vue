@@ -1,9 +1,9 @@
 <template>
   <div
-    v-if="connectedAccount.walletName === WALLETS.walletConnect"
+    v-if="connectedAccount.protocol === WalletProtocol.walletConnect"
     class="wallet-connect-tips"
   >
-    {{ $t('Working with WalletConnect') }}
+    {{ $tt('Working with WalletConnect') }}
   </div>
 </template>
 
@@ -11,13 +11,13 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
-import { WALLETS } from '~/constant'
+import { WalletProtocol } from '~/constant'
 
 export default Vue.extend({
   name: 'DasTips',
   data () {
     return {
-      WALLETS
+      WalletProtocol
     }
   },
   computed: {

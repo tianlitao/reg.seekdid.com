@@ -2,21 +2,23 @@
   <div class="explorer">
     <PublicBetaTips v-if="!config.isProdData" />
     <div class="explorer__lang-switcher">
-      <LangSwitcher v-if="isMobile" />
+      <LangSwitcher
+        v-if="isMobile"
+      />
     </div>
     <img class="explorer__logo" src="/images/explorer/das-logo.png" alt="logo">
     <div class="explorer__full-name">
-      {{ $t('Your decentralized identity (DID) for Web3.0 life') }}
+      {{ $tt('Your decentralized identity (DID) for Web3.0 life') }}
       <span
         v-if="!config.isProdData"
         class="explorer__full-name__beta"
       >
-        {{ $t('(Public Beta)') }}
+        {{ $tt('(Public Beta)') }}
       </span>
     </div>
     <ExplorerSearch
       v-model.trim="searchWord"
-      :placeholder="$t('Find your perfect DAS account')"
+      :placeholder="$tt('Find your perfect DAS account')"
       @input="onInput"
       @search="onSearch"
     />
@@ -24,27 +26,26 @@
       v-if="showIncorrectAccountFormat"
       class="explorer__error-tip"
     >
-      {{ $t('Account names can only contain lowercase letters, numbers and partial Emoji') }}
+      {{ $tt('Account names can only contain lowercase letters, numbers and partial Emoji') }}
       <a
         class="explorer__rules-details"
-        :href="$i18n.locale === 'zh' ? 'https://docs.did.id/zh/register-das/charsets' : 'https://docs.did.id/register-das/charsets'"
+        :href="$i18n.locale === 'zh-CN' ? 'https://docs.did.id/zh/register-das/charsets' : 'https://docs.did.id/register-das/charsets'"
         :target="isMobile ? '_self' : '_blank'"
       >
-        {{ $t('[Rules Details]') }}
+        {{ $tt('[Rules Details]') }}
       </a>
     </div>
     <div
       v-else-if="showIllegalStringLength"
       class="explorer__error-tip"
     >
-      {{ $t('Account name length must be {min} to {max} characters', { min: commonConfig.min_account_len, max: commonConfig.max_account_len }) }}
+      {{ $tt('Account name length must be {min} to {max} characters', { min: commonConfig.min_account_len, max: commonConfig.max_account_len }) }}
     </div>
     <div
       v-else-if="notOpenForRegistrationShowing"
       class="explorer__error-tip"
     >
-      {{ $t('Try another one. This account is not open for registration yet.') }}
-      {{ registrableDate ? $t('Available time: {date}.', { date: registrableDate }) : '' }}
+      {{ registrableDate ? $tt('To be released at on-chain time: {date}.', { date: registrableDate }) : $tt('Try another one. This account is not open for registration yet.') }}
     </div>
     <div class="explorer__search_result">
       <ul
@@ -57,45 +58,49 @@
         />
       </ul>
     </div>
+    <div class="explorer__current-on-chain-time">
+      {{ $tt('Current on-chain time: {date} (UTC+0)', { date: dateOnChain }) }}
+    </div>
     <div class="explorer__open-registration-rules">
       <div class="explorer__open-registration-rules__title">
-        {{ $t('Updates for the release:') }}
+        {{ $tt('Updates for the release:') }}
       </div>
       <div class="explorer__open-registration-rules__item">
         <span class="explorer__open-registration-rules__item__dot">•</span>
-        {{ $t('10 characters and above: All released.') }}
+        {{ $tt('10 characters and above: All released.') }}
       </div>
       <div class="explorer__open-registration-rules__item">
         <span class="explorer__open-registration-rules__item__dot">•</span>
         <span>
-          {{ $t('4~9 characters: Randomly release 35%.') }}
-          <i18n
-            path="More will be released gradually until {percentage} from {date}."
-            tag="span"
-          >
-            <span
-              slot="percentage"
-              class="explorer__open-registration-rules__item__high-brightness"
-            >60%</span>
-            <span
-              slot="date"
-              class="explorer__open-registration-rules__item__high-brightness"
-            >
-              {{ $t('21st March') }}
-            </span>
-          </i18n>
+          {{ $tt('4~9 characters: Randomly release 60%.') }}
+<!--          <i18n-->
+<!--            tag="span"-->
+<!--            path="开放注册通知"-->
+<!--            :i18nkey="$tt('开放注册通知')"-->
+<!--          >-->
+<!--            <span-->
+<!--              slot="percentage"-->
+<!--              class="explorer__open-registration-rules__item__high-brightness"-->
+<!--            >60%</span>-->
+<!--            <span-->
+<!--              slot="date"-->
+<!--              class="explorer__open-registration-rules__item__high-brightness"-->
+<!--            >-->
+<!--              {{ $tt('12:00 PM (UTC+0) on April 18th') }}-->
+<!--            </span>-->
+<!--          </i18n>-->
           <a
             class="explorer__rules-details"
-            :href="$i18n.locale === 'zh' ? 'https://docs.did.id/zh/register-das/open-registration-rules' : 'https://docs.did.id/register-das/open-registration-rules'"
+            :href="$i18n.locale === 'zh-CN' ? 'https://docs.did.id/zh/register-das/open-registration-rules' : 'https://docs.did.id/register-das/open-registration-rules'"
             :target="isMobile ? '_self' : '_blank'"
           >
-            {{ $t('Releasing plan.') }}
+            {{ $tt('Releasing plan.') }}
           </a>
         </span>
       </div>
       <div class="explorer__open-registration-rules__item">
         <span class="explorer__open-registration-rules__item__dot">•</span>
-        <span>{{ $t('1~3 characters: Not released yet.') }}</span>
+        <span>{{ $tt('1~3 characters: Not released yet.') }}</span>
       </div>
     </div>
     <a
@@ -104,7 +109,7 @@
       href="https://did.id"
       :target="isMobile ? '_self' : '_blank'"
     >
-      {{ $t('What is DAS?') }}
+      {{ $tt('What is DAS?') }}
     </a>
   </div>
 </template>
@@ -125,7 +130,7 @@ import { ACCOUNT_STATUS, ACCOUNT_SUFFIX, CHAR_TYPE, DEBOUNCE_WAIT_TIME } from '~
 import { ISearchAccount } from '~/services/Explorer'
 import AccountStatus from '~/pages/explorer/-/AccountStatus.vue'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
-import { isMobile, splitAccount } from '~/modules/tools'
+import { isMobile, splitAccount, toDottedStyle } from '~/modules/tools'
 import { COMMON_KEYS } from '~/store/common'
 import { IConfig } from '~/services/Common'
 import PublicBetaTips from '~/components/PublicBetaTips.vue'
@@ -151,7 +156,8 @@ export default Vue.extend({
       showIncorrectAccountFormat: false,
       showIllegalStringLength: false,
       notOpenForRegistrationShowing: false,
-      registrableDate: ''
+      registrableDate: '',
+      fetchConfigTimer: 0
     }
   },
   computed: {
@@ -161,8 +167,17 @@ export default Vue.extend({
       common: COMMON_KEYS.namespace
     }),
     ...mapGetters({
-      computedChainId: ME_KEYS.computedChainId
+      computedChainType: ME_KEYS.computedChainType
     }),
+    dateOnChain (): string {
+      const timestamp = this.common.config.timestamp_on_chain
+      if (timestamp) {
+        return dayjs(timestamp * 1000).utc().format('YYYY-MM-DD hh:mm:ssA')
+      }
+      else {
+        return dayjs().utc().format('YYYY-MM-DD hh:mm:ssA')
+      }
+    },
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
     },
@@ -172,6 +187,9 @@ export default Vue.extend({
   },
   async mounted () {
     await this.$store.dispatch(COMMON_KEYS.fetchConfig)
+    this.fetchConfigTimer = window.setInterval(() => {
+      this.$store.dispatch(COMMON_KEYS.fetchConfig)
+    }, 5000)
     const _searchWord = this.$route.query.searchWord
     if (_searchWord) {
       this.searchWord = (_searchWord as string)
@@ -179,8 +197,11 @@ export default Vue.extend({
       this.onSearch(this.searchWord)
     }
   },
+  beforeDestroy () {
+    clearInterval(this.fetchConfigTimer)
+  },
   methods: {
-    checkSearchWord (value: string) {
+    checkSearchWord (value: string, isSubAccount?: boolean) {
       try {
         value = uts46.toAscii(value, { useStd3ASCII: true, transitional: false, verifyDnsLength: false })
         value = uts46.toUnicode(value, { useStd3ASCII: true })
@@ -195,7 +216,7 @@ export default Vue.extend({
       })
       const accountLength = splitArr.length
 
-      if (accountLength < this.commonConfig.min_account_len || accountLength > this.commonConfig.max_account_len) {
+      if (!isSubAccount && (accountLength < this.commonConfig.min_account_len || accountLength > this.commonConfig.max_account_len)) {
         this.showIllegalStringLength = true
       }
       this.showIncorrectAccountFormat = !!nonComplianceChar
@@ -217,7 +238,11 @@ export default Vue.extend({
     },
     onSearch: debounce(async function (this: any, value: string) {
       value = value.replace(/\s+/g, '')
+      value = value.toLowerCase()
       this.searchWord = value
+      value = value.replace(/\.bit$/, '')
+      value = value + ACCOUNT_SUFFIX
+      value = toDottedStyle(value)
       value = value.replace(/\.bit$/, '')
 
       this.searchResult = {}
@@ -230,9 +255,20 @@ export default Vue.extend({
         return
       }
 
-      this.$ga.event('explorer', 'search', 'search account')
+      this.$gtag('event', 'click', {
+        event_category: 'explorer',
+        event_label: 'search account',
+        value: 1
+      })
 
-      this.checkSearchWord(value)
+      const accountList = value.split('.')
+
+      if (accountList[0]) {
+        this.checkSearchWord(accountList[0], accountList.length === 2)
+      }
+      if (accountList[1]) {
+        this.checkSearchWord(accountList[1])
+      }
 
       if (this.showIncorrectAccountFormat || this.showIllegalStringLength) {
         return
@@ -240,26 +276,26 @@ export default Vue.extend({
 
       this.loading = true
       this.searchResult = {
-        account: this.searchWord + ACCOUNT_SUFFIX
+        account: value + ACCOUNT_SUFFIX
       }
 
       try {
         const res = await this.$services.explorer.searchAccount({
           account: value,
-          chain_type: this.computedChainId,
+          chain_type: this.computedChainType,
           address: this.connectedAccount.address
         })
 
         if (!res.is_self && [ACCOUNT_STATUS.registeringPaymentConfirm].includes(res.status)) {
           this.searchResult = {
-            account: this.searchWord,
+            account: value + ACCOUNT_SUFFIX,
             ...res,
             status: ACCOUNT_STATUS.registerable
           }
         }
         else if (!res.is_self && [ACCOUNT_STATUS.registeringLockedAccount, ACCOUNT_STATUS.registering, ACCOUNT_STATUS.registeringIncludeProposal, ACCOUNT_STATUS.registeringConfirmProposal].includes(res.status)) {
           this.searchResult = {
-            account: this.searchWord,
+            account: value + ACCOUNT_SUFFIX,
             ...res,
             status: ACCOUNT_STATUS.othersRegistering
           }
@@ -277,24 +313,24 @@ export default Vue.extend({
             const luckyNum = first4Bytes.readUInt32BE(0)
 
             if (luckyNum <= 1717986918) {
-              this.registrableDate = dayjs.utc('2022-03-21 12:00:00').local().format('YYYY-MM-DD hh:mm:ssA')
+              this.registrableDate = '2022–03–21 12:00PM (UTC+0)'
             }
             else if (luckyNum <= 1932735282) {
-              this.registrableDate = dayjs.utc('2022-03-28 12:00:00').local().format('YYYY-MM-DD hh:mm:ssA')
+              this.registrableDate = '2022–03–28 12:00PM (UTC+0)'
             }
             else if (luckyNum <= 2147483647) {
-              this.registrableDate = dayjs.utc('2022-04-04 12:00:00').local().format('YYYY-MM-DD hh:mm:ssA')
+              this.registrableDate = '2022–04–04 12:00PM (UTC+0)'
             }
             else if (luckyNum <= 2362232012) {
-              this.registrableDate = dayjs.utc('2022-04-11 12:00:00').local().format('YYYY-MM-DD hh:mm:ssA')
+              this.registrableDate = '2022–04–11 12:00PM (UTC+0)'
             }
             else if (luckyNum <= 2576980377) {
-              this.registrableDate = dayjs.utc('2022-04-18 12:00:00').local().format('YYYY-MM-DD hh:mm:ssA')
+              this.registrableDate = '2022–04–18 12:00PM (UTC+0)'
             }
           }
           else {
             this.searchResult = {
-              account: this.searchWord,
+              account: value + ACCOUNT_SUFFIX,
               ...res
             }
           }
@@ -308,7 +344,7 @@ export default Vue.extend({
         }
         else {
           this.$alert({
-            title: this.$t('Error'),
+            title: this.$tt('Error'),
             message: `${err.code}: ${err.message}`
           })
         }
@@ -332,6 +368,8 @@ export default Vue.extend({
 }
 
 .explorer__lang-switcher {
+  display: flex;
+  justify-content: flex-end;
   min-height: 32px;
   text-align: right;
 }
@@ -387,8 +425,21 @@ export default Vue.extend({
   }
 }
 
-.explorer__open-registration-rules {
+.explorer__current-on-chain-time {
   margin-top: 20px;
+  margin-bottom: 8px;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  color: #10152D;
+  line-height: 17px;
+  background: #D9F8E4;
+  border-radius: 12px;
+  border: 1px solid rgba(143, 225, 166, 0.4);
+}
+
+.explorer__open-registration-rules {
   padding: 12px 12px 6px 12px;
   text-align: left;
   font-size: 14px;

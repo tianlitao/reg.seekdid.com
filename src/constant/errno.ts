@@ -28,6 +28,7 @@ export default {
   rpcApiErrTransferAccountSameAddress: 30023,
   rpcApiErrWithdrawFromDasLockInsufficientBalance: 30025,
   rpcApiErrWithdrawFromDasLockUnsupportedLongAddress: 30030,
+  rpcApiErrSignatureError: 30034,
   apiErrorCodeInsufficientBalance: 11007,
   apiErrorCodeResolveFailed: 11011,
   apiErrorCodeNotEnoughChange: 11014,

@@ -91,7 +91,7 @@ export default Vue.extend({
   align-self: flex-end;
   border-radius: 24px 24px 0 0;
   background: $white;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 .bottom-sheet__content {

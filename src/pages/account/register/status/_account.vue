@@ -7,11 +7,11 @@
           class="register-status__tip"
           icon="⏳"
           iconSize="72"
-          :tip="$t('Payment Confirmation')"
+          :tip="$tt('Payment Confirmation')"
           tipFontSize="24"
         />
         <div class="register-status__explain">
-          {{ $t('The payment status of the order registered with {accountName} is not detected, please confirm whether you have paid?', { accountName: accountName }) }}
+          {{ $tt('The payment status of the order registered with {accountName} is not detected, please confirm whether you have paid?', { accountName: accountName }) }}
         </div>
         <Button
           class="register-status__button"
@@ -19,7 +19,7 @@
           success
           @click="onPaid"
         >
-          {{ $t('I have already paid') }}
+          {{ $tt('I have already paid') }}
         </Button>
         <Button
           class="register-status__button"
@@ -27,7 +27,7 @@
           normal
           @click="onRegisterAgain"
         >
-          {{ $t('Not paid, continue to pay') }}
+          {{ $tt('Not paid, continue to pay') }}
         </Button>
       </template>
       <template v-else-if="tipStatus === TIPS.registering">
@@ -37,29 +37,35 @@
           alt="register-status-registering"
         >
         <h2 class="register-status__registering-title">
-          {{ $t('I am registering {accountName}', { accountName: accountName }) }}
+          {{ $tt('You are registering {accountName}', { accountName: accountName }) }}
         </h2>
         <i18n
-          class="register-status__explain register-status__margin-bottom-24"
-          path="It takes about five minutes, so please be patient. You can also go to the「{mePage}」page to see the accounts being registered."
           tag="div"
+          class="register-status__explain register-status__margin-bottom-24"
+          path="注册过程说明"
+          :i18nkey="$tt('注册过程说明')"
         >
           <span
             slot="mePage"
             class="register-status__go-me-page"
             @click="goMe"
           >
-            {{ $t('My') }}
+            {{ $tt('My') }}
           </span>
         </i18n>
         <ConfirmList :accountInfo="accountInfo" />
+        <a
+          class="register-status__registration-process-docs"
+          :href="$i18n.locale === LANGUAGE.zhCN ? 'https://docs.did.id/zh/faq#%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%B2%E6%8A%A2%E6%B3%A8-%E9%98%B2%E6%8A%A2%E6%B3%A8%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88' : 'https://docs.did.id/faq#what-is-anti-squatting-what-is-the-principle-of-anti-squatting'"
+          target="_blank"
+        >{{ $tt('Learn more about the registration process.') }}</a>
         <Button
           class="register-status__button register-status__margin-bottom-24"
           block
           normal
           @click="onRegisterAnother"
         >
-          {{ $t('Register another') }}
+          {{ $tt('Register another') }}
         </Button>
         <DasTips />
       </template>
@@ -70,10 +76,10 @@
           alt="register-status-registered"
         >
         <h2 class="register-status__registered-title">
-          {{ $t(`Congratulations, you have {accountName}`, { accountName: accountName }) }}
+          {{ $tt(`Congratulations, you have {accountName}`, { accountName: accountName }) }}
         </h2>
         <div class="register-status__explain">
-          {{ $t('You can go to the administration page to add a resolution record, renew, etc.') }}
+          {{ $tt('You can go to the administration page to add a resolution record, renew, etc.') }}
         </div>
         <div class="register-status__registered-actions">
           <Button
@@ -87,28 +93,33 @@
               alt="reward"
               :size="25"
             />
-            {{ $t('Reward') }}
+            {{ $tt('Reward') }}
           </Button>
           <Button
             class="register-status__registered-button__right"
             success
             @click="goManage"
           >
-            {{ $t('View Account') }}
+            {{ $tt('View Account') }}
           </Button>
         </div>
         <ConfirmList :accountInfo="accountInfo" />
+        <a
+          class="register-status__registration-process-docs"
+          :href="$i18n.locale === LANGUAGE.zhCN ? 'https://docs.did.id/zh/faq#%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%B2%E6%8A%A2%E6%B3%A8-%E9%98%B2%E6%8A%A2%E6%B3%A8%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88' : 'https://docs.did.id/faq#what-is-anti-squatting-what-is-the-principle-of-anti-squatting'"
+          target="_blank"
+        >{{ $tt('Learn more about the registration process.') }}</a>
       </template>
       <template v-else-if="tipStatus === TIPS.registerFailed">
         <StatusTip
           class="register-status__tip"
           icon="😢"
           iconSize="72"
-          :tip="$t('Oops! Registration failed')"
+          :tip="$tt('Oops! Registration failed')"
           tipFontSize="24"
         />
         <div class="register-status__explain">
-          {{ $t('Registration of {accountName} failed! If you have already paid the relevant fees, you will be refunded to your payment address within 24 hours (except for transaction fees).', { accountName: accountName }) }}
+          {{ $tt('Registration of {accountName} failed! If you have already paid the relevant fees, you will be refunded to your payment address within 1 hour (except for transaction fees).', { accountName: accountName }) }}
         </div>
         <Button
           class="register-status__button"
@@ -116,7 +127,7 @@
           normal
           @click="goHome"
         >
-          {{ $t('Back to home page') }}
+          {{ $tt('Back to home page') }}
         </Button>
       </template>
     </div>
@@ -139,6 +150,8 @@ import { COMMON_KEYS } from '~/store/common'
 import DasTips from '~/components/DasTips.vue'
 import Breadcrumb from '~/components/Breadcrumb.vue'
 import IconImage from '~/components/icon/IconImage.vue'
+import config from '~~/config'
+import { LANGUAGE } from '~/constant/language'
 
 const TIPS = {
   registeringPaymentConfirm: 'registeringPaymentConfirm',
@@ -160,6 +173,7 @@ export default Vue.extend({
   layout: 'noBottomNav',
   data () {
     return {
+      LANGUAGE,
       TIPS,
       ACCOUNT_STATUS,
       accountName: this.$route.params.account,
@@ -172,7 +186,7 @@ export default Vue.extend({
   },
   head (): { [key: string]: string } {
     return {
-      title: (this.$t('Register') as string)
+      title: (this.$tt('Register') as string)
     }
   },
   computed: {
@@ -181,7 +195,7 @@ export default Vue.extend({
       me: ME_KEYS.namespace
     }),
     ...mapGetters({
-      computedChainId: ME_KEYS.computedChainId
+      computedChainType: ME_KEYS.computedChainType
     }),
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
@@ -190,30 +204,29 @@ export default Vue.extend({
       const from = this.$route.query.from
       if (from && from === 'registering-accounts') {
         return [{
-          text: this.$t('My'),
+          text: this.$tt('My'),
           href: '/me'
         }, {
-          text: this.$t('Registering accounts'),
+          text: this.$tt('Registering accounts'),
           href: '/me/registering-accounts'
         }, {
-          text: this.$t('Registering')
+          text: this.$tt('Registering')
         }]
       }
       return [{
-        text: this.$t('Explorer'),
+        text: this.$tt('Explorer'),
         href: '/explorer'
       }, {
-        text: this.$t('Register'),
+        text: this.$tt('Register'),
         href: `/account/register/${this.accountName}`
       }, {
-        text: this.$t('Registering')
+        text: this.$tt('Registering')
       }]
     }
   },
   async mounted () {
     await this.$store.dispatch(COMMON_KEYS.fetchTokens)
     this.$store.dispatch(COMMON_KEYS.fetchConfig)
-    this.checkAccountStatus()
     this.checkAccountStatusLoop()
   },
   beforeDestroy () {
@@ -234,7 +247,7 @@ export default Vue.extend({
       try {
         const res = await this.$services.explorer.searchAccount({
           account: this.accountName,
-          chain_type: this.computedChainId,
+          chain_type: this.computedChainType,
           address: this.connectedAccount.address
         })
 
@@ -270,16 +283,16 @@ export default Vue.extend({
         }
         else if ([ACCOUNT_STATUS.registeringLockedAccount, ACCOUNT_STATUS.registering, ACCOUNT_STATUS.registeringIncludeProposal, ACCOUNT_STATUS.registeringConfirmProposal].includes(res.status)) {
           this.$alert({
-            title: this.$t('Error'),
-            message: this.$t('Someone else is registering {accountName}, it is currently unavailable, please try again later', { accountName: this.accountName })
+            title: this.$tt('Error'),
+            message: this.$tt('Someone else is registering {accountName}, it is currently unavailable, please try again later', { accountName: this.accountName })
           })
           this.tipStatus = TIPS.registerFailed
           this.clearCheckAccountStatus()
         }
         else if (res.status === ACCOUNT_STATUS.registered) {
           this.$alert({
-            title: this.$t('Error'),
-            message: this.$t('{accountName} has been registered by someone else and can no longer be registered', { accountName: this.accountName })
+            title: this.$tt('Error'),
+            message: this.$tt('{accountName} has been registered by someone else and can no longer be registered', { accountName: this.accountName })
           })
           this.tipStatus = TIPS.registerFailed
           this.clearCheckAccountStatus()
@@ -296,7 +309,8 @@ export default Vue.extend({
       this.$router.push('/explorer')
     },
     goManage () {
-      this.$router.push(`/me/account/${this.accountName}`)
+      // this.$router.push(`/me/account/${this.accountName}`)
+      window.location.href = `${config.homepage}/${this.accountName}`
     },
     goMe () {
       this.$router.push('/me')
@@ -405,5 +419,13 @@ export default Vue.extend({
 
 .register-status__breadcrumb {
   padding: 16px 0;
+}
+
+.register-status__registration-process-docs {
+  padding: 0 16px;
+  margin-bottom: 24px;
+  display: block;
+  color: $link-font-color;
+  text-align: left;
 }
 </style>

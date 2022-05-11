@@ -2,15 +2,16 @@
   <div class="invitation-link">
     <Breadcrumb class="invitation-link__breadcrumb" :items="breadcrumbItems" />
     <i18n
-      class="invitation-link__title"
-      path="Invite others to register and {rewardFactor} reward"
       tag="h1"
+      class="invitation-link__title"
+      path="奖励提成说明"
+      :i18nkey="$tt('奖励提成说明')"
     >
       <span class="invitation-link__reward-factor" slot="rewardFactor">
-        {{ $t('earn {rewardFactor}%', { rewardFactor: rewardFactor }) }}
+        {{ $tt('earn {rewardFactor}%', { rewardFactor: rewardFactor }) }}
       </span>
     </i18n>
-    <div class="invitation-link__tip">{{ $t('Open this page in your browser to download the poster') }}</div>
+    <div class="invitation-link__tip">{{ $tt('Open this page in your browser to download the poster') }}</div>
     <div class="invite-link-img__container">
       <img
         v-if="inviteLinkImgBase64"
@@ -68,20 +69,20 @@ export default Vue.extend({
       const from = this.$route.query.from
       if (from && from === 'registering') {
         return [{
-          text: this.$t('Explorer'),
+          text: this.$tt('Explorer'),
           href: '/explorer'
         }, {
-          text: this.$t('Register'),
+          text: this.$tt('Register'),
           href: `/account/register/status/${this.invitationAccount}`
         }, {
-          text: this.$t('Poster')
+          text: this.$tt('Poster')
         }]
       }
       return [{
-        text: this.$t('My'),
+        text: this.$tt('My'),
         href: `/me?tab=reward&invitationAccount=${this.invitationAccount}`
       }, {
-        text: this.$t('Poster')
+        text: this.$tt('Poster')
       }]
     }
   },

@@ -1,120 +1,88 @@
 <template>
   <span class="lang-switcher">
-    <span class="lang-switcher__trigger" @click="showOptions">
-      {{ $i18n.localeProperties.name }}
+    <span
+      v-for="option in LanguageOptions"
+      v-show="computedLanguage.value !== option.value"
+      :key="option.value"
+      class="lang-switcher__item"
+      @click="switchLanguage(option)"
+    >
       <Iconfont
-        class="lang-switcher__trigger__icon"
-        name="toggle"
-        size="16"
+        class="lang-switcher__icon"
+        name="language"
+        size="19"
         color="#11142D"
       />
+      {{ option.text }}
     </span>
-    <BottomSheet
-      v-model="showing"
-      :title="$t('Switch Language')"
-    >
-      <ul class="lang-switcher__list">
-        <li
-          v-for="locale in availableLocales"
-          :key="locale.code"
-          class="lang-switcher__list__item"
-          @click="switchLocalePath(locale.code)"
-        >
-          <span>{{ locale.name }}</span>
-          <span v-if="$i18n.locale === locale.code">
-            <Iconfont name="check" color="#22C493" />
-          </span>
-        </li>
-      </ul>
-    </BottomSheet>
   </span>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
+import { ILanguageOption, LanguageOptions } from '~/constant/language'
+import { COMMON_KEYS } from '~/store/common'
 import Iconfont from '~/components/icon/Iconfont.vue'
-import BottomSheet from '~/components/BottomSheet.vue'
 
 export default Vue.extend({
   name: 'LangSwitcher',
-  components: {
-    Iconfont,
-    BottomSheet
+  components: { Iconfont },
+  props: {
+    button: {
+      type: Boolean,
+      default: false
+    },
+    block: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
-      showing: false
+      LanguageOptions
     }
   },
   computed: {
-    availableLocales () {
-      return this.$i18n.locales
-    }
+    ...mapGetters({
+      computedLanguage: COMMON_KEYS.computedLanguage
+    })
   },
   methods: {
-    switchLocalePath (code: string) {
-      this.showing = false
-      this.$i18n.setLocale(code)
-    },
-    showOptions () {
-      this.showing = true
+    switchLanguage (option: ILanguageOption) {
+      this.$store.commit(COMMON_KEYS.setLanguage, option)
+      this.$i18n.locale = option.value
+      window.localStorage.setItem('lang', option.value)
+      window.location.reload()
     }
   }
 })
 </script>
 
-<style lang="scss" scoped>
-@import "src/assets/variables";
+<style lang="scss">
+@import 'src/assets/variables';
 
 .lang-switcher {
-  display: inline-flex;
-  height: 32px;
+  display: flex;
+  color: $primary-font-color;
+  line-height: 19px;
+  font-weight: 600;
   cursor: pointer;
 }
 
-.lang-switcher__trigger {
+.lang-switcher__item {
+  padding: 10px 11px;
   display: inline-flex;
-  padding: 8px 8px 8px 12px;
-  background: $normal-color;
+  align-items: center;
+  background: #f7f7f7;
   border-radius: 8px;
-  color: $assist-font-color;
-  font-size: 14px;
 
   &:hover {
-    background: #073A8D;
     background: rgba(7, 58, 141, 0.08);
   }
 }
 
-.lang-switcher__trigger__icon {
-  margin-left: 4px;
-}
-
-.lang-switcher__list {
-  height: 380px;
-  overflow-y: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-    width: 0 !important;
-  }
-}
-
-.lang-switcher__list__item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 88px;
-  padding: 0 24px 0 16px;
-  margin-bottom: 16px;
-  border: $container-border;
-  border-radius: 16px;
-  font-size: 18px;
-  color: $primary-font-color;
-
-  &:hover {
-    background: #F6F7F9;
-  }
+.lang-switcher__icon {
+  margin-right: 4px;
 }
 </style>

@@ -4,7 +4,7 @@
     class="das-tips"
   >
     <div class="das-tips__title">
-      💡{{ $t('Do you know') }}
+      💡{{ $tt('Do you know') }}
     </div>
     <div>{{ showTip }}</div>
   </div>
@@ -34,11 +34,11 @@ export default Vue.extend({
     },
     tips (): any[] {
       return [
-        this.$t('You can sign up for a .bit account in multiple languages around the world and even Emoji.'),
-        this.$t("Invite others to sign up and you'll get a {rewardFactor}% bonus on the registration fee.", { rewardFactor: this.rewardFactor }),
-        this.$t('When you own alice.bit, you will automatically own alice.bit.cc as your decentralized profile page.'),
-        this.$t('All modules of DAS are open source and are maintained by developers worldwide.'),
-        this.$t('Each DAS account avatar is unique.')
+        this.$tt('You can sign up for a .bit account in multiple languages around the world and even Emoji.'),
+        this.$tt("Invite others to sign up and you'll get a {rewardFactor}% bonus on the registration fee.", { rewardFactor: this.rewardFactor }),
+        this.$tt('When you own alice.bit, you will automatically own alice.bit.cc as your decentralized profile page.'),
+        this.$tt('All modules of DAS are open source and are maintained by developers worldwide.'),
+        this.$tt('Each DAS account avatar is unique.')
       ]
     }
   },

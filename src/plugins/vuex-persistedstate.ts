@@ -12,8 +12,7 @@ export default ({ store }: Context) => {
       'reverse.dasReverse',
       'me.connectedAccount',
       'me.inviter',
-      'me.channel',
-      'me.loggedIn'
+      'me.channel'
     ]
   })(store)
 }

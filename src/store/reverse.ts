@@ -40,7 +40,7 @@ export const actions: ActionTree<CommonState, CommonState> = {
     try {
       const res = await this.$services.dasReverse.accountList({
         // @ts-ignore
-        chainType: rootGetters[ME_KEYS.computedChainId],
+        chainType: rootGetters[ME_KEYS.computedChainType],
         // @ts-ignore
         address: rootState.me.connectedAccount.address
       })
@@ -61,7 +61,7 @@ export const actions: ActionTree<CommonState, CommonState> = {
     }
     try {
       const res = await this.$services.dasReverse.reverseLatest({
-        chainType: rootGetters[ME_KEYS.computedChainId],
+        chainType: rootGetters[ME_KEYS.computedChainType],
         address: connectedAccount.address
       })
       if (res) {

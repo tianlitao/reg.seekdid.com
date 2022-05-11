@@ -2,14 +2,14 @@
   <Dialog
     class="edit-das-reverse-dialog"
     :showing="showing"
-    :title="$t('Edit reverse record')"
+    :title="$tt('Edit reverse record')"
     closeButton
     @close="onClose"
   >
     <label class="edit-das-reverse-dialog__label">.bit</label>
     <SelectDas
       v-model="account"
-      :placeholder="$t('Select or enter the DAS account')"
+      :placeholder="$tt('Select or enter the DAS account')"
       :errorMessages="selectDasErrors"
     />
     <template v-slot:action>
@@ -21,7 +21,7 @@
         :loading="confirmLoading"
         @click="onConfirm"
       >
-        {{ $t('Save') }}
+        {{ $tt('Save') }}
       </Button>
     </template>
   </Dialog>
@@ -73,8 +73,8 @@ export default Vue.extend({
       common: COMMON_KEYS.namespace
     }),
     ...mapGetters({
-      computedChainId: ME_KEYS.computedChainId,
-      computedEvmChainId: ME_KEYS.computedEvmChainId
+      computedChainType: ME_KEYS.computedChainType,
+      computedChainId: ME_KEYS.computedChainId
     }),
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
@@ -105,14 +105,14 @@ export default Vue.extend({
 
         if (accountInfo) {
           if ([ACCOUNT_STATUS.notOpenRegister, ACCOUNT_STATUS.unavailableAccount, ACCOUNT_STATUS.reservedAccount].includes(accountInfo.status)) {
-            this.selectDasErrors = [(this.$t('The account is not registered and does not support the reverse record') as string)]
+            this.selectDasErrors = [(this.$tt('The account is not registered and does not support the reverse record') as string)]
             return
           }
         }
 
         const res = await this.$services.dasReverse.editDasReverse({
-          evm_chain_id: this.computedEvmChainId,
-          chain_type: this.computedChainId,
+          evm_chain_id: this.computedChainId,
+          chain_type: this.computedChainType,
           address: this.connectedAccount.address,
           account: this.account
         })
@@ -148,34 +148,34 @@ export default Vue.extend({
         if (![errno.metaMaskUserRejectedAccountAccess, errno.metaMaskUserDeniedMessageSignature].includes(err.code) && err !== errno.tronLinkConfirmationDeclinedByUser && err.message !== errno.walletConnectUserRejectedTheTransaction) {
           if (err.code === errno.rpcApiErrAccountFrequencyLimit) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('If the operation is too frequent, please try again after {timeInterval} minutes', { timeInterval: 3 })
+              title: this.$tt('Tips'),
+              message: this.$tt('The operation is too frequent. Please try again after {timeInterval} minutes', { timeInterval: 3 })
             })
           }
           else if (err.code === errno.apiErrorCodeResolveFailed) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('Frequent operations. There are still transactions being processed in your wallet address, please try again after 30s.')
+              title: this.$tt('Tips'),
+              message: this.$tt('Frequent operations. There are still transactions being processed in your wallet address, please try again after 30s.')
             })
           }
           else if (err.code === errno.apiErrorCodeReverseAlreadyExist) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('You have already set this account.')
+              title: this.$tt('Tips'),
+              message: this.$tt('You have already set this account.')
             })
           }
           else if (err.code === errno.metaMaskWalletRequestPermissions) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('Other requests for the wallet are not processed, please try again after processing')
+              title: this.$tt('Tips'),
+              message: this.$tt('Other requests for the wallet are not processed, please try again after processing')
             })
           }
           else if (err.code === errno.rpcApiErrAccountNotExist) {
-            this.selectDasErrors = [(this.$t('The account is not registered and does not support the reverse record') as string)]
+            this.selectDasErrors = [(this.$tt('The account is not registered and does not support the reverse record') as string)]
           }
           else {
             this.$alert({
-              title: this.$t('Error'),
+              title: this.$tt('Error'),
               message: err.code ? `${err.code}: ${err.message}` : err
             })
           }

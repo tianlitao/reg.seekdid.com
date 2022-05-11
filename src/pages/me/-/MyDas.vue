@@ -1,12 +1,26 @@
 <template>
   <div class="my-das">
+    <div class="my-das__manual">
+      <Search
+        @search="onSearch"
+        @focus="hideManual"
+      />
+      <a
+        v-if="!isHide"
+        class="my-das__manual__link"
+        :href="$i18n.locale === 'zh-CN' ? 'https://talk.did.id/t/bit/424' : 'https://talk.did.id/t/getting-started-with-bit/426'"
+        target="_blank"
+      >
+        📚 {{ $tt('Getting started with .bit') }}
+      </a>
+    </div>
     <div
       v-if="registeringAccounts > 0"
       class="my-das__registering-accounts"
       @click="goRegisteringAccounts"
     >
       <span>{{
-        $t('{registeringAccounts} accounts are being registered', { registeringAccounts: registeringAccounts })
+        $tt('{registeringAccounts} accounts are being registered', { registeringAccounts: registeringAccounts })
       }}</span>
       <Iconfont name="arrow-right" color="#FFFFFF" />
     </div>
@@ -15,16 +29,16 @@
         class="my-das__loading__tip"
         icon="⏳"
         iconSize="72"
-        :tip="$t('Loading...')"
+        :tip="$tt('Loading')"
         tipFontSize="14"
       />
     </div>
-    <div v-else-if="myAccounts.length === 0" class="my-das__no-account">
+    <div v-else-if="myAccounts.length === 0 && searchWord === ''" class="my-das__no-account">
       <StatusTip
         class="my-das__no-account__tip"
         icon="📂"
         iconSize="55"
-        :tip="$t(`You don't have a DAS account yet`)"
+        :tip="$tt('You do not have a .bit account yet')"
         tipFontSize="14"
       />
       <Button
@@ -32,7 +46,7 @@
         primary
         @click="goRegister"
       >
-        {{ $t('Register one') }}
+        {{ $tt('Register one') }}
       </Button>
     </div>
     <div
@@ -40,12 +54,12 @@
       class="my-das__testnet-tips"
     >
       <span class="my-das__testnet-tips__icon">💡</span>
-      {{ $t('The following is the test network account, you need to re-register after the official launch.') }}
+      {{ $tt('The following is the test network account, you need to re-register after the official launch.') }}
     </div>
     <ul class="my-das__account-list">
       <AccountStatus
-        v-for="account in myAccounts"
-        :key="account.account"
+        v-for="(account, index) in myAccounts"
+        :key="index"
         :accountInfo="account"
       />
       <li
@@ -53,19 +67,19 @@
         class="my-das__account-list__action my-das__account-list__link"
         @click="getMyAccounts"
       >
-        {{ $t('Load more') }}
+        {{ $tt('Load more') }}
       </li>
       <li
         v-else-if="loadingShowing"
         class="my-das__account-list__action"
       >
-        {{ $t('Loading...') }}
+        {{ $tt('Loading') }}
       </li>
       <li
         v-else-if="noMoreShowing"
         class="my-das__account-list__action"
       >
-        {{ $t('No more') }}
+        {{ $tt('No more') }}
       </li>
     </ul>
   </div>
@@ -82,6 +96,7 @@ import { IAccountInfo } from '~/services/Account'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import config from '~~/config'
 import { DEFAULT_PAGE_SIZE } from '~/constant'
+import Search from '~/pages/me/-/Search.vue'
 
 export default Vue.extend({
   name: 'MyDas',
@@ -89,7 +104,8 @@ export default Vue.extend({
     StatusTip,
     Button,
     AccountStatus,
-    Iconfont
+    Iconfont,
+    Search
   },
   props: {},
   data () {
@@ -100,7 +116,9 @@ export default Vue.extend({
       page: 0,
       loadMoreShowing: false,
       loadingShowing: false,
-      noMoreShowing: false
+      noMoreShowing: false,
+      searchWord: '',
+      isHide: false
     }
   },
   computed: {
@@ -108,7 +126,7 @@ export default Vue.extend({
       me: ME_KEYS.namespace
     }),
     ...mapGetters({
-      computedChainId: ME_KEYS.computedChainId
+      computedChainType: ME_KEYS.computedChainType
     }),
     registeringAccounts (): IAccountInfo[] {
       return this.me.registeringAccounts.length
@@ -125,6 +143,11 @@ export default Vue.extend({
     goRegisteringAccounts () {
       this.$router.push('/me/registering-accounts')
     },
+    onSearch (value: string) {
+      this.page = 0
+      this.searchWord = value
+      this.getMyAccounts()
+    },
     async getMyAccounts () {
       if (!this.connectedAccount.address) {
         return
@@ -132,6 +155,7 @@ export default Vue.extend({
       if (this.myAccounts.length === 0) {
         this.fetchDataLoading = true
       }
+      this.noMoreShowing = false
       if (this.page > 0) {
         this.loadMoreShowing = false
         this.loadingShowing = true
@@ -140,13 +164,20 @@ export default Vue.extend({
       try {
         this.page = this.page + 1
         const res = await this.$services.account.myAccounts({
-          chain_type: this.computedChainId,
+          chain_type: this.computedChainType,
           address: this.connectedAccount.address,
-          page: this.page
+          page: this.page,
+          keyword: this.searchWord
         })
         this.loadingShowing = false
         if (res && res.list) {
-          this.myAccounts.push(...res.list)
+          if (this.page === 1) {
+            this.myAccounts = res.list
+          }
+          else {
+            this.myAccounts.push(...res.list)
+          }
+
           const length = res.list.length
           if (length < DEFAULT_PAGE_SIZE) {
             this.loadMoreShowing = false
@@ -168,6 +199,9 @@ export default Vue.extend({
     },
     goRegister () {
       this.$router.push('/explorer')
+    },
+    hideManual (value: boolean) {
+      this.isHide = value
     }
   }
 })
@@ -237,5 +271,17 @@ export default Vue.extend({
 
 .my-das__testnet-tips__icon {
   margin-right: 4px;
+}
+
+.my-das__manual {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.my-das__manual__link {
+  margin-left: 24px;
+  color: #22C493;
 }
 </style>

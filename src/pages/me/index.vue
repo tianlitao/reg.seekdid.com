@@ -53,24 +53,24 @@ export default Vue.extend({
       ME_TABS,
       tabs: [
         {
-          text: 'My DAS',
+          text: this.$tt('My DAS'),
           value: ME_TABS.myDAS
         },
         // {
-        //   text: this.$t('My Auction'),
+        //   text: this.$tt('My Auction'),
         //   value: ME_TABS.myAuction
         // },
         // {
-        //   text: this.$t('Favorites'),
+        //   text: this.$tt('Favorites'),
         //   value: ME_TABS.following
         // },
         {
-          text: 'Rewards',
+          text: this.$tt('Rewards'),
           icon: 'reward',
           value: ME_TABS.reward
         },
         {
-          text: 'Balance',
+          text: this.$tt('Balance'),
           value: ME_TABS.balance
         }
       ],
@@ -79,7 +79,7 @@ export default Vue.extend({
   },
   head (): { [key: string]: string | TranslateResult } {
     return {
-      title: this.$t('My')
+      title: this.$tt('My')
     }
   },
   watch: {

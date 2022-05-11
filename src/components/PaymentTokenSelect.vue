@@ -17,7 +17,7 @@
         <span class="payment-token-select__item__info">
           <span class="payment-token-select__item__symbol">
             {{ option.symbol + ' ' }}
-            <span v-if="option.chain_type === CKB.chainId" class="payment-token-select__no-gas">NO GAS</span>
+            <span v-if="option.chain_type === ChainType.ckb" class="payment-token-select__no-gas">NO GAS</span>
           </span>
           <span class="payment-token-select__item__name">{{ option.name }}</span>
         </span>
@@ -40,11 +40,10 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { IToken } from '~/services/Common'
-import { BSC, CHAIN_ID, CKB, DASBalanceTokenId, ETH, Polygon } from '~/constant/chain'
+import { BSC, ChainType, CKB, CoinType, DASBalanceTokenId, Polygon } from '~/constant/chain'
 import IconImage from '~/components/icon/IconImage.vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
-import { WALLETS } from '~/constant'
 
 export default Vue.extend({
   name: 'PaymentTokenSelect',
@@ -69,7 +68,7 @@ export default Vue.extend({
       required: true
     },
     currentChain: {
-      type: Number as PropType<CHAIN_ID>,
+      type: Number as PropType<ChainType>,
       required: true
     }
   },
@@ -77,7 +76,7 @@ export default Vue.extend({
     return {
       CKB,
       DASBalanceTokenId,
-      CHAIN_ID,
+      ChainType,
       selectOption: {
         symbol: ''
       } as IToken
@@ -96,13 +95,13 @@ export default Vue.extend({
         if (option.token_id === BSC.tokenId) {
           _option = {
             ...option,
-            chain_type: BSC.chainId
+            chain_type: ChainType.bsc
           }
         }
         else if (option.token_id === Polygon.tokenId) {
           _option = {
             ...option,
-            chain_type: Polygon.chainId
+            chain_type: ChainType.polygon
           }
         }
         else {
@@ -121,7 +120,7 @@ export default Vue.extend({
         return option.token_id === CKB.tokenId
       })
 
-      if (options && [WALLETS.metaMask].includes(this.connectedAccount.walletName)) {
+      if (options && [CoinType.eth].includes(this.connectedAccount.chain?.coinType)) {
         return options
       }
       return []
@@ -155,7 +154,7 @@ export default Vue.extend({
       this.selectOption = option
       const _option = JSON.parse(JSON.stringify(option))
       if ([BSC.tokenId, Polygon.tokenId].includes(_option.token_id)) {
-        _option.chain_type = ETH.chainId
+        _option.chain_type = ChainType.eth
       }
       this.$emit('input', _option)
     },
@@ -193,7 +192,7 @@ export default Vue.extend({
       const _option = JSON.parse(JSON.stringify(this.selectOption))
 
       if ([BSC.tokenId, Polygon.tokenId].includes(_option.token_id)) {
-        _option.chain_type = ETH.chainId
+        _option.chain_type = ChainType.eth
       }
       this.$emit('input', _option)
     }

@@ -22,13 +22,13 @@
           v-if="dasReverse.account"
           class="reverse__container__text-opacity"
         >
-          {{ $t('The reverse record of your address') }}
+          {{ $tt('The reverse record of your address') }}
         </div>
         <div
           v-else
           class="reverse__container__text-opacity"
         >
-          {{ $t('Your address') }}
+          {{ $tt('Your address') }}
         </div>
         <div
           class="reverse__container__address"
@@ -40,13 +40,13 @@
           v-if="dasReverse.account"
           class="reverse__container__text-opacity"
         >
-          {{ $t('is') }}
+          {{ $tt('is') }}
         </div>
         <div
           v-else
           class="reverse__container__text-opacity"
         >
-          {{ $t("doesn't have any reverse record") }}
+          {{ $tt("does not have any reverse record") }}
         </div>
         <div
           v-if="dasReverse.account"
@@ -56,17 +56,17 @@
             'font-size': `${accountFontSize}px`
           }"
         >
-          {{ dasReverse.account }}
+          {{ toHashedStyle(dasReverse.account) }}
         </div>
         <div
           v-if="isIneffective"
           class="reverse__container__ineffective__faq"
         >
-          {{ $t('Invalid now.') }}
+          {{ $tt('Invalid now.') }}
           <span
             class="reverse__container__ineffective__faq-link"
             @click="openIneffectiveFaqDialog"
-          >{{ $t('Check reasons and reset') }}</span>
+          >{{ $tt('Check reasons and reset') }}</span>
         </div>
       </div>
       <div class="reverse__action">
@@ -84,7 +84,7 @@
               class="reverse__action__button"
               @click="editDasReverse"
             >
-              {{ $t('Edit') }}
+              {{ $tt('Edit') }}
             </span>
           </div>
           <div>
@@ -92,7 +92,7 @@
               class="reverse__action__button__delete"
               @click="deleteDasReverse"
             >
-              {{ $t('Delete') }}
+              {{ $tt('Delete') }}
             </span>
           </div>
         </div>
@@ -101,17 +101,17 @@
           class="reverse__action__button"
           @click="setDasReverse"
         >
-          {{ $t('Set Now') }}
+          {{ $tt('Set Now') }}
         </span>
       </div>
     </div>
     <a
       class="reverse__action__faq"
-      :href="$i18n.locale === 'zh' ? 'https://talk.did.id/t/bit/400' : ' https://talk.did.id/t/bit-alias-comes/401'"
+      :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit/400' : ' https://talk.did.id/t/bit-alias-comes/401'"
     >
       <span class="reverse__action__faq__text">
         <span class="reverse__action__faq__icon">📖</span>
-        {{ $t('About reverse resolution & FAQ') }}
+        {{ $tt('About reverse resolution & FAQ') }}
       </span>
       <Iconfont
         :size="24"
@@ -121,42 +121,42 @@
     </a>
     <div class="reverse__tips">
       <h2 class="reverse__tips__title">
-        {{ $t('Benefits of setting the reverse record') }}
+        {{ $tt('Benefits of setting the reverse record') }}
       </h2>
       <img
         class="reverse__tips__image"
         src="/images/reverse/das-reverse-tips.png"
       >
       <div class="reverse__tips__text">
-        {{ $t("Once it's set, your Apps will display DAS account name wherever it currently displays addresses. For example, when you log in the DApp, it will show your DAS account name as if it is your username.") }}
+        {{ $tt("Once it is set, your Apps will display DAS account name wherever it currently displays addresses. For example, when you log in the DApp, it will show your DAS account name as if it is your username.") }}
         <a
           class="reverse__tips__link"
           href="https://www.did.id/bit-as-alias"
         >
-          {{ $t('Learn more') }}
+          {{ $tt('Learn more') }}
         </a>
       </div>
     </div>
     <Dialog
       :showing="ineffectiveFaqDialogShowing"
-      :title="$t('Tips')"
+      :title="$tt('Tips')"
       closeButton
       @close="closeIneffectiveFaqDialog"
     >
-      <div>{{ $t('The reverse record is valid only if any of the following conditions is met.') }}</div>
+      <div>{{ $tt('The reverse record is valid only if any of the following conditions is met.') }}</div>
       <div class="reverse__ineffective-faq__rule">
         <span>1.</span>
-        <span>{{ $t('Your address is the Owner/Manager of {account};', { account: dasReverse.account }) }}</span>
+        <span>{{ $tt('Your address is the Owner/Manager of {account};', { account: toHashedStyle(dasReverse.account) }) }}</span>
       </div>
       <div class="reverse__ineffective-faq__rule">
         <span>2.</span>
-        <span>{{ $t('Your address is in the record of {account}.', { account: dasReverse.account }) }}</span>
+        <span>{{ $tt('Your address is in the record of {account}.', { account: toHashedStyle(dasReverse.account) }) }}</span>
       </div>
       <a
         class="reverse__ineffective-faq__link"
-        :href="$i18n.locale === 'zh' ? 'https://talk.did.id/t/bit/400#h-8' : 'https://talk.did.id/t/bit-alias-comes/401#reasons-for-failure-8'"
+        :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit/400#h-8' : 'https://talk.did.id/t/bit-alias-comes/401#reasons-for-failure-8'"
       >
-        {{ $t('Learn more') }}
+        {{ $tt('Learn more') }}
       </a>
       <span slot="action" />
     </Dialog>
@@ -193,6 +193,8 @@ import LoginStatusCard from '~/components/cards/LoginStatusCard.vue'
 import { CYCLE_CALL_FUNCTION_TIME, ORDER_ACTION_TYPE, TRX_STATUS } from '~/constant'
 import errno from '~/constant/errno'
 import { COMMON_KEYS } from '~/store/common'
+import { toHashedStyle } from '~/modules/tools'
+import { LANGUAGE } from '~/constant/language'
 
 export default Vue.extend({
   name: 'Reverse',
@@ -209,6 +211,7 @@ export default Vue.extend({
   layout: 'noBottomNav',
   data () {
     return {
+      LANGUAGE,
       searchWord: '',
       trxPending: false,
       ineffectiveFaqDialogShowing: false,
@@ -225,8 +228,8 @@ export default Vue.extend({
       reverse: REVERSE_KEYS.namespace
     }),
     ...mapGetters({
-      computedChainId: ME_KEYS.computedChainId,
-      computedEvmChainId: ME_KEYS.computedEvmChainId
+      computedChainType: ME_KEYS.computedChainType,
+      computedChainId: ME_KEYS.computedChainId
     }),
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
@@ -257,10 +260,10 @@ export default Vue.extend({
     },
     breadcrumbItems (): any {
       return [{
-        text: this.$t('My'),
+        text: this.$tt('My'),
         href: '/me'
       }, {
-        text: this.$t('Reverse record')
+        text: this.$tt('Reverse record')
       }]
     }
   },
@@ -275,6 +278,7 @@ export default Vue.extend({
     clearTimeout(this.checkOrderStatusTimer)
   },
   methods: {
+    toHashedStyle,
     openIneffectiveFaqDialog () {
       this.ineffectiveFaqDialogShowing = true
     },
@@ -298,8 +302,8 @@ export default Vue.extend({
     async checkOrderStatus (action?: string | number) {
       try {
         const res = await this.$services.account.trxStatus({
-          evm_chain_id: this.computedEvmChainId,
-          chain_type: this.computedChainId,
+          evm_chain_id: this.computedChainId,
+          chain_type: this.computedChainType,
           address: this.connectedAccount.address,
           actions: action ? [action] : [ORDER_ACTION_TYPE.setDasReverse, ORDER_ACTION_TYPE.editDasReverse]
         })
@@ -315,7 +319,7 @@ export default Vue.extend({
           this.trxPending = false
           if (action) {
             this.$store.dispatch(REVERSE_KEYS.fetchDasReverse)
-            this.$toast('👌 ' + this.$t('Succeeded'))
+            this.$toast('👌 ' + this.$tt('Succeeded'))
           }
         }
       }

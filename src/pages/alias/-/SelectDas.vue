@@ -42,19 +42,7 @@
           :size="22"
           rounded
         />
-        <template v-if="value">
-          <span
-            v-for="(part, i) in option.text.split('.')[0].split(value)"
-            :key="i"
-          >
-            <span
-              v-if="i"
-              class="select-das__options__highlight"
-            >{{ value }}</span><span>{{ part }}</span></span>.bit
-        </template>
-        <template v-else>
-          {{ option.text }}
-        </template>
+        {{ toHashedStyle(option.text) }}
       </li>
     </ul>
   </div>
@@ -68,6 +56,7 @@ import { REVERSE_KEYS } from '~/store/reverse'
 import { IAccountListRes } from '~/services/DasReverse'
 import IconImage from '~/components/icon/IconImage.vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
+import { toHashedStyle } from '~/modules/tools'
 
 interface IOption {
   text: string
@@ -122,7 +111,7 @@ export default Vue.extend({
       const _list: IOption[] = []
       if (this.value) {
         this.reverse.accountList.forEach((item: IAccountListRes) => {
-          if (item.account.includes(this.value)) {
+          if (item.account.includes(this.value) || toHashedStyle(item.account).includes(this.value)) {
             _list.push({
               text: item.account,
               value: item.account
@@ -162,6 +151,7 @@ export default Vue.extend({
     }
   },
   methods: {
+    toHashedStyle,
     onSelect (option: IOption) {
       this.selectOption = option
       this.$emit('input', option.value)

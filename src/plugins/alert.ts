@@ -14,7 +14,7 @@ export default function ({ app }: Context, inject: Function) {
     const _instance = new Dialog({
       propsData: {
         showing: true,
-        actionButtonText: app.i18n.t('OK'),
+        actionButtonText: app.$tt('OK'),
         ...options
       }
     })

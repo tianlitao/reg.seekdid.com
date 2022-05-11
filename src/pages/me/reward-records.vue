@@ -6,7 +6,7 @@
         class="reward-records__loading__tip"
         icon="⏳"
         iconSize="72"
-        :tip="$t('Loading...')"
+        :tip="$tt('Loading')"
         tipFontSize="14"
       />
     </div>
@@ -15,10 +15,10 @@
         <thead>
           <tr class="reward-records__thead__tr">
             <th class="reward-records__thead__th">
-              {{ $t('Bonus (CKB)') }}
+              {{ $tt('Bonus (CKB)') }}
             </th>
             <th class="reward-records__thead__th reward-records__thead__th__align-right">
-              {{ $t(`Invitees's DAS`) }}
+              {{ $tt(`Invitees's DAS`) }}
             </th>
           </tr>
         </thead>
@@ -36,7 +36,7 @@
                 class="reward-records__table__link"
                 :to="`/explorer/account/${record.invitee}`"
               >
-                {{ record.invitee }}
+                {{ toHashedStyle(record.invitee) }}
               </nuxt-link>
             </td>
           </tr>
@@ -47,19 +47,19 @@
         class="reward-records__action reward-records__link"
         @click="getMyRewards"
       >
-        {{ $t('Load more') }}
+        {{ $tt('Load more') }}
       </div>
       <div
         v-else-if="loadingShowing"
         class="reward-records__action"
       >
-        {{ $t('Loading...') }}
+        {{ $tt('Loading') }}
       </div>
       <div
         v-else-if="noMoreShowing"
         class="reward-records__action"
       >
-        {{ $t('No more') }}
+        {{ $tt('No more') }}
       </div>
     </template>
   </div>
@@ -69,7 +69,7 @@
 import Vue from 'vue'
 import { TranslateResult } from 'vue-i18n'
 import { mapState, mapGetters } from 'vuex'
-import { shrinkUnit, thousandSplit } from '~/modules/tools'
+import { shrinkUnit, thousandSplit, toHashedStyle } from '~/modules/tools'
 import StatusTip from '~/components/StatusTip.vue'
 import { CKB } from '~/constant/chain'
 import { IMyRewardsResInviteList } from '~/services/Account'
@@ -89,17 +89,17 @@ export default Vue.extend({
       me: ME_KEYS.namespace
     }),
     ...mapGetters({
-      computedChainId: ME_KEYS.computedChainId
+      computedChainType: ME_KEYS.computedChainType
     }),
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
     },
     breadcrumbItems (): any {
       return [{
-        text: this.$t('My'),
+        text: this.$tt('My'),
         href: '/me?tab=reward'
       }, {
-        text: this.$t('Reward records')
+        text: this.$tt('Reward records')
       }]
     }
   },
@@ -115,7 +115,7 @@ export default Vue.extend({
   },
   head (): { [key: string]: string | TranslateResult } {
     return {
-      title: this.$t('Reward records')
+      title: this.$tt('Reward records')
     }
   },
   mounted () {
@@ -123,6 +123,7 @@ export default Vue.extend({
   },
   methods: {
     thousandSplit,
+    toHashedStyle,
     async getMyRewards () {
       if (!this.connectedAccount.address) {
         return
@@ -136,7 +137,7 @@ export default Vue.extend({
         this.page = this.page + 1
         const res = await this.$services.account.myRewards({
           address: this.connectedAccount.address,
-          chainType: this.computedChainId,
+          chainType: this.computedChainType,
           page: this.page
         })
         this.rewardRecords = res.list && res.list.map((item: IMyRewardsResInviteList) => {

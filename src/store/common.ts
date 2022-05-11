@@ -1,7 +1,10 @@
-import { ActionTree, MutationTree } from 'vuex'
+import { ActionTree, GetterTree, MutationTree } from 'vuex'
+import cookie from 'js-cookie'
 import { augmentKeys } from '~/modules/tools'
 import { IConfig, IToken } from '~/services/Common'
 import { CKB, DASBalanceTokenId } from '~/constant/chain'
+import { matchLanguage } from '~/plugins/i18n'
+import { LANGUAGE, LanguageOptions } from '~/constant/language'
 
 const keys = {
   namespace: 'common',
@@ -9,15 +12,22 @@ const keys = {
   setTokens: 'setTokens',
   setConfig: 'setConfig',
   setHardwareWalletTipsShow: 'setHardwareWalletTipsShow',
+  setTorusLoginSuccessTipsShow: 'setTorusLoginSuccessTipsShow',
+  setLanguage: 'setLanguage',
   // actions
   fetchTokens: 'fetchTokens',
-  fetchConfig: 'fetchConfig'
+  fetchConfig: 'fetchConfig',
+  // getters
+  computedLanguage: 'computedLanguage'
 }
 
 export const state = () => ({
+  version: '0.0.1',
+  language: '',
   tokens: [] as IToken[],
   config: {} as IConfig,
-  hardwareWalletTipsShow: true
+  hardwareWalletTipsShow: true,
+  torusLoginSuccessTipsShow: undefined
 })
 
 export type CommonState = ReturnType<typeof state>
@@ -31,6 +41,10 @@ export const mutations: MutationTree<CommonState> = {
   },
   [keys.setHardwareWalletTipsShow]: (state, value: boolean) => {
     state.hardwareWalletTipsShow = value
+  },
+  [keys.setTorusLoginSuccessTipsShow]: (state, value: boolean) => {
+    // @ts-ignore
+    state.torusLoginSuccessTipsShow = value
   }
 }
 
@@ -77,6 +91,21 @@ export const actions: ActionTree<CommonState, CommonState> = {
       console.error(err)
       throw err
     }
+  }
+}
+
+export const getters: GetterTree<CommonState, CommonState> = {
+  [keys.computedLanguage] (state) {
+    const ua = window.navigator.userAgent.match(/Language\/([a-zA-Z-_]+)/)
+    const query = window.location.search.match(/[&?]lang=([a-zA-Z-_]+)/)
+    const uaLanguage = ua?.[1]
+    const queryLanguage = query?.[1]
+
+    return matchLanguage(
+      localStorage.getItem('lang') || cookie.get('lang') || state.language || queryLanguage || uaLanguage || window.navigator.language,
+      LanguageOptions,
+      LANGUAGE.en
+    )
   }
 }
 

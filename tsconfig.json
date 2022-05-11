@@ -26,9 +26,7 @@
     },
     "types": [
       "@nuxt/types",
-      "@types/node",
-      "nuxt-i18n",
-      "@nuxtjs/google-analytics/types"
+      "@types/node"
     ]
   },
   "exclude": [

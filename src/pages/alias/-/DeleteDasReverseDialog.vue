@@ -2,11 +2,11 @@
   <Dialog
     class="delete-das-reverse-dialog"
     :showing="showing"
-    :title="$t('Confirm to delete?')"
+    :title="$tt('Confirm to delete?')"
     closeButton
     @close="onClose"
   >
-    <div>{{ $t('After deleting the reverse record, the frozen {freezeCKB} CKB will be returned to your balance automatically.', { freezeCKB: thousandSplit(freezeCKB) }) }}</div>
+    <div>{{ $tt('After deleting the reverse record, the frozen {freezeCKB} CKB will be returned to your balance automatically.', { freezeCKB: thousandSplit(freezeCKB) }) }}</div>
     <template v-slot:action>
       <div class="delete-das-reverse-dialog__buttons">
         <Button
@@ -14,7 +14,7 @@
           :disabled="disabledButtons"
           @click="onClose"
         >
-          {{ $t('Cancel') }}
+          {{ $tt('Cancel') }}
         </Button>
         <Button
           :loading="disabledButtons"
@@ -22,7 +22,7 @@
           block
           @click="onDelete"
         >
-          {{ $t('Delete') }}
+          {{ $tt('Delete') }}
         </Button>
       </div>
     </template>
@@ -70,8 +70,8 @@ export default Vue.extend({
       common: COMMON_KEYS.namespace
     }),
     ...mapGetters({
-      computedChainId: ME_KEYS.computedChainId,
-      computedEvmChainId: ME_KEYS.computedEvmChainId
+      computedChainType: ME_KEYS.computedChainType,
+      computedChainId: ME_KEYS.computedChainId
     }),
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
@@ -90,8 +90,8 @@ export default Vue.extend({
 
       try {
         const res = await this.$services.dasReverse.deleteDasReverse({
-          evm_chain_id: this.computedEvmChainId,
-          chain_type: this.computedChainId,
+          evm_chain_id: this.computedChainId,
+          chain_type: this.computedChainType,
           address: this.connectedAccount.address
         })
 
@@ -126,25 +126,25 @@ export default Vue.extend({
         if (![errno.metaMaskUserRejectedAccountAccess, errno.metaMaskUserDeniedMessageSignature].includes(err.code) && err !== errno.tronLinkConfirmationDeclinedByUser && err.message !== errno.walletConnectUserRejectedTheTransaction) {
           if (err.code === errno.rpcApiErrAccountFrequencyLimit) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('If the operation is too frequent, please try again after {timeInterval} minutes', { timeInterval: 3 })
+              title: this.$tt('Tips'),
+              message: this.$tt('The operation is too frequent. Please try again after {timeInterval} minutes', { timeInterval: 3 })
             })
           }
           else if (err.code === errno.apiErrorCodeResolveFailed) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('Frequent operations. There are still transactions being processed in your wallet address, please try again after 30s.')
+              title: this.$tt('Tips'),
+              message: this.$tt('Frequent operations. There are still transactions being processed in your wallet address, please try again after 30s.')
             })
           }
           else if (err.code === errno.metaMaskWalletRequestPermissions) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('Other requests for the wallet are not processed, please try again after processing')
+              title: this.$tt('Tips'),
+              message: this.$tt('Other requests for the wallet are not processed, please try again after processing')
             })
           }
           else {
             this.$alert({
-              title: this.$t('Error'),
+              title: this.$tt('Error'),
               message: err.code ? `${err.code}: ${err.message}` : err
             })
           }

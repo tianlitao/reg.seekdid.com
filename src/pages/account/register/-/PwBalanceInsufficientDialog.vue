@@ -1,18 +1,18 @@
 <template>
   <Dialog
     :showing="showing"
-    :title="$t('Insufficient balance')"
+    :title="$tt('Insufficient balance')"
     closeButton
     @close="onClose"
   >
-    <div>{{ $t('Insufficient balance. Please make sure the balance in your Portal Wallet is "≥ 61 CKB" after payment.') }}</div>
+    <div>{{ $tt('Insufficient balance. Please make sure the balance in your Portal Wallet is "≥ 61 CKB" after payment.') }}</div>
     <template #action>
       <Button
         block
         success
         @click="onManageBalance"
       >
-        {{ $t('Manage Balance') }}
+        {{ $tt('Manage Balance') }}
       </Button>
     </template>
   </Dialog>
