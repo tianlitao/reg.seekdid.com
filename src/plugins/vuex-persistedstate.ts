@@ -5,7 +5,7 @@ import { COMMON_KEYS } from '~/store/common'
 
 export default ({ store }: Context) => {
   createPersistedState({
-    key: config.appNmae,
+    key: config.appNmae + 'v2',
     paths: [
       COMMON_KEYS.namespace,
       'reverse.config',
