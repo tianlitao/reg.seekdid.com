@@ -113,7 +113,7 @@ export default Vue.extend({
       return window.location.origin
     },
     localStorageValue (): string {
-      return localStorage.getItem(config.appNmae) || ''
+      return localStorage.getItem(config.appNmae + 'v2') || ''
     }
   },
   beforeMount () {
@@ -173,7 +173,7 @@ export default Vue.extend({
       })
     },
     onClearCache () {
-      localStorage.removeItem(config.appNmae)
+      localStorage.removeItem(config.appNmae + 'v2')
       window.location.href = config.domain
     }
   }
