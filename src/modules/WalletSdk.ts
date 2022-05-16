@@ -150,7 +150,7 @@ export default class WalletSdk {
   async onConnect (ignoreNoLoginPage = false) {
     const { $tt, $alert, store } = this.context.app
     // no login page
-    const noLoginPage = ['explorer', 'explorer-account-account', 'debug', 'me-award-ranking', 'me-invitation-link-account']
+    const noLoginPage = ['index', 'apps', 'explorer', 'explorer-account-account', 'debug', 'me-award-ranking', 'me-invitation-link-account']
     if (!ignoreNoLoginPage && noLoginPage.includes(this.context.route.name as string)) {
       this.walletsConnectResetCurrentLogin()
       return

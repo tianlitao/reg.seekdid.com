@@ -525,6 +525,7 @@ export default Vue.extend({
     async onConfirm () {
       // todo split this function
       this.confirmRegisterLoading = true
+      await this.$walletSdk.onConnect(true)
       const checkAccountStatusRes = await this.checkAccountStatus()
       if (!checkAccountStatusRes) {
         this.confirmRegisterLoading = false
