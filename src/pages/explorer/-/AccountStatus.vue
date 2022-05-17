@@ -49,6 +49,7 @@ import Button from '~/components/Button.vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import config from '~~/config'
 import { toHashedStyle } from '~/modules/tools'
+import { LANGUAGE } from '~/constant/language'
 
 export default Vue.extend({
   name: 'AccountStatus',
@@ -108,7 +109,7 @@ export default Vue.extend({
         },
         [ACCOUNT_STATUS.registered]: {
           statusText: this.$tt('Already registered'),
-          href: '/explorer/account/',
+          href: '-',
           actionText: this.$tt('View')
         },
         [ACCOUNT_STATUS.reservedAccount]: {
@@ -154,11 +155,10 @@ export default Vue.extend({
     goPage (account: ISearchAccount) {
       if (account.status === ACCOUNT_STATUS.registered) {
         if (account.is_self) {
-          // this.$router.push(`/me/account/${account.account}`)
           window.location.href = `${config.homepage}/${account.account}`
         }
         else {
-          if (this.$i18n.locale === 'zh-CN') {
+          if (this.$i18n.locale === LANGUAGE.zhCN) {
             window.location.href = `https://${account.account}.host`
           }
           else {
