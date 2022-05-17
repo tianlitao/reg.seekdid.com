@@ -111,15 +111,15 @@ export default Vue.extend({
       })
     },
     showOptions (): IToken[] {
-      return this.computedOptions.filter((option: IToken) => {
-        return option.chain_type === this.currentChain
+      const res = this.computedOptions.filter((option: IToken) => {
+        return option.chain_type === this.currentChain && this.currentChain !== 0
       })
+      return res
     },
     pwWalletOptions (): IToken[] {
       const options = this.options.filter((option: IToken) => {
         return option.token_id === CKB.tokenId
       })
-
       if (options && [CoinType.eth].includes(this.connectedAccount.chain?.coinType)) {
         return options
       }
@@ -129,7 +129,6 @@ export default Vue.extend({
       const options = this.options.filter((option: IToken) => {
         return option.token_id === DASBalanceTokenId
       })
-
       if (options) {
         return options
       }

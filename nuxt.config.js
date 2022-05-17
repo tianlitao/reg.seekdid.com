@@ -1,4 +1,5 @@
 import abcConfig from './abc.config'
+import { resolve } from 'path'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -37,7 +38,7 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [{
-      src: '//at.alicdn.com/t/font_2342047_q0xht6ccymn.js',
+      src: '//at.alicdn.com/t/font_2342047_yw1er2htdfq.js',
       async: true
     }]
   },
@@ -100,6 +101,10 @@ export default {
     static: {
       maxAge: 7 * 24 * 60 * 60 * 1000 // 这里会造成 static/ 目录里面 7 天的缓存，所以如果有紧急换图的场景，需要更换文件名称
     }
+  },
+
+  alias: {
+    'bn.js': resolve(__dirname, './node_modules/bn.js/lib/bn.js')
   },
 
   // The build Property: https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-build

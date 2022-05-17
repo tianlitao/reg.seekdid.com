@@ -5,7 +5,6 @@ import abcCopy from 'abc-copy'
 import dayjs, { Dayjs } from 'dayjs'
 import GraphemeSplitter from 'grapheme-splitter'
 import { SignTypedDataVersion, TypedMessage, TypedDataUtils } from '@metamask/eth-sig-util'
-import Web3 from 'web3'
 import Das from 'das-sdk'
 import { IToken } from '~/services/Common'
 import { ACCOUNT_SUFFIX, CHAR_TYPE, TIME_FORMAT, TOKEN_DECIMAL_PLACES } from '~/constant'
@@ -413,15 +412,6 @@ export function fromSatoshi (satoshi: string | number): string {
  */
 export function sleep (ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
-}
-
-/**
- * convert a hexadecimal chainId to decimal
- * @param chainId
- */
-export function chainIdHexToNumber (chainId: string | number): number {
-  const _chainId = Web3.utils.isHexStrict(chainId) ? Web3.utils.hexToNumber(chainId) : chainId
-  return Number(_chainId)
 }
 
 /**

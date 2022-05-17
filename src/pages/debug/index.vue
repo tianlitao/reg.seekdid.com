@@ -64,8 +64,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
+import { chainIdHexToNumber } from 'wallet-sdk-js'
 import {
-  chainIdHexToNumber,
   copyText,
   isMobile,
   isMobileDevices,
