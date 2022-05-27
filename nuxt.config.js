@@ -109,8 +109,6 @@ export default {
 
   // The build Property: https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-build
   build: {
-    // For debug purpose
-    'html.minify': !abcConfig.isProd,
     extractCSS: true
   }
 }
