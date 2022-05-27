@@ -13,6 +13,7 @@ export default {
   tronLinkConfirmationDeclinedByUser: 'Confirmation declined by user',
   tronLinkInsufficientBalance: 'class org.tron.core.exception.ContractValidateException : Validate TransferContract error, no OwnerAccount.',
   tronLinkTypeErrorAddUpdateDataNotFunction: 'transactionBuilder.addUpdateData',
+  tronLinkAuthorizationRequestsAreBeingProcessed: 4000,
   // imToken
   imTokenUserCanceled: 'user_canceled',
   // Portal Wallet
@@ -28,6 +29,7 @@ export default {
   rpcApiErrTransferAccountSameAddress: 30023,
   rpcApiErrWithdrawFromDasLockInsufficientBalance: 30025,
   rpcApiErrWithdrawFromDasLockUnsupportedLongAddress: 30030,
+  rpcApiErrSignatureError: 30034,
   apiErrorCodeInsufficientBalance: 11007,
   apiErrorCodeResolveFailed: 11011,
   apiErrorCodeNotEnoughChange: 11014,

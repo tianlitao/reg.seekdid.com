@@ -10,7 +10,7 @@
       isMobileDevices: <span class="debug__value">{{ isMobileDevices }}</span>
     </div>
     <div class="debug__item">
-      computedEvmChainId: <span class="debug__value">{{ computedEvmChainId }}</span>
+      computedChainId: <span class="debug__value">{{ computedChainId }}</span>
     </div>
     <div>-----------</div>
     <div class="debug__item">
@@ -64,8 +64,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
+import { chainIdHexToNumber } from 'wallet-sdk-js'
 import {
-  chainIdHexToNumber,
   copyText,
   isMobile,
   isMobileDevices,
@@ -95,7 +95,7 @@ export default Vue.extend({
       me: ME_KEYS.namespace
     }),
     ...mapGetters({
-      computedEvmChainId: ME_KEYS.computedEvmChainId
+      computedChainId: ME_KEYS.computedChainId
     }),
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
@@ -113,7 +113,7 @@ export default Vue.extend({
       return window.location.origin
     },
     localStorageValue (): string {
-      return localStorage.getItem(config.appNmae) || ''
+      return localStorage.getItem(config.appNmae + 'v2') || ''
     }
   },
   beforeMount () {
@@ -135,7 +135,7 @@ export default Vue.extend({
     chainIdHexToNumber,
     async signEIP712 () {
       const _mmJson = JSON.parse(this.mmJson)
-      _mmJson.domain.chainId = this.computedEvmChainId
+      _mmJson.domain.chainId = this.computedChainId
       try {
         const { ethereum } = window
         const res = await ethereum.request({
@@ -169,11 +169,11 @@ export default Vue.extend({
     },
     onCopy (value: string) {
       copyText(value).then(() => {
-        this.$toast('👌 ' + this.$t('Copied'))
+        this.$toast('👌 ' + this.$tt('Copied'))
       })
     },
     onClearCache () {
-      localStorage.removeItem(config.appNmae)
+      localStorage.removeItem(config.appNmae + 'v2')
       window.location.href = config.domain
     }
   }

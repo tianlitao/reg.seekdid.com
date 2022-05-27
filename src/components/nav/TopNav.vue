@@ -15,7 +15,7 @@
           :class="{ 'top-nav__item_active': isTargetPath(menu.path) }"
           :to="menu.path"
         >
-          <span class="top-nav__item__text">{{ $t(menu.text) }}</span>
+          <span class="top-nav__item__text">{{ $tt(menu.text) }}</span>
           <span
             v-if="isTargetPath(menu.path)"
             class="top-nav__item__tag"
@@ -27,7 +27,7 @@
           target="_self"
         >
           <span class="top-nav__item__text top-nav__item__marketplace">
-            {{ $t('Marketplace') }}
+            {{ $tt('Marketplace') }}
             <Iconfont
               class="top-nav__item__marketplace__icon"
               name="arrow-right-up"

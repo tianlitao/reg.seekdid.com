@@ -1,7 +1,7 @@
 <template>
   <div class="login-status-card">
     <div class="login-status-card__login-status">
-      {{ loggedIn ? $t('Currently connected wallet') : $t('Not connected to wallet') }}
+      {{ loggedIn ? $tt('Currently connected wallet') : $tt('Not connected to wallet') }}
     </div>
     <div class="login-status-card__info">
       <span
@@ -18,11 +18,11 @@
             class="login-status-card__reverse-record__account"
             @click="onCopyAddress(dasReverse.account)"
           >
-            {{ dasReverse.account }}
+            {{ toHashedStyle(dasReverse.account) }}
             <IconImage
-              v-if="connectedAccount.walletName === WALLETS.walletConnect"
+              v-if="connectedAccount.protocol === WalletProtocol.walletConnect"
               class="login-status-card__wallet-connect"
-              url="/images/components/walletConnect-wallet-logo.png"
+              url="/images/components/wallet-connect.png"
               alt="logo"
               :size="20"
             />
@@ -35,11 +35,11 @@
           </div>
         </div>
         <template v-else>
-          <span>{{ loggedIn ? collapseString(connectedAccount.address, 5, 5) : $t('Please connect') }}</span>
+          <span>{{ loggedIn ? collapseString(connectedAccount.address, 5, 5) : $tt('Please connect') }}</span>
           <IconImage
-            v-if="connectedAccount.walletName === WALLETS.walletConnect"
+            v-if="connectedAccount.protocol === WalletProtocol.walletConnect"
             class="login-status-card__wallet-connect"
-            url="/images/components/walletConnect-wallet-logo.png"
+            url="/images/components/wallet-connect.png"
             alt="logo"
             :size="20"
           />
@@ -49,7 +49,7 @@
         class="login-status-card__connect-wallet"
         @click="onConnectWallet"
       >
-        {{ loggedIn ? $t('Switch wallet') : $t('Connect wallet') }}
+        {{ loggedIn ? $tt('Switch wallet') : $tt('Connect wallet') }}
       </span>
     </div>
     <template v-if="!hideReverseRecordSetting">
@@ -59,18 +59,18 @@
         @click="goDasReverse"
       >
         <span class="login-status-card__edit-das-reverse__header">
-          <span>{{ $t('Reverse record') }}</span>
+          <span>{{ $tt('Reverse record') }}</span>
           <span class="login-status-card__edit-das-reverse__account">
             <Iconfont
               name="check-strong"
               color="#167B58"
               size="16"
             />
-            {{ dasReverse.account }}
+            {{ toHashedStyle(dasReverse.account) }}
           </span>
         </span>
         <span class="login-status-card__action">
-          {{ $t('Edit') }}
+          {{ $tt('Edit') }}
           <Iconfont class="login-status-card__action__icon" name="arrow-right" color="#62BFA0" />
         </span>
         <img
@@ -84,18 +84,18 @@
         @click="goDasReverse"
       >
         <span class="login-status-card__edit-das-reverse__header">
-          <span>{{ $t('Reverse record') }}</span>
+          <span>{{ $tt('Reverse record') }}</span>
           <span class="login-status-card__edit-das-reverse__account">
             <Iconfont
               name="warning"
               color="#167B58"
               size="16"
             />
-            {{ $t('Invalid') }}
+            {{ $tt('Invalid') }}
           </span>
         </span>
         <span class="login-status-card__action">
-          {{ $t('Learn more') }}
+          {{ $tt('Learn more') }}
           <Iconfont class="login-status-card__action__icon" name="arrow-right" color="#62BFA0" />
         </span>
         <img
@@ -108,9 +108,9 @@
         class="login-status-card__set-das-reverse"
         @click="goDasReverse"
       >
-        <span>{{ $t('Reverse record') }}</span>
+        <span>{{ $tt('Reverse record') }}</span>
         <span class="login-status-card__action">
-          {{ $t('Not set') }}
+          {{ $tt('Not set') }}
           <Iconfont class="login-status-card__action__icon" name="arrow-right" color="#62BFA0" />
         </span>
         <img
@@ -126,10 +126,10 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
-import { collapseString, copyText } from '~/modules/tools'
+import { collapseString, copyText, toHashedStyle } from '~/modules/tools'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import IconImage from '~/components/icon/IconImage.vue'
-import { WALLETS } from '~/constant'
+import { WalletProtocol } from '~/constant'
 import { IReverseLatestRes } from '~/services/DasReverse'
 import { REVERSE_KEYS } from '~/store/reverse'
 
@@ -151,7 +151,7 @@ export default Vue.extend({
       reverse: REVERSE_KEYS.namespace
     }),
     loggedIn (): boolean {
-      return this.me.loggedIn
+      return !!this.me.connectedAccount.address
     },
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
@@ -162,10 +162,11 @@ export default Vue.extend({
   },
   data () {
     return {
-      WALLETS
+      WalletProtocol
     }
   },
   methods: {
+    toHashedStyle,
     collapseString,
     onConnectWallet () {
       this.$walletSdk.walletsConnect()
@@ -178,7 +179,7 @@ export default Vue.extend({
         return
       }
       copyText(address).then(() => {
-        this.$toast('👌 ' + this.$t('Copied'))
+        this.$toast('👌 ' + this.$tt('Copied'))
       })
     }
   }

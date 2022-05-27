@@ -19,7 +19,7 @@
       class="explorer-search__button"
       primary
       type="submit">
-      {{ $t('Search') }}
+      {{ $tt('Search') }}
     </Button>
   </form>
 </template>

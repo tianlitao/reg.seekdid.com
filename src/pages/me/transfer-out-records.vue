@@ -6,7 +6,7 @@
         class="transfer-out-records__loading__tip"
         icon="⏳"
         iconSize="72"
-        :tip="$t('Loading...')"
+        :tip="$tt('Loading')"
         tipFontSize="14"
       />
     </div>
@@ -15,7 +15,7 @@
         <thead>
           <tr class="transfer-out-records__thead__tr">
             <th class="transfer-out-records__thead__th">
-              {{ $t('Bonus (CKB)') }}
+              {{ $tt('Bonus (CKB)') }}
             </th>
             <th class="transfer-out-records__thead__th transfer-out-records__thead__th__align-right">
               Hash
@@ -48,19 +48,19 @@
         class="transfer-out-records__action transfer-out-records__link"
         @click="getTransferOutRecords"
       >
-        {{ $t('Load more') }}
+        {{ $tt('Load more') }}
       </div>
       <div
         v-else-if="loadingShowing"
         class="transfer-out-records__action"
       >
-        {{ $t('Loading...') }}
+        {{ $tt('Loading') }}
       </div>
       <div
         v-else-if="noMoreShowing"
         class="transfer-out-records__action"
       >
-        {{ $t('No more') }}
+        {{ $tt('No more') }}
       </div>
     </template>
   </div>
@@ -90,17 +90,17 @@ export default Vue.extend({
       me: ME_KEYS.namespace
     }),
     ...mapGetters({
-      computedChainId: ME_KEYS.computedChainId
+      computedChainType: ME_KEYS.computedChainType
     }),
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
     },
     breadcrumbItems (): any {
       return [{
-        text: this.$t('My'),
+        text: this.$tt('My'),
         href: '/me?tab=reward'
       }, {
-        text: this.$t('Transfer out records')
+        text: this.$tt('Transfer out records')
       }]
     }
   },
@@ -117,7 +117,7 @@ export default Vue.extend({
   },
   head (): { [key: string]: string | TranslateResult } {
     return {
-      title: this.$t('Transfer out records')
+      title: this.$tt('Transfer out records')
     }
   },
   mounted () {
@@ -139,7 +139,7 @@ export default Vue.extend({
         this.page = this.page + 1
         const res = await this.$services.account.transferOutRecords({
           address: this.connectedAccount.address,
-          chainType: this.computedChainId,
+          chainType: this.computedChainType,
           page: this.page
         })
         this.transferOutRecords = res.list && res.list.map((item: ITransferOutRecordsResList) => {

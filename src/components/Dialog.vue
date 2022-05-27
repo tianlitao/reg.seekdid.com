@@ -44,7 +44,7 @@
             block
             @click="onClose(false)"
           >
-            {{ actionButtonText || $t('OK') }}
+            {{ actionButtonText || $tt('OK') }}
           </Button>
         </div>
       </div>
@@ -90,7 +90,7 @@ export default Vue.extend({
   },
   computed: {
     containerLayoutMaxHeight (): string {
-      return `${window.innerHeight * 0.9 - 68}px`
+      return `${window.innerHeight * 0.9 - 92}px`
     }
   },
   watch: {
@@ -135,11 +135,12 @@ export default Vue.extend({
 
 .dialog__container {
   width: 92%;
-  max-width: 490px;
+  max-width: 394px;
   max-height: 90%;
   align-self: center;
   border-radius: 24px;
   background: $white;
+  overflow: hidden;
 }
 
 .dialog__container__layout {
@@ -153,7 +154,7 @@ export default Vue.extend({
 }
 
 .dialog__content {
-  padding: 0 24px;
+  padding: 0 32px;
   font-size: 14px;
   color: $primary-font-color;
   line-height: 20px;
@@ -161,10 +162,10 @@ export default Vue.extend({
 }
 
 .dialog__slot-content {
-  padding: 0 24px;
+  padding: 0 32px;
 }
 
 .dialog__action {
-  padding: 24px;
+  padding: 24px 32px;
 }
 </style>

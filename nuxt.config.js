@@ -1,4 +1,5 @@
 import abcConfig from './abc.config'
+import { resolve } from 'path'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -11,7 +12,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: '.bit - DID system for the entire Web3.0 ecosystem.',
+    title: '.bit - Your decentralized identity (DID) for Web3.0 life.',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover' },
@@ -20,24 +21,24 @@ export default {
       { hid: 'keyword', name: 'keywords', content: 'domain, domain name, blockchain domain, nervos, ckb, .bit, domain name registration, purchase domain name, website domain, domain name service, domain name hosting, timyang, .bit, domain investment, DNS, buy domain name' },
       // The Open Graph protocol
       { hid: 'og:description', property: 'og:description', content: '.bit is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. .bit can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
-      { hid: 'og:title', property: 'og:title', content: '.bit - DID system for the entire Web3.0 ecosystem.' },
-      { hid: 'og:site_name', property: 'og:site_name', content: '.bit - DID system for the entire Web3.0 ecosystem.' },
+      { hid: 'og:title', property: 'og:title', content: '.bit - Your decentralized identity (DID) for Web3.0 life.' },
+      { hid: 'og:site_name', property: 'og:site_name', content: '.bit - Your decentralized identity (DID) for Web3.0 life.' },
       { hid: 'og:type', property: 'og:type', content: 'article' },
       { hid: 'og:url', property: 'og:url', content: 'https://did.id/' },
       { hid: 'og:image', property: 'og:image', content: `https://${abcConfig.hostname}/images/seo-thumbnail-image.png` },
       // Twitter
-      { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
-      { hid: 'twitter:site', name: 'twitter:site', content: '.bit - DID system for the entire Web3.0 ecosystem.' },
-      { hid: 'twitter:title', name: 'twitter:title', content: '.bit - DID system for the entire Web3.0 ecosystem.' },
+      { hid: 'twitter:card', name: 'twitter:card', content: 'summary_large_image' },
+      { hid: 'twitter:site', name: 'twitter:site', content: '.bit - Your decentralized identity (DID) for Web3.0 life.' },
+      { hid: 'twitter:title', name: 'twitter:title', content: '.bit - Your decentralized identity (DID) for Web3.0 life.' },
       { hid: 'twitter:description', name: 'twitter:description', content: '.bit is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. .bit can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
       { hid: 'twitter:image', name: 'twitter:image', content: `https://${abcConfig.hostname}/images/seo-thumbnail-image.png` },
-      { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: '.bit - DID system for the entire Web3.0 ecosystem.' }
+      { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: '.bit - Your decentralized identity (DID) for Web3.0 life.' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [{
-      src: '//at.alicdn.com/t/font_2342047_h6ht5qlxt6j.js',
+      src: '//at.alicdn.com/t/font_2342047_yw1er2htdfq.js',
       async: true
     }]
   },
@@ -54,6 +55,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/vuex-persistedstate.ts',
+    '~/plugins/i18n',
     '~/plugins/vee-validate',
     '~/plugins/services.ts',
     '~/plugins/alert.ts',
@@ -66,105 +68,23 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
-    // https://google-analytics.nuxtjs.org/
-    '@nuxtjs/google-analytics'
+    ['@nuxtjs/google-gtag', {
+      id: abcConfig.googleAnalyticsId,
+      debug: !abcConfig.isProd
+    }]
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://sentry.nuxtjs.org/
-    '@nuxtjs/sentry',
-    // https://i18n.nuxtjs.org/
-    'nuxt-i18n'
+    '@nuxtjs/sentry'
   ],
-
-  googleAnalytics: {
-    dev: true,
-    id: abcConfig.googleAnalyticsId,
-    autoTracking: {
-      screenview: true,
-      pageviewOnLoad: false,
-      transformQueryString: false,
-      skipSamePath: true
-    }
-  },
 
   sentry: {
     disabled: true,
     dsn: abcConfig.sentryDsn,
     config: {
       autoSessionTracking: false
-    }
-  },
-
-  i18n: {
-    locales: [
-      {
-        code: 'en',
-        file: 'en.json',
-        iso: 'en-US',
-        name: 'English'
-      },
-      {
-        code: 'zh',
-        file: 'zh.json',
-        iso: 'zh-CN',
-        name: '简体中文'
-      },
-      // {
-      //   code: 'ru',
-      //   file: 'ru.json',
-      //   iso: 'ru-RU',
-      //   name: 'русский'
-      // },
-      // {
-      //   code: 'ja',
-      //   file: 'ja.json',
-      //   iso: 'ja-JP',
-      //   name: '日本語'
-      // },
-      // {
-      //   code: 'de',
-      //   file: 'de.json',
-      //   iso: 'de-DE',
-      //   name: 'Deutsch'
-      // },
-      // {
-      //   code: 'ko',
-      //   file: 'ko.json',
-      //   iso: 'ko-KR',
-      //   name: '한국어'
-      // },
-      // {
-      //   code: 'fr',
-      //   file: 'fr.json',
-      //   iso: 'fr-FR',
-      //   name: 'français'
-      // },
-      // {
-      //   code: 'es',
-      //   file: 'es.json',
-      //   iso: 'es-ES',
-      //   name: 'Español'
-      // },
-      // {
-      //   code: 'pt',
-      //   file: 'pt.json',
-      //   iso: 'pt-PT',
-      //   name: 'português'
-      // }
-    ],
-    strategy: 'no_prefix',
-    defaultLocale: 'en',
-    vueI18n: {
-      fallbackLocale: 'en'
-    },
-    lazy: true,
-    langDir: 'locales/',
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'das_i18n_redirected',
-      onlyOnRoot: true
     }
   },
 
@@ -183,10 +103,12 @@ export default {
     }
   },
 
+  alias: {
+    'bn.js': resolve(__dirname, './node_modules/bn.js/lib/bn.js')
+  },
+
   // The build Property: https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-build
   build: {
-    // For debug purpose
-    'html.minify': !abcConfig.isProd,
     extractCSS: true
   }
 }

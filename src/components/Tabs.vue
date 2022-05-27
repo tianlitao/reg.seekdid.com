@@ -7,7 +7,7 @@
       :class="{ 'tabs__button_active': value === item.value }"
       @click="onChange(item.value)">
       <Iconfont v-if="item.icon" :name="item.icon" size="16" color="#FE61A0" />
-      {{ $t(item.text) }}
+      {{ item.text }}
     </button>
   </div>
 </template>

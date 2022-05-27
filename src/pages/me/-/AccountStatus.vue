@@ -13,7 +13,7 @@
           rounded
         />
         <span class="account-status__account-name">
-          {{ accountInfo.account }}
+          {{ toHashedStyle(accountInfo.account) }}
         </span>
       </div>
       <Iconfont class="account-status__arrow-right" name="arrow-right" color="#E4E4E4" />
@@ -24,19 +24,19 @@
           v-if="accountStatus === ACCOUNT_STATUS.expired"
           class="account-status__status-text account-status__status-text_warn"
         >
-          {{ $t('Recalls after {countdownToRecoveryDays} days, renews immediately', { countdownToRecoveryDays: calcExpiredDay(accountInfo.expired_at) }) }}
+          {{ $tt('Recalls after {countdownToRecoveryDays} days, renews immediately', { countdownToRecoveryDays: calcExpiredDay(accountInfo.expired_at) }) }}
         </span>
         <span
           v-if="accountStatus === ACCOUNT_STATUS.registered"
           class="account-status__status-text account-status__status-text_success"
         >
-          {{ $t('In normal use') }}
+          {{ $tt('In normal use') }}
         </span>
         <span
           v-else-if="accountStatus === ACCOUNT_STATUS.onePriceSell"
           class="account-status__status-text account-status__status-text__fixed-price-sell"
         >
-          {{ $t('On sale') }}
+          {{ $tt('On sale') }}
         </span>
       </template>
     </div>
@@ -52,6 +52,8 @@ import { IAccountInfo } from '~/services/Account'
 import { ACCOUNT_STATUS, IDENTICON_SERVE } from '~/constant'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { COMMON_KEYS } from '~/store/common'
+import config from '~~/config'
+import { toHashedStyle } from '~/modules/tools'
 
 export default Vue.extend({
   name: 'AccountStatus',
@@ -92,6 +94,7 @@ export default Vue.extend({
     this.checkAccountStatus()
   },
   methods: {
+    toHashedStyle,
     checkAccountStatus () {
       if (!this.accountInfo.account) {
         return
@@ -112,7 +115,8 @@ export default Vue.extend({
         .toFixed(0, Decimal.ROUND_UP)
     },
     onClick () {
-      this.$router.push(`/me/account/${this.accountInfo.account}`)
+      // this.$router.push(`/me/account/${this.accountInfo.account}`)
+      window.location.href = `${config.homepage}/${this.accountInfo.account}`
     }
   }
 })

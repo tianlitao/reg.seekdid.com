@@ -28,10 +28,10 @@ export default Vue.extend({
   computed: {
     breadcrumbItems (): any {
       return [{
-        text: this.$t('Explorer'),
+        text: this.$tt('Explorer'),
         href: '/explorer'
       }, {
-        text: this.$t('Account details')
+        text: this.$tt('Account details')
       }]
     }
   }

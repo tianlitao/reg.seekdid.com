@@ -1,6 +1,6 @@
 import { BasicService } from '~/services/BasicService'
 import { ACCOUNT_STATUS, ACCOUNT_SUFFIX } from '~/constant'
-import { CHAIN_ID } from '~/constant/chain'
+import { ChainType } from '~/constant/chain'
 import { splitAccount } from '~/modules/tools'
 
 export interface IRegisterTxMap {
@@ -31,7 +31,7 @@ export default class Explorer extends BasicService {
     address
   }: {
     account: string,
-    chain_type: CHAIN_ID,
+    chain_type: ChainType,
     address:string
   }): Promise<ISearchAccount> {
     account = account.replace(/\.bit$/, '')

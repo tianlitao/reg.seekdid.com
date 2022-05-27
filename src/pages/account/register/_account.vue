@@ -5,20 +5,20 @@
     <div class="account-register__container">
       <div class="account-register__item">
         <span>
-          {{ $t('Registration year') }}
+          {{ $tt('Registration year') }}
         </span>
         <InputCounter
           v-model="registrationPeriod"
-          :unit="registrationPeriod > 1 ? $t('years') : $t('year')"
+          :unit="registrationPeriod > 1 ? $tt('years') : $tt('year')"
         />
       </div>
       <div class="account-register__inviter">
         <span class="account-register__inviter__label">
           <span>
-            {{ $t('Inviter') }}
+            {{ $tt('Inviter') }}
           </span>
           <br>
-          <span class="account-register__inviter-discount__tips">*{{ $t('Save {inviterDiscount}% on fees', { inviterDiscount: inviterDiscount }) }}</span>
+          <span class="account-register__inviter-discount__tips">*{{ $tt('Save {inviterDiscount}% on fees', { inviterDiscount: inviterDiscount }) }}</span>
         </span>
         <span>
           <span class="account-register__input">
@@ -26,7 +26,7 @@
               v-model.trim="inviter"
               class="account-register__input__input"
               :class="{ 'account-register__input__input_error': inviterErrorTipShowing }"
-              :placeholder="$t('Optional')"
+              :placeholder="$tt('Optional')"
               @input="onInputInviter"
               @blur="onBlurInviter"
             >
@@ -36,24 +36,24 @@
             v-if="inviterErrorTipShowing"
             class="account-register__input__input__error-messages"
           >
-            {{ $t('The account does not exist') }}
+            {{ $tt('The account does not exist') }}
           </span>
         </span>
       </div>
       <div class="account-register__split-line" />
       <div class="account-register__item">
         <span>
-          {{ $t('Annual fee') }}
-          <span class="account-register__annual-fee__registration-period">{{ `${registrationPeriod} ${registrationPeriod > 1 ? $t('years') : $t('year')}` }}</span>
+          {{ $tt('Annual fee') }}
+          <span class="account-register__annual-fee__registration-period">{{ `${registrationPeriod} ${registrationPeriod > 1 ? $tt('years') : $tt('year')}` }}</span>
         </span>
         <span class="account-register__value">${{ thousandSplit(originalTotalAccountPrice || 0, FIAT_DECIMAL_PLACES) }}</span>
       </div>
       <div class="account-register__item">
         <span>
           <span>
-            {{ $t('Storage deposit') }}
+            {{ $tt('Storage deposit') }}
             <a
-              :href="$i18n.locale === 'zh' ? 'https://docs.did.id/zh/faq#%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E6%8A%BC%E9%87%91' : 'https://docs.did.id/faq#what-is-the-storage-deposit'"
+              :href="$i18n.locale === LANGUAGE.zhCN ? 'https://docs.did.id/zh/faq#%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E6%8A%BC%E9%87%91' : 'https://docs.did.id/faq#what-is-the-storage-deposit'"
               target="_blank"
             >
               <Iconfont
@@ -64,7 +64,7 @@
             </a>
           </span>
           <br>
-          <span class="account-register__label-tip">*{{ $t('Full refund when account expires for recycling') }}</span>
+          <span class="account-register__label-tip">*{{ $tt('Full refund when account expires for recycling') }}</span>
         </span>
         <span class="account-register__value">
           {{ `$${thousandSplit(accountInfo.base_amount || 0, FIAT_DECIMAL_PLACES)}` }}
@@ -72,7 +72,7 @@
       </div>
       <div class="account-register__item">
         <span>
-          {{ $t('Discount') }}
+          {{ $tt('Discount') }}
         </span>
         <span
           class="account-register__value"
@@ -83,33 +83,34 @@
       </div>
       <div class="account-register__split-line" />
       <div class="account-register__registration-fee">
-        <span>{{ $t('Total cost') }}</span>
+        <span>{{ $tt('Total cost') }}</span>
         <span class="account-register__registration-fee__value">
           {{ `$${thousandSplit(paidAmount, FIAT_DECIMAL_PLACES)}` }}
           <span
             v-if="originalPrice.gt(paidAmount)"
             class="account-register__original-price"
           >
-            {{ `${$t('Original price')}: $${thousandSplit(originalPrice, FIAT_DECIMAL_PLACES)}` }}
+            {{ `${$tt('Original price')}: $${thousandSplit(originalPrice, FIAT_DECIMAL_PLACES)}` }}
           </span>
         </span>
       </div>
       <Button
+        :disabled="onRegisterLoading"
         block
         success
         @click="onRegister"
       >
-        {{ $t('Register') }}
+        {{ $tt('Register') }}
       </Button>
     </div>
     <BottomSheet
       v-model="confirmRegisterShowing"
-      :title="$t('Select payment')"
+      :title="$tt('Select payment')"
     >
       <PaymentTokenSelect
         v-model="paymentToken"
         class="account-register__payment-token-select"
-        :currentChain="connectedAccount.chain ? connectedAccount.chain.chainId : 0"
+        :currentChain="chainType"
         :options="common.tokens"
       />
       <a
@@ -117,12 +118,12 @@
         :href="config.dasBalance"
         target="_blank"
       >
-        <span>{{ $t('Deposit CKB to DAS Balance') }}</span>
+        <span>{{ $tt('Deposit CKB to DAS Balance') }}</span>
         <Iconfont name="arrow-right" color="#C4D0CD" size="26" />
       </a>
       <a
         class="account-register__register-with-ckb"
-        :href="$i18n.locale === 'zh' ? 'https://talk.did.id/t/ckb-das-das-0-gas-ckb/284' : 'https://talk.did.id/t/how-do-i-register-das-account-with-ckb-0-gas-no-ckb-wallet-needed/285'"
+        :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/ckb-das-das-0-gas-ckb/284' : 'https://talk.did.id/t/how-do-i-register-das-account-with-ckb-0-gas-no-ckb-wallet-needed/285'"
         target="_blank"
       >
         <span>
@@ -132,7 +133,7 @@
             size="17"
           />
         </span>
-        <span>{{ $t('How to register with CKB (DAS Balance)?') }}</span>
+        <span>{{ $tt('How to register with CKB (DAS Balance)?') }}</span>
       </a>
       <div class="account-register__confirm-register__paid-amount__value">
         {{ `${thousandSplit(paidTokenAmount)} ${paymentToken.symbol}` }}
@@ -142,23 +143,23 @@
         v-if="paymentToken.token_id === CKB.tokenId && (isTokenPocket || isCoinbaseWallet)"
         class="account-register__payment-error"
       >
-        {{ $t('The wallet environment does not support {token} payments', { token: CKB.symbol }) }}
+        {{ $tt('The wallet environment does not support {token} payments', { token: CKB.symbol }) }}
       </div>
       <div
-        v-if="paymentToken.chain_type === CHAIN_ID.tron && (isSafePalWallet || isViaWallet)"
+        v-if="paymentToken.chain_type === ChainType.tron && (isSafePalWallet || isViaWallet)"
         class="account-register__payment-error"
       >
-        {{ $t('The wallet environment does not support {token} payments', { token: TRON.symbol }) }}
+        {{ $tt('The wallet environment does not support {token} payments', { token: TRON.symbol }) }}
       </div>
       <Button
         class="account-register__confirm-register__button"
         :loading="confirmRegisterLoading"
-        :disabled="(paymentToken.token_id === CKB.tokenId && (isTokenPocket || isCoinbaseWallet)) || (paymentToken.chain_type === CHAIN_ID.tron && (isSafePalWallet || isViaWallet))"
+        :disabled="(paymentToken.token_id === CKB.tokenId && (isTokenPocket || isCoinbaseWallet)) || (paymentToken.chain_type === ChainType.tron && (isSafePalWallet || isViaWallet))"
         block
         success
         @click="onConfirm"
       >
-        {{ $t('Pay') }}
+        {{ $tt('Pay') }}
       </Button>
     </BottomSheet>
     <DasBalanceInsufficientDialog
@@ -167,6 +168,9 @@
     />
     <PwBalanceInsufficientDialog
       v-model="pwBalanceInsufficientDialogShowing"
+    />
+    <SignatureErrorDialog
+      v-model="signatureErrorDialogShowing"
     />
   </div>
 </template>
@@ -177,6 +181,7 @@ import { mapState, mapGetters } from 'vuex'
 import Decimal from 'decimal.js'
 import DasBalanceInsufficientDialog from './-/DasBalanceInsufficientDialog.vue'
 import PwBalanceInsufficientDialog from './-/PwBalanceInsufficientDialog.vue'
+import SignatureErrorDialog from './-/SignatureErrorDialog.vue'
 import AccountStatusSimpleCard from '~/components/cards/AccountStatusSimpleCard.vue'
 import Button from '~/components/Button.vue'
 import { COMMON_KEYS } from '~/store/common'
@@ -205,10 +210,19 @@ import { ISearchAccount } from '~/services/Explorer'
 import errno from '~/constant/errno'
 import PaymentTokenSelect from '~/components/PaymentTokenSelect.vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
-import { CHAIN_ID, CKB, DASBalanceTokenId, NEW_LOCK_SCRIPT_TYPE, TRON } from '~/constant/chain'
+import {
+  ChainType,
+  CKB,
+  CoinTypeToChainTypeMap,
+  DASBalanceTokenId,
+  EvmCoinTypes,
+  NEW_LOCK_SCRIPT_TYPE,
+  TRON
+} from '~/constant/chain'
 import Breadcrumb from '~/components/Breadcrumb.vue'
 import config from '~~/config'
 import { IOrderDetailRes } from '~/services/Account'
+import { LANGUAGE } from '~/constant/language'
 
 export default Vue.extend({
   name: 'AccountRegister',
@@ -222,15 +236,17 @@ export default Vue.extend({
     Breadcrumb,
     WalletConnectTips,
     DasBalanceInsufficientDialog,
-    PwBalanceInsufficientDialog
+    PwBalanceInsufficientDialog,
+    SignatureErrorDialog
   },
   layout: 'noBottomNav',
   data () {
     return {
+      LANGUAGE,
       config,
       TRON,
       CKB,
-      CHAIN_ID,
+      ChainType,
       FIAT_DECIMAL_PLACES,
       accountName: this.$route.params.account,
       accountInfo: {
@@ -245,12 +261,14 @@ export default Vue.extend({
       orderInfo: {} as IOrderDetailRes,
       storageFeeTipsShowing: false,
       dasBalanceInsufficientDialogShowing: false,
-      pwBalanceInsufficientDialogShowing: false
+      pwBalanceInsufficientDialogShowing: false,
+      signatureErrorDialogShowing: false,
+      onRegisterLoading: false
     }
   },
   head (): { [key: string]: string } {
     return {
-      title: (this.$t('Register') as string)
+      title: (this.$tt('Register') as string)
     }
   },
   computed: {
@@ -259,8 +277,8 @@ export default Vue.extend({
       me: ME_KEYS.namespace
     }),
     ...mapGetters({
-      computedChainId: ME_KEYS.computedChainId,
-      computedEvmChainId: ME_KEYS.computedEvmChainId
+      computedChainType: ME_KEYS.computedChainType,
+      computedChainId: ME_KEYS.computedChainId
     }),
     isTokenPocket,
     isCoinbaseWallet,
@@ -313,14 +331,19 @@ export default Vue.extend({
     },
     breadcrumbItems (): any {
       return [{
-        text: this.$t('Explorer'),
+        text: this.$tt('Explorer'),
         href: '/explorer'
       }, {
-        text: this.$t('Register')
+        text: this.$tt('Register')
       }]
     },
-    loggedIn (): boolean {
-      return this.me.loggedIn
+    chainType (): ChainType {
+      let _chainType = ChainType.ckb
+      const _coinType = this.connectedAccount.chain?.coinType
+      if (_coinType && CoinTypeToChainTypeMap[_coinType]) {
+        _chainType = CoinTypeToChainTypeMap[_coinType]
+      }
+      return _chainType
     }
   },
   watch: {
@@ -359,7 +382,7 @@ export default Vue.extend({
       try {
         const res = await this.$services.explorer.searchAccount({
           account: this.accountName,
-          chain_type: this.computedChainId,
+          chain_type: this.computedChainType,
           address: this.connectedAccount.address
         })
 
@@ -375,23 +398,23 @@ export default Vue.extend({
           }
           else if (res.status === ACCOUNT_STATUS.registered) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('You already have {accountName}, no need to register again', { accountName: this.accountName })
+              title: this.$tt('Tips'),
+              message: this.$tt('You already have {accountName}, no need to register again', { accountName: this.accountName })
             })
             _result = false
           }
         }
         else if ([ACCOUNT_STATUS.registering, ACCOUNT_STATUS.registeringIncludeProposal, ACCOUNT_STATUS.registeringConfirmProposal].includes(res.status)) {
           this.$alert({
-            title: this.$t('Tips'),
-            message: this.$t('Someone else is registering {accountName}, it is currently unavailable, please try again later', { accountName: this.accountName })
+            title: this.$tt('Tips'),
+            message: this.$tt('Someone else is registering {accountName}, it is currently unavailable, please try again later', { accountName: this.accountName })
           })
           _result = false
         }
         else if (res.status === ACCOUNT_STATUS.registered) {
           this.$alert({
-            title: this.$t('Tips'),
-            message: this.$t('{accountName} has been registered by someone else and can no longer be registered', { accountName: this.accountName })
+            title: this.$tt('Tips'),
+            message: this.$tt('{accountName} has been registered by someone else and can no longer be registered', { accountName: this.accountName })
           })
           _result = false
         }
@@ -401,15 +424,15 @@ export default Vue.extend({
         }
         else if (res.status === ACCOUNT_STATUS.notOpenRegister) {
           this.$alert({
-            title: this.$t('Tips'),
-            message: this.$t('This account name is not yet open for registration')
+            title: this.$tt('Tips'),
+            message: this.$tt('This account name is not yet open for registration')
           })
           _result = false
         }
         else if (res.status === ACCOUNT_STATUS.unavailableAccount) {
           this.$alert({
-            title: this.$t('Tips'),
-            message: this.$t('Unavailable Account')
+            title: this.$tt('Tips'),
+            message: this.$tt('Unavailable Account')
           })
           _result = false
         }
@@ -418,13 +441,13 @@ export default Vue.extend({
         console.error(err)
         if (err.code === errno.rpcApiErrNotOpenForRegistration) {
           this.$alert({
-            title: this.$t('Error'),
-            message: this.$t('{accountName} is not open for registration', { accountName: this.accountName })
+            title: this.$tt('Error'),
+            message: this.$tt('{accountName} is not open for registration', { accountName: this.accountName })
           })
         }
         else {
           this.$alert({
-            title: this.$t('Error'),
+            title: this.$tt('Error'),
             message: `${err.code}: ${err.message}`
           })
         }
@@ -436,7 +459,7 @@ export default Vue.extend({
       try {
         const res = await this.$services.account.orderDetail({
           account: this.accountName,
-          chain_type: this.computedChainId,
+          chain_type: this.computedChainType,
           address: this.connectedAccount.address,
           action: ORDER_ACTION_TYPE.applyRegister
         })
@@ -452,7 +475,7 @@ export default Vue.extend({
     async changeOrder () {
       try {
         await this.$services.account.changeOrder({
-          chain_type: this.computedChainId,
+          chain_type: this.computedChainType,
           address: this.connectedAccount.address,
           account: this.accountName,
           pay_chain_type: this.paymentToken.chain_type,
@@ -470,44 +493,50 @@ export default Vue.extend({
       }
     },
     async onRegister () {
-      if (this.loggedIn) {
-        if (this.isSafePalWallet && [CHAIN_ID.eth, CHAIN_ID.bsc, CHAIN_ID.polygon].includes(this.computedChainId)) {
-          this.$alert({
-            title: this.$t('Tips'),
-            message: this.$t('The wallet does not support EIP-712 signature algorithm. Please use another wallet App and try again.')
-          })
-          return
-        }
-        await this.checkInviter()
-        if (this.inviterErrorTipShowing) {
-          return
-        }
-        if (this.inviter) {
-          this.$store.commit(ME_KEYS.setInviter, this.inviter + ACCOUNT_SUFFIX)
-        }
-        this.confirmRegisterShowing = true
-        this.$ga.event('account', 'click', 'register')
+      if (this.onRegisterLoading) {
+        return
       }
-      else {
-        await this.checkInviter()
-        if (this.inviterErrorTipShowing) {
-          return
-        }
-        if (this.inviter) {
-          this.$store.commit(ME_KEYS.setInviter, this.inviter + ACCOUNT_SUFFIX)
-        }
-        this.$walletSdk.init()
+      this.onRegisterLoading = true
+      await this.$walletSdk.onConnect(true)
+      if (this.isSafePalWallet && EvmCoinTypes.includes(this.connectedAccount.chain?.coinType)) {
+        this.$alert({
+          title: this.$tt('Tips'),
+          message: this.$tt('The wallet does not support EIP-712 signature algorithm. Please use another wallet App and try again.')
+        })
+        this.onRegisterLoading = false
+        return
       }
+      await this.checkInviter()
+      if (this.inviterErrorTipShowing) {
+        this.onRegisterLoading = false
+        return
+      }
+      if (this.inviter) {
+        this.$store.commit(ME_KEYS.setInviter, this.inviter + ACCOUNT_SUFFIX)
+      }
+      this.onRegisterLoading = false
+      this.confirmRegisterShowing = true
+      this.$gtag('event', 'click', {
+        event_category: 'account',
+        event_label: 'register',
+        value: 1
+      })
     },
     async onConfirm () {
       // todo split this function
       this.confirmRegisterLoading = true
+      await this.$walletSdk.onConnect(true)
       const checkAccountStatusRes = await this.checkAccountStatus()
       if (!checkAccountStatusRes) {
         this.confirmRegisterLoading = false
         return
       }
-      this.$ga.event('account', 'click', 'confirm register')
+
+      this.$gtag('event', 'click', {
+        event_category: 'account',
+        event_label: 'confirm register',
+        value: 1
+      })
 
       try {
         await this.getOrderInfo()
@@ -518,8 +547,8 @@ export default Vue.extend({
           }
           if (this.paymentToken.token_id === DASBalanceTokenId) {
             const res = await this.$services.account.dasBalancePay({
-              evm_chain_id: this.computedEvmChainId,
-              chain_type: this.computedChainId,
+              evm_chain_id: this.computedChainId,
+              chain_type: this.computedChainType,
               address: this.connectedAccount.address,
               order_id: this.orderInfo.order_id
             })
@@ -545,7 +574,7 @@ export default Vue.extend({
               const { hash } = await this.$services.account.sendTrx(res)
               if (hash) {
                 await this.$services.account.returnRegisteredPaymentTrxId({
-                  chain_type: this.computedChainId,
+                  chain_type: this.computedChainType,
                   address: this.connectedAccount.address,
                   account: this.accountName,
                   order_id: this.orderInfo.order_id,
@@ -572,7 +601,7 @@ export default Vue.extend({
 
             if (typeof trxId === 'string') {
               await this.$services.account.returnRegisteredPaymentTrxId({
-                chain_type: this.computedChainId,
+                chain_type: this.computedChainType,
                 address: this.connectedAccount.address,
                 account: this.accountName,
                 order_id: this.orderInfo.order_id,
@@ -592,7 +621,7 @@ export default Vue.extend({
         }
         else {
           const applyRegisterRes = await this.$services.account.submitRegisterOrder({
-            chain_type: this.computedChainId,
+            chain_type: this.computedChainType,
             address: this.connectedAccount.address,
             account: this.accountName,
             pay_chain_type: this.paymentToken.chain_type,
@@ -614,8 +643,8 @@ export default Vue.extend({
 
           if (this.paymentToken.token_id === DASBalanceTokenId) {
             const res = await this.$services.account.dasBalancePay({
-              evm_chain_id: this.computedEvmChainId,
-              chain_type: this.computedChainId,
+              evm_chain_id: this.computedChainId,
+              chain_type: this.computedChainType,
               address: this.connectedAccount.address,
               order_id: applyRegisterRes.order_id
             })
@@ -641,7 +670,7 @@ export default Vue.extend({
               const { hash } = await this.$services.account.sendTrx(res)
               if (hash) {
                 await this.$services.account.returnRegisteredPaymentTrxId({
-                  chain_type: this.computedChainId,
+                  chain_type: this.computedChainType,
                   address: this.connectedAccount.address,
                   account: this.accountName,
                   order_id: applyRegisterRes.order_id,
@@ -668,7 +697,7 @@ export default Vue.extend({
 
             if (trxId && typeof trxId === 'string') {
               await this.$services.account.returnRegisteredPaymentTrxId({
-                chain_type: this.computedChainId,
+                chain_type: this.computedChainType,
                 address: this.connectedAccount.address,
                 account: this.accountName,
                 order_id: applyRegisterRes.order_id,
@@ -692,14 +721,14 @@ export default Vue.extend({
         if (![errno.metaMaskUserRejectedAccountAccess, errno.metaMaskUserDeniedMessageSignature].includes(err.code) && err !== errno.tronLinkConfirmationDeclinedByUser && err.message !== errno.walletConnectUserRejectedTheTransaction) {
           if (err.code === errno.metaMaskWalletRequestPermissions) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('Other requests for the wallet are not processed, please try again after processing')
+              title: this.$tt('Tips'),
+              message: this.$tt('Other requests for the wallet are not processed, please try again after processing')
             })
           }
           else if (err === errno.tronLinkInsufficientBalance || (err.message && err.message.includes(errno.walletConnectInsufficientFundsForTransfer))) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('Insufficient balance')
+              title: this.$tt('Tips'),
+              message: this.$tt('Insufficient balance')
             })
           }
           else if (err.message && err.message.startsWith(errno.portalWalletInsufficientBalance)) {
@@ -707,14 +736,14 @@ export default Vue.extend({
           }
           else if (err.message && err.message.includes(errno.tronLinkTypeErrorAddUpdateDataNotFunction)) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet.')
+              title: this.$tt('Tips'),
+              message: this.$tt('The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet.')
             })
           }
           else if (err.message && err.message.includes(errno.portalWalletValidationFailure)) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('The wallet environment does not support {token} payments', { token: CKB.symbol })
+              title: this.$tt('Tips'),
+              message: this.$tt('The wallet environment does not support {token} payments', { token: CKB.symbol })
             })
           }
           else if (err.code === errno.apiErrorCodeInsufficientBalance) {
@@ -722,13 +751,16 @@ export default Vue.extend({
           }
           else if (err.code === errno.apiErrorCodeNotEnoughChange) {
             this.$alert({
-              title: this.$t('Tips'),
-              message: this.$t('DAS is a smart contract that runs on the Nervos. Due to the underlying logic of the contract, the remaining amount is too low (less than 116 CKB) to send a transaction.')
+              title: this.$tt('Tips'),
+              message: this.$tt('DAS is a smart contract that runs on the Nervos. Due to the underlying logic of the contract, the remaining amount is too low (less than 116 CKB) to send a transaction.')
             })
+          }
+          else if (err.code === errno.rpcApiErrSignatureError) {
+            this.signatureErrorDialogShowing = true
           }
           else {
             this.$alert({
-              title: this.$t('Error'),
+              title: this.$tt('Error'),
               message: err.code ? `${err.code}: ${err.message}` : err
             })
           }

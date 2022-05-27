@@ -5,11 +5,11 @@
       :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registeringLockedAccount }"
     >
       <div class="confirm-list__confirm-item__label">
-        <div>1. {{ $t('Confirm payment') }}</div>
+        <div>1. {{ $tt('Confirm payment') }}</div>
         <template v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['1']">
           <a
             class="confirm-list__confirm-item__link"
-            :href="confirmPaymentExplorerTrx"
+            :href="`${TOKEN_ID_TO_CHAIN[accountInfo.register_tx_map['1'].token_id].explorerTrx}${accountInfo.register_tx_map['1'].hash}`"
             target="_blank"
           >
             <span>{{ collapseString(accountInfo.register_tx_map['1'].hash, 8, 8) }}</span>
@@ -36,11 +36,11 @@
       :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registering }"
     >
       <div class="confirm-list__confirm-item__label">
-        <div>2. {{ $t('Lock account') }}</div>
+        <div>2. {{ $tt('Apply for registration in private') }}</div>
         <a
           v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['2']"
           class="confirm-list__confirm-item__link"
-          :href="`${CHAINID_TO_CHAIN[accountInfo.register_tx_map['2'].chain_id].explorerTrx}${accountInfo.register_tx_map['2'].hash}`"
+          :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['2'].hash}`"
           target="_blank"
         >
           <span>{{ collapseString(accountInfo.register_tx_map['2'].hash, 8, 8) }}</span>
@@ -69,11 +69,11 @@
       :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registeringIncludeProposal }"
     >
       <div class="confirm-list__confirm-item__label">
-        <div>3. {{ $t('Register the account') }}</div>
+        <div>3. {{ $tt('Reveal the account name on the chain') }}</div>
         <a
           v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['3']"
           class="confirm-list__confirm-item__link"
-          :href="`${CHAINID_TO_CHAIN[accountInfo.register_tx_map['3'].chain_id].explorerTrx}${accountInfo.register_tx_map['3'].hash}`"
+          :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['3'].hash}`"
           target="_blank"
         >
           <span>{{ collapseString(accountInfo.register_tx_map['3'].hash, 8, 8) }}</span>
@@ -102,11 +102,11 @@
       :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registeringConfirmProposal }"
     >
       <div class="confirm-list__confirm-item__label">
-        <div>4. {{ $t('Confirm account uniqueness') }}</div>
+        <div>4. {{ $tt('Submit a proposal') }}</div>
         <a
           v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['4']"
           class="confirm-list__confirm-item__link"
-          :href="`${CHAINID_TO_CHAIN[accountInfo.register_tx_map['4'].chain_id].explorerTrx}${accountInfo.register_tx_map['4'].hash}`"
+          :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['4'].hash}`"
           target="_blank"
         >
           <span>{{ collapseString(accountInfo.register_tx_map['4'].hash, 8, 8) }}</span>
@@ -135,11 +135,11 @@
       :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status === ACCOUNT_STATUS.registered }"
     >
       <div class="confirm-list__confirm-item__label">
-        <div>5. {{ $t('Registration is successful') }}</div>
+        <div>5. {{ $tt('Proposal approved. Registered successfully') }}</div>
         <a
           v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['5']"
           class="confirm-list__confirm-item__link"
-          :href="`${CHAINID_TO_CHAIN[accountInfo.register_tx_map['5'].chain_id].explorerTrx}${accountInfo.register_tx_map['5'].hash}`"
+          :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['5'].hash}`"
           target="_blank"
         >
           <span>{{ collapseString(accountInfo.register_tx_map['5'].hash, 8, 8) }}</span>
@@ -171,7 +171,7 @@ import Vue, { PropType } from 'vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { ISearchAccount } from '~/services/Explorer'
 import { ACCOUNT_STATUS } from '~/constant'
-import { CHAIN_ID, CHAINID_TO_CHAIN, BSC, Polygon } from '~/constant/chain'
+import { ChainTypeToChain, BSC, Polygon, CKB, TOKEN_ID_TO_CHAIN } from '~/constant/chain'
 import { collapseString } from '~/modules/tools'
 
 export default Vue.extend({
@@ -194,16 +194,17 @@ export default Vue.extend({
         else if (this.accountInfo.register_tx_map['1'].token_id === Polygon.tokenId) {
           return `${Polygon.explorerTrx}${this.accountInfo.register_tx_map['1'].hash}`
         }
-        return `${CHAINID_TO_CHAIN[this.accountInfo.register_tx_map['1'].chain_id].explorerTrx}${this.accountInfo.register_tx_map['1'].hash}`
+        return `${ChainTypeToChain[this.accountInfo.register_tx_map['1'].chain_id].explorerTrx}${this.accountInfo.register_tx_map['1'].hash}`
       }
       return ''
     }
   },
   data () {
     return {
+      CKB,
       ACCOUNT_STATUS,
-      CHAINID_TO_CHAIN,
-      CHAIN_ID
+      ChainTypeToChain,
+      TOKEN_ID_TO_CHAIN
     }
   },
   methods: {
@@ -216,7 +217,7 @@ export default Vue.extend({
 @import "src/assets/variables";
 
 .confirm-list {
-  margin-bottom: 24px;
+  margin-bottom: 8px;
   padding: 14px 12px 12px 16px;
   background: $normal-color;
   border-radius: 12px;

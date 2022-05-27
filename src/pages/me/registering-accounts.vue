@@ -6,11 +6,12 @@
         class="registering-accounts__loading__tip"
         icon="⏳"
         iconSize="72"
-        :tip="$t('Loading...')"
+        :tip="$tt('Loading')"
         tipFontSize="14"
       />
     </div>
     <template v-else>
+      <div class="registering-accounts__tips">{{ $tt('Automatically closed after 24 hours.') }}</div>
       <ul class="registering-accounts__list">
         <li
           v-for="account in registeringAccounts"
@@ -35,13 +36,13 @@
           </div>
           <div class="registering-accounts__list__status">
             <span class="registering-accounts__list__status-text">
-              {{ $t('Registering') }}
+              {{ $tt('Registering') }}
             </span>
           </div>
         </li>
       </ul>
       <div class="registering-accounts__no-more">
-        {{ $t('No more') }}
+        {{ $tt('No more') }}
       </div>
     </template>
   </div>
@@ -77,10 +78,10 @@ export default Vue.extend({
     },
     breadcrumbItems (): any {
       return [{
-        text: this.$t('My'),
+        text: this.$tt('My'),
         href: '/me'
       }, {
-        text: this.$t('Registering accounts')
+        text: this.$tt('Registering accounts')
       }]
     }
   },
@@ -92,7 +93,7 @@ export default Vue.extend({
   },
   head (): { [key: string]: string | TranslateResult } {
     return {
-      title: this.$t('Registering accounts')
+      title: this.$tt('Registering accounts')
     }
   },
   mounted () {
@@ -198,5 +199,15 @@ export default Vue.extend({
 
 .registering-accounts__breadcrumb {
   padding: 16px 12px 4px 12px;
+}
+
+.registering-accounts__tips {
+  display: flex;
+  margin: 12px 12px 0 12px;
+  padding: 10px 16px;
+  background: #FCECEC;
+  border-radius: 9px;
+  line-height: 20px;
+  color: #DE4A46;
 }
 </style>

@@ -4,9 +4,9 @@ import { max, min_value, required } from 'vee-validate/dist/rules'
 import { formatsByName } from '@ensdomains/address-encoder'
 import { BSC, CKB, ETH, Polygon } from '~/constant/chain'
 import { isValidAdaAddress } from '~/modules/ADAValidator'
-import { ParsingRecordProfileKey } from '~/services/Account'
 import config from '~~/config'
 import { findParsingRecordChain } from '~/modules/tools'
+import { $tt } from '~/plugins/i18n'
 
 setInteractionMode('lazy')
 
@@ -15,7 +15,7 @@ export default function ({ app }: Context) {
   extend('required', {
     ...required,
     message: (fieldName): string => {
-      return <string>app.i18n.t('Please enter a valid {fieldName}', { fieldName })
+      return $tt('Please enter a valid {fieldName}', { fieldName })
     }
   })
 
@@ -23,7 +23,7 @@ export default function ({ app }: Context) {
   extend('selectRequired', {
     ...required,
     message: (fieldName): string => {
-      return <string>app.i18n.t('Please select {fieldName}', { fieldName })
+      return $tt('Please select {fieldName}', { fieldName })
     }
   })
 
@@ -31,7 +31,7 @@ export default function ({ app }: Context) {
   extend('max', {
     ...max,
     message: (fieldName, args: any): string => {
-      return <string>app.i18n.t('{fieldName} must not exceed {length} characters', {
+      return $tt('{fieldName} must not exceed {length} characters', {
         fieldName,
         length: args.length
       })
@@ -42,7 +42,7 @@ export default function ({ app }: Context) {
   extend('minValue', {
     ...min_value,
     message: (fieldName, args: any): string => {
-      return <string>app.i18n.t('{fieldName} must be greater than or equal to {min}', {
+      return $tt('{fieldName} must be greater than or equal to {min}', {
         fieldName,
         min: args.min
       })
@@ -55,7 +55,7 @@ export default function ({ app }: Context) {
       return parseInt(value) === Number(value) && Number(value) > 0
     },
     message: (fieldName): string => {
-      return <string>app.i18n.t('{fieldName} must be a positive integer', { fieldName })
+      return $tt('{fieldName} must be a positive integer', { fieldName })
     }
   })
 
@@ -66,7 +66,7 @@ export default function ({ app }: Context) {
     message: (fieldName, args: any): string => {
       // @ts-ignore
       const chain = findParsingRecordChain(args.key)
-      return <string>app.i18n.t('{chain} address format is wrong', { chain: chain.text })
+      return $tt('{chain} address format is wrong', { chain: chain.text })
     },
     validate (value: string, args: any): boolean {
       try {
@@ -102,33 +102,6 @@ export default function ({ app }: Context) {
         console.error(err)
         return false
       }
-    }
-  })
-
-  // object key
-  extend('objectkey', {
-    validate (value: string) {
-      return /^[a-z0-9_]+$/g.test(value)
-    },
-    message: (fieldName): string => {
-      return <string>app.i18n.t('{fieldName} can only contain lowercase letters, numbers and underscores', { fieldName })
-    }
-  })
-
-  // profile value
-  extend('profileValue', {
-    params: ['key'],
-    validate (value: string, args: any) {
-      const key = args.key
-      switch (key) {
-        case ParsingRecordProfileKey.twitter:
-          return /^[a-zA-Z0-9_]+$/g.test(value)
-        default:
-          return true
-      }
-    },
-    message: (fieldName): string => {
-      return <string>app.i18n.t('{fieldName} can only contain letters, numbers and underscores', { fieldName })
     }
   })
 }

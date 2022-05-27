@@ -50,7 +50,7 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 16px 20px 24px;
+  padding: 32px 16px 32px 32px;
 }
 
 .content-header__title {
@@ -58,16 +58,17 @@ export default Vue.extend({
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 600;
   color: $primary-font-color;
   text-align: left;
+  line-height: 28px;
 }
 
 .content-header__close {
   position: absolute;
-  right: 12px;
-  top: 13px;
+  right: 16px;
+  top: 28px;
   border-radius: 50%;
   cursor: pointer;
 

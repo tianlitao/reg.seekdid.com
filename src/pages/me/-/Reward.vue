@@ -7,10 +7,10 @@
         alt="reward"
       >
       <h1 class="reward__title">
-        {{ $t('Invite others to register and earn {rewardFactor}% reward', { rewardFactor: rewardFactor }) }}
+        {{ $tt('Invite others to register and earn {rewardFactor}% reward', { rewardFactor: rewardFactor }) }}
       </h1>
       <div class="reward__factor-desc">
-        {{ $t('If someone else opens and successfully registers a DAS account through the link below, you will earn {rewardFactor}% of the registration fee.', { rewardFactor: rewardFactor }) }}
+        {{ $tt('If someone else opens and successfully registers a DAS account through the link below, you will earn {rewardFactor}% of the registration fee.', { rewardFactor: rewardFactor }) }}
       </div>
       <template v-if="invitationAccount">
         <div
@@ -18,7 +18,7 @@
           @click="onChangeInvitationLink"
         >
           <span>
-            <div class="reward__invitation-link__label">{{ $t('My invitation link') }}</div>
+            <div class="reward__invitation-link__label">{{ $tt('My invitation link') }}</div>
             <div>{{ invitationLink }}</div>
           </span>
           <Iconfont
@@ -33,14 +33,14 @@
             :to="`/me/invitation-link/${invitationAccount}`"
             success
           >
-            {{ $t('Share image') }}
+            {{ $tt('Share image') }}
           </Button>
           <Button
             class="reward__share-on-twitter"
             success
             @click="onShareTwitter"
           >
-            {{ $t('Share on Twitter') }}
+            {{ $tt('Share on Twitter') }}
           </Button>
         </div>
         <Button
@@ -49,14 +49,14 @@
           normal
           @click="onCopyInvitationLink"
         >
-          {{ $t('Copy to friends') }}
+          {{ $tt('Copy to friends') }}
         </Button>
       </template>
       <template v-else>
         <div
           class="reward__invitation-link reward__invitation-link__label"
         >
-          {{ $t("You don't have a DAS account, register your DAS account to generate an invitation link and get the reward.") }}
+          {{ $tt("You do not have a DAS account, register your DAS account to generate an invitation link and get the reward.") }}
         </div>
         <Button
           class="reward__register-now"
@@ -64,14 +64,15 @@
           block
           @click="goHome"
         >
-          {{ $t('Register Now') }}
+          {{ $tt('Register Now') }}
         </Button>
       </template>
-      <RecordContainer class="reward__bonus" :title="$t('Transferable Balance')">
+      <RecordContainer class="reward__bonus" :title="$tt('Transferable Balance')">
         <i18n
-          class="reward__my-bonus__unissued-tip"
-          path="Invitation bonus is issued once every {minMergeBonus} CKB and becomes transferable amount{faq}"
           tag="div"
+          class="reward__my-bonus__unissued-tip"
+          path="邀请奖励说明"
+          :i18nkey="$tt('邀请奖励说明')"
         >
           <template
             slot="minMergeBonus"
@@ -82,7 +83,7 @@
             slot="faq"
           >
             <a
-              :href="$i18n.locale === 'zh' ? 'https://docs.did.id/zh/faq#%E9%82%80%E8%AF%B7%E4%BA%BA-%E6%B8%A0%E9%81%93%E5%A5%96%E5%8A%B1%E7%9A%84%E7%BB%93%E7%AE%97%E6%98%AF%E4%B8%AD%E5%BF%83%E5%8C%96%E7%9A%84%E5%90%97-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%BB%A1%E4%B8%80%E5%AE%9A%E6%95%B0%E9%A2%9D%E4%B9%8B%E5%90%8E%E6%89%8D%E4%BC%9A%E5%8F%91%E6%94%BE' : 'https://docs.did.id/faq#is-the-settlement-of-inviter-channel-rewards-centralized-and-why-are-they-paid-out-only-after-a-certain-amount-is-reached'"
+              :href="$i18n.locale === 'zh-CN' ? 'https://docs.did.id/zh/faq#%E9%82%80%E8%AF%B7%E4%BA%BA-%E6%B8%A0%E9%81%93%E5%A5%96%E5%8A%B1%E7%9A%84%E7%BB%93%E7%AE%97%E6%98%AF%E4%B8%AD%E5%BF%83%E5%8C%96%E7%9A%84%E5%90%97-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%BB%A1%E4%B8%80%E5%AE%9A%E6%95%B0%E9%A2%9D%E4%B9%8B%E5%90%8E%E6%89%8D%E4%BC%9A%E5%8F%91%E6%94%BE' : 'https://docs.did.id/faq#is-the-settlement-of-inviter-channel-rewards-centralized-and-why-are-they-paid-out-only-after-a-certain-amount-is-reached'"
               target="_blank"
             >
               <Iconfont
@@ -98,28 +99,27 @@
           class="reward__action-button"
           @click="onManageBalance"
         >
-          {{ $t('Manage Balance') }}
+          {{ $tt('Manage Balance') }}
         </div>
       </RecordContainer>
       <RecordContainer
         class="reward__margin-bottom-32"
-        :title="$t('Transfer out records')"
+        :title="$tt('Transfer out records')"
       >
         <template v-if="transferOutRecords.length === 0">
           <div class="reward__no-record">
-            {{ $t('No record') }}
+            {{ $tt('No record') }}
           </div>
         </template>
         <template v-else>
           <div class="reward__transfer-out-total">
-            {{ $t('Cumulative transfer out {transferOutTotal} CKB', { transferOutTotal: thousandSplit(transferOutTotal) }) }}
+            {{ $tt('Cumulative transfer out {transferOutTotal} CKB', { transferOutTotal: thousandSplit(transferOutTotal) }) }}
           </div>
           <table class="reward__table">
             <thead>
               <tr class="reward__thead__tr">
                 <th class="reward__thead__th">
-                  {{ $t('Bonus (CKB)') }}
-                  <span v-if="!config.isProdData" class="reward__test-network">{{ $t('Test Network') }}</span>
+                  {{ $tt('Bonus (CKB)') }}
                 </th>
                 <th class="reward__thead__th reward__thead__th__align-right">
                   Hash
@@ -152,14 +152,14 @@
             class="reward__action-button"
             @click="goTransferOutRecords"
           >
-            {{ $t('View all') }}
+            {{ $tt('View all') }}
           </div>
         </template>
       </RecordContainer>
-      <RecordContainer :title="$t('Reward records')">
+      <RecordContainer :title="$tt('Reward records')">
         <template v-if="rewardRecords.length === 0">
           <div class="reward__no-record">
-            {{ $t('No record, go ahead and invite~') }}
+            {{ $tt('No record, go ahead and invite~') }}
           </div>
         </template>
         <template v-else>
@@ -167,11 +167,10 @@
             <thead>
               <tr class="reward__thead__tr">
                 <th class="reward__thead__th">
-                  {{ $t('Bonus (CKB)') }}
-                  <span v-if="!config.isProdData" class="reward__test-network">{{ $t('Test Network') }}</span>
+                  {{ $tt('Bonus (CKB)') }}
                 </th>
                 <th class="reward__thead__th reward__thead__th__align-right">
-                  {{ $t(`Invitees's DAS`) }}
+                  {{ $tt(`Invitees's DAS`) }}
                 </th>
               </tr>
             </thead>
@@ -189,7 +188,7 @@
                     class="reward__table__link"
                     :to="`/explorer/account/${record.invitee}`"
                   >
-                    {{ record.invitee }}
+                    {{ toHashedStyle(record.invitee) }}
                   </nuxt-link>
                 </td>
               </tr>
@@ -200,13 +199,13 @@
             class="reward__action-button"
             @click="goRewardRecords"
           >
-            {{ $t('View all') }}
+            {{ $tt('View all') }}
           </div>
         </template>
       </RecordContainer>
       <BottomSheet
         v-model="selectAccountShowing"
-        :title="$t('Toggle invite link')"
+        :title="$tt('Toggle invite link')"
       >
         <ul class="reward__account-list">
           <li
@@ -223,7 +222,7 @@
                 :size="40"
                 rounded
               />
-              <span class="reward__account-list__account-name">{{ item.account }}</span>
+              <span class="reward__account-list__account-name">{{ toHashedStyle(item.account) }}</span>
             </span>
             <Iconfont
               v-if="invitationAccount === item.account"
@@ -237,19 +236,19 @@
             class="reward__account-list__action reward__account-list__link"
             @click="getMyAccounts"
           >
-            {{ $t('Load more') }}
+            {{ $tt('Load more') }}
           </li>
           <li
             v-else-if="loadingShowing"
             class="reward__account-list__action"
           >
-            {{ $t('Loading...') }}
+            {{ $tt('Loading') }}
           </li>
           <li
             v-else-if="noMoreShowing"
             class="reward__account-list__action"
           >
-            {{ $t('No more') }}
+            {{ $tt('No more') }}
           </li>
         </ul>
       </BottomSheet>
@@ -268,7 +267,8 @@ import {
   fromSatoshi,
   shrinkUnit,
   thousandSplit,
-  isMobile
+  isMobile,
+  toHashedStyle
 } from '~/modules/tools'
 import { DEFAULT_PAGE_SIZE, IDENTICON_SERVE } from '~/constant'
 import RecordContainer from '~/pages/me/-/RecordContainer.vue'
@@ -300,8 +300,8 @@ export default Vue.extend({
       me: ME_KEYS.namespace
     }),
     ...mapGetters({
-      computedChainId: ME_KEYS.computedChainId,
-      computedEvmChainId: ME_KEYS.computedEvmChainId
+      computedChainType: ME_KEYS.computedChainType,
+      computedChainId: ME_KEYS.computedChainId
     }),
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
@@ -348,6 +348,7 @@ export default Vue.extend({
     shrinkUnit,
     thousandSplit,
     collapseString,
+    toHashedStyle,
     onManageBalance () {
       if (this.isMobile) {
         window.location.href = config.dasBalance
@@ -368,7 +369,7 @@ export default Vue.extend({
       try {
         const res = await this.$services.account.myRewards({
           address: this.connectedAccount.address,
-          chainType: this.computedChainId,
+          chainType: this.computedChainType,
           size: 10
         })
         const list = res.list && res.list.map((item: IMyRewardsResInviteList) => {
@@ -390,7 +391,7 @@ export default Vue.extend({
       try {
         const res = await this.$services.account.transferOutRecords({
           address: this.connectedAccount.address,
-          chainType: this.computedChainId,
+          chainType: this.computedChainType,
           size: 10
         })
         this.transferOutTotal = shrinkUnit(res.total, CKB.decimals)
@@ -418,9 +419,10 @@ export default Vue.extend({
       try {
         this.page = this.page + 1
         const res = await this.$services.account.myAccounts({
-          chain_type: this.computedChainId,
+          chain_type: this.computedChainType,
           address: this.connectedAccount.address,
-          page: this.page
+          page: this.page,
+          keyword: ''
         })
         this.loadingShowing = false
         if (res && res.list) {
@@ -453,13 +455,13 @@ export default Vue.extend({
     onCopyInvitationLink () {
       if (this.myAccounts.length === 0) {
         this.$alert({
-          title: this.$t('Tips'),
-          message: (this.$t('You have not registered for a DAS account yet, you cannot invite others to register, go register for a DAS account now!') as string)
+          title: this.$tt('Tips'),
+          message: (this.$tt('You have not registered for a DAS account yet, you cannot invite others to register, go register for a DAS account now!') as string)
         })
         return
       }
       copyText(this.invitationLink).then(() => {
-        this.$toast('👌 ' + this.$t('Copied'))
+        this.$toast('👌 ' + this.$tt('Copied'))
       })
     },
     goHome () {
@@ -640,16 +642,6 @@ export default Vue.extend({
   font-size: 32px;
   font-family: $barlow-medium;
   color: #FE61A0;
-}
-
-.reward__test-network {
-  padding: 1px 6px;
-  border-radius: 4px;
-  border: $container-border;
-  font-size: 12px;
-  font-weight: 600;
-  color: $primary-font-color;
-  line-height: 17px;
 }
 
 .reward__my-bonus-fiat-currency {

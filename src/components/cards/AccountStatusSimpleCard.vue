@@ -11,7 +11,7 @@
       <span
         class="account-status-simple-card__status-text"
       >
-        {{ accountInfo.status !== undefined ? $t(ACCOUNT_STATUS_LIST[accountInfo.status].statusText) : '' }}
+        {{ accountInfo.status !== undefined ? ACCOUNT_STATUS_LIST[accountInfo.status] : '' }}
       </span>
       <span
         class="account-status-simple-card__account-name"
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { ACCOUNT_STATUS_LIST, IDENTICON_SERVE } from '~/constant'
+import { ACCOUNT_STATUS, IDENTICON_SERVE } from '~/constant'
 import IconImage from '~/components/icon/IconImage.vue'
 import { IAccountInfo } from '~/services/Account'
 
@@ -43,7 +43,23 @@ export default Vue.extend({
   data () {
     return {
       IDENTICON_SERVE,
-      ACCOUNT_STATUS_LIST
+      ACCOUNT_STATUS_LIST: {
+        [ACCOUNT_STATUS.notOpenRegister]: this.$tt('Not open for registration'),
+        [ACCOUNT_STATUS.registerable]: this.$tt('Available'),
+        [ACCOUNT_STATUS.registeringPaymentConfirm]: this.$tt('Registering'),
+        [ACCOUNT_STATUS.registeringLockedAccount]: this.$tt('Registering'),
+        [ACCOUNT_STATUS.registering]: this.$tt('Registering'),
+        [ACCOUNT_STATUS.registeringIncludeProposal]: this.$tt('Registering'),
+        [ACCOUNT_STATUS.registeringConfirmProposal]: this.$tt('Registering'),
+        [ACCOUNT_STATUS.registered]: this.$tt('Already registered'),
+        [ACCOUNT_STATUS.reservedAccount]: this.$tt('Reserved account'),
+        [ACCOUNT_STATUS.onePriceSell]: this.$tt('On sale'),
+        [ACCOUNT_STATUS.auctionSell]: this.$tt('Bid for sale'),
+        [ACCOUNT_STATUS.candidateAccount]: this.$tt('Candidate account'),
+        [ACCOUNT_STATUS.othersRegistering]: this.$tt('Others are registering'),
+        [ACCOUNT_STATUS.unavailableAccount]: this.$tt('Unavailable Account'),
+        [ACCOUNT_STATUS.notCreated]: this.$tt('Not minted')
+      }
     }
   }
 })

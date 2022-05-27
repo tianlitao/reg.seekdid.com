@@ -28,6 +28,7 @@ export interface IConfig {
   transfer_throttle: number;
   income_cell_min_transfer_value: number;
   premium: string;
+  timestamp_on_chain: number;
 }
 
 export default class Common extends BasicService {

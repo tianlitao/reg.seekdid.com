@@ -1,18 +1,18 @@
 <template>
   <Dialog
     :showing="showing"
-    :title="$t('Insufficient balance')"
+    :title="$tt('Insufficient balance')"
     closeButton
     @close="onClose"
   >
-    <div>{{ $t('Before payment, please ensure that your DAS balance is greater than {recommendedDepositAmount} CKB. After payment, the remaining amount must not be less than 116 CKB. Otherwise, the transaction can not be sent.', { recommendedDepositAmount: recommendedDepositAmount }) }}</div>
+    <div>{{ $tt('Before payment, please ensure that your DAS balance is greater than {recommendedDepositAmount} CKB. After payment, the remaining amount must not be less than 116 CKB. Otherwise, the transaction can not be sent.', { recommendedDepositAmount: recommendedDepositAmount }) }}</div>
     <template v-slot:action>
       <Button
         block
         success
         @click="onManageBalance"
       >
-        {{ $t('Manage Balance') }}
+        {{ $tt('Manage Balance') }}
       </Button>
     </template>
   </Dialog>

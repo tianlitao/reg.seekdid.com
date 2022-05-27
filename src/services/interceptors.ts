@@ -11,8 +11,8 @@ export function onFulfilled (context: Context) {
       else {
         if (res.data.err_no === errno.rpcApiErrSystemUpgrade) {
           context.app.$alert({
-            title: context.app.i18n.t('Tips'),
-            message: context.app.i18n.t('The service is under maintenance, please try again later.')
+            title: context.app.$tt('Tips'),
+            message: context.app.$tt('The service is under maintenance, please try again later.')
           })
         }
         else {

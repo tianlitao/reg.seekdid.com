@@ -11,7 +11,7 @@
       <span
         class="bottom-nav__item__text"
         :class="{ 'bottom-nav__item__text_active': isTargetPath(menu.path) }">
-        {{ $t(menu.text) }}
+        {{ $tt(menu.text) }}
       </span>
     </nuxt-link>
     <a
@@ -24,7 +24,7 @@
         color="#A0A1AB"/>
       <span
         class="bottom-nav__item__text">
-        {{ $t('Marketplace') }}
+        {{ $tt('Marketplace') }}
       </span>
     </a>
   </nav>

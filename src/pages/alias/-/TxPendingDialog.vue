@@ -2,14 +2,14 @@
   <Dialog
     class="tx-pending-dialog"
     :showing="value"
-    :actionButtonText="$t('Got it')"
+    :actionButtonText="$tt('Got it')"
     closeButton
     @close="onClose"
   >
     <div class="dialog_icon">📡</div>
-    <div class="dialog_title">{{ $t('Transaction pending') }}</div>
+    <div class="dialog_title">{{ $tt('Transaction pending') }}</div>
     <div class="account_pending">
-      {{ $t('It is expected to take 3 minutes to be confirmed on chain.') }}
+      {{ $tt('It is expected to take 3 minutes to be confirmed on chain.') }}
     </div>
   </Dialog>
 </template>
