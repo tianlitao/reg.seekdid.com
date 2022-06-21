@@ -73,7 +73,7 @@ export default Vue.extend({
   margin: 0 2px;
   border: 0;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 14px;
   color: rgba(31, 43, 77, 0.66);
   background: unset;
   outline: 0;

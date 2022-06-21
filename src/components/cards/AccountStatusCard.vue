@@ -22,8 +22,8 @@
         {{ $tt('This account is a reserved account and can only be claimed for free by the corresponding organization/individual. The free application process will be made public at a later date.') }}
       </div>
       <Button
+        shape="round"
         class="account-status-card__action-button"
-        normal
         @click="gotoReservedDasList"
       >
         {{ $tt('About Reserved Account') }}
@@ -93,7 +93,8 @@ export default Vue.extend({
   color: $white;
   line-height: 38px;
   text-align: center;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .account-status-card__status {

@@ -11,7 +11,15 @@
       />
     </div>
     <template v-else>
-      <div class="registering-accounts__tips">{{ $tt('Automatically closed after 24 hours.') }}</div>
+      <div class="registering-accounts__tips">
+        <Iconfont
+          class="registering-accounts__tips__icon"
+          name="tips"
+          size="16"
+          color="#DE4A46"
+        />
+        {{ $tt('Automatically closed after 24 hours.') }}
+      </div>
       <ul class="registering-accounts__list">
         <li
           v-for="account in registeringAccounts"
@@ -20,25 +28,28 @@
           @click="seeDetails(account.account)"
         >
           <div class="account-status__list__container">
+            <IconImage
+              class="registering-accounts__list__logo"
+              :url="`${IDENTICON_SERVE}${account.account}`"
+              :alt="account.account"
+              :size="44"
+              rounded
+            />
             <div class="registering-accounts__list__info">
-              <IconImage
-                class="registering-accounts__list__logo"
-                :url="`${IDENTICON_SERVE}${account.account}`"
-                :alt="account.account"
-                :size="28"
-                rounded
-              />
-              <span>
-                {{ account.account }}
-              </span>
+              <span>{{ toHashedStyle(account.account) }}</span>
+              <div>
+                <span class="registering-accounts__list__status-text">
+                  <Iconfont
+                    name="loading"
+                    size="16"
+                    color="#2EB67D"
+                  />
+                  {{ $tt('Registering') }}
+                </span>
+              </div>
             </div>
-            <Iconfont name="arrow-right" color="#E4E4E4" />
           </div>
-          <div class="registering-accounts__list__status">
-            <span class="registering-accounts__list__status-text">
-              {{ $tt('Registering') }}
-            </span>
-          </div>
+          <Iconfont name="arrow-right" color="#11142D" />
         </li>
       </ul>
       <div class="registering-accounts__no-more">
@@ -59,6 +70,7 @@ import Iconfont from '~/components/icon/Iconfont.vue'
 import { IDENTICON_SERVE } from '~/constant'
 import { ME_KEYS } from '~/store/me'
 import Breadcrumb from '~/components/Breadcrumb.vue'
+import { toHashedStyle } from '~/modules/tools'
 
 export default Vue.extend({
   name: 'RegisteringAccounts',
@@ -68,7 +80,6 @@ export default Vue.extend({
     Iconfont,
     Breadcrumb
   },
-  layout: 'noBottomNav',
   computed: {
     ...mapState({
       me: ME_KEYS.namespace
@@ -100,6 +111,7 @@ export default Vue.extend({
     this.getRegisteringAccounts()
   },
   methods: {
+    toHashedStyle,
     async getRegisteringAccounts () {
       if (this.registeringAccounts.length === 0) {
         this.fetchDataLoading = true
@@ -145,16 +157,20 @@ export default Vue.extend({
 }
 
 .registering-accounts__list__item {
-  margin-bottom: 12px;
-  padding: 16px 16px 20px 16px;
-  border: $container-border;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 8px;
+  height: 90px;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.03);
   border-radius: 16px;
-  background: $white;
-  box-shadow: 0px -1px 0px 0px $normal-color;
+  border: 1px solid rgba(182, 196, 217, 0.4);
   cursor: pointer;
 
   &:hover {
-    background: #F6F7F9;
+    background: #F7F9FA;
   }
 }
 
@@ -162,39 +178,49 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: $primary-font-color;
+  word-break: break-word;
+  hyphens: auto;
+  line-height: 21px;
 }
 
 .registering-accounts__list__info {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   font-size: 18px;
   font-weight: 600;
-  color: $primary-font-color;
-  word-break: break-all;
+  color: #11142D;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .registering-accounts__list__logo {
   margin-right: 12px;
 }
 
-.registering-accounts__list__status {
-  min-height: 17px;
-}
-
 .registering-accounts__list__status-text {
-  margin-left: 38px;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 4px;
   padding: 0 6px;
   border-radius: 4px;
   font-size: 12px;
   color: $success-font-color;
   background: rgba(0, 223, 155, 0.1);
+
+  svg {
+    animation: rotate360DegAnimation 0.9s linear infinite;
+  }
 }
 
 .registering-accounts__no-more {
-  color: $assist-font-color;
-  padding: 24px 0;
+  padding: 16px 0;
   text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #636D85;
 }
 
 .registering-accounts__breadcrumb {
@@ -202,12 +228,19 @@ export default Vue.extend({
 }
 
 .registering-accounts__tips {
-  display: flex;
   margin: 12px 12px 0 12px;
-  padding: 10px 16px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  height: 40px;
   background: #FCECEC;
-  border-radius: 9px;
-  line-height: 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
   color: #DE4A46;
+}
+
+.registering-accounts__tips__icon {
+  margin-right: 6px;
 }
 </style>

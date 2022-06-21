@@ -58,6 +58,10 @@ export default Vue.extend({
 
   .signature-error-dialog__discord-link {
     color: $link-font-color;
+
+    &:hover {
+      color: $link-hover-font-color
+    }
   }
 }
 </style>

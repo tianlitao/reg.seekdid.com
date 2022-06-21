@@ -8,8 +8,9 @@
     <div>{{ $tt('Insufficient balance. Please make sure the balance in your Portal Wallet is "≥ 61 CKB" after payment.') }}</div>
     <template #action>
       <Button
+        shape="round"
         block
-        success
+        status="success"
         @click="onManageBalance"
       >
         {{ $tt('Manage Balance') }}

@@ -58,7 +58,8 @@ export default Vue.extend({
         [ACCOUNT_STATUS.candidateAccount]: this.$tt('Candidate account'),
         [ACCOUNT_STATUS.othersRegistering]: this.$tt('Others are registering'),
         [ACCOUNT_STATUS.unavailableAccount]: this.$tt('Unavailable Account'),
-        [ACCOUNT_STATUS.notCreated]: this.$tt('Not minted')
+        [ACCOUNT_STATUS.subAccountNotCreated]: this.$tt('Not minted'),
+        [ACCOUNT_STATUS.onCross]: this.$tt('Already registered')
       }
     }
   }
@@ -99,7 +100,8 @@ export default Vue.extend({
   font-size: 32px;
   font-weight: 600;
   color: $white;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .account-status-simple-card__account-name_small {

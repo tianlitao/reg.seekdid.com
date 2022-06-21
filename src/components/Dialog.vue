@@ -40,7 +40,8 @@
           class="dialog__action"
         >
           <Button
-            success
+            shape="round"
+            status="success"
             block
             @click="onClose(false)"
           >
@@ -159,6 +160,7 @@ export default Vue.extend({
   color: $primary-font-color;
   line-height: 20px;
   word-break: break-word;
+  hyphens: auto;
 }
 
 .dialog__slot-content {
@@ -166,6 +168,6 @@ export default Vue.extend({
 }
 
 .dialog__action {
-  padding: 24px 32px;
+  padding: 32px;
 }
 </style>

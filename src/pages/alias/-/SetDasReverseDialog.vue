@@ -19,8 +19,9 @@
       </div>
       <template v-slot:action>
         <Button
+          shape="round"
           block
-          success
+          status="success"
           :loading="confirmLoading"
           :disabled="!account"
           @click="onConfirm"
@@ -40,8 +41,9 @@
       </div>
       <template v-slot:action>
         <Button
+          shape="round"
           block
-          success
+          status="success"
           @click="onManageBalance"
         >
           {{ $tt('Manage Balance') }}
@@ -59,8 +61,9 @@
       </div>
       <template v-slot:action>
         <Button
+          shape="round"
           block
-          success
+          status="success"
           @click="onManageBalance"
         >
           {{ $tt('Manage Balance') }}
@@ -227,6 +230,12 @@ export default Vue.extend({
               message: this.$tt('Frequent operations. There are still transactions being processed in your wallet address, please try again after 30s.')
             })
           }
+          else if (err.code === errno.rpcApiErrAccountIsExpired) {
+            this.$alert({
+              title: this.$tt('Tips'),
+              message: this.$tt('The account has expired. If you need to continue using it, please renew it.')
+            })
+          }
           else if (err.code === errno.apiErrorCodeInsufficientBalance) {
             this.insufficientBalanceDialogShowing = true
           }
@@ -282,6 +291,7 @@ export default Vue.extend({
   color: #636D85;
   line-height: 17px;
   word-break: break-word;
+  hyphens: auto;
 }
 
 .set-das-reverse-dialog__insufficient-balance__tips {

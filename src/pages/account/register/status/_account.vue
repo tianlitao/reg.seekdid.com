@@ -14,17 +14,18 @@
           {{ $tt('The payment status of the order registered with {accountName} is not detected, please confirm whether you have paid?', { accountName: accountName }) }}
         </div>
         <Button
+          shape="round"
           class="register-status__button"
           block
-          success
+          status="success"
           @click="onPaid"
         >
           {{ $tt('I have already paid') }}
         </Button>
         <Button
+          shape="round"
           class="register-status__button"
           block
-          normal
           @click="onRegisterAgain"
         >
           {{ $tt('Not paid, continue to pay') }}
@@ -60,9 +61,10 @@
           target="_blank"
         >{{ $tt('Learn more about the registration process.') }}</a>
         <Button
+          shape="round"
           class="register-status__button register-status__margin-bottom-24"
           block
-          normal
+          status="success"
           @click="onRegisterAnother"
         >
           {{ $tt('Register another') }}
@@ -83,8 +85,9 @@
         </div>
         <div class="register-status__registered-actions">
           <Button
+            shape="round"
             class="register-status__registered-button__left"
-            primary
+            status="primary"
             @click="goInvitationLink"
           >
             <IconImage
@@ -96,8 +99,9 @@
             {{ $tt('Reward') }}
           </Button>
           <Button
+            shape="round"
             class="register-status__registered-button__right"
-            success
+            status="success"
             @click="goManage"
           >
             {{ $tt('View Account') }}
@@ -122,9 +126,10 @@
           {{ $tt('Registration of {accountName} failed! If you have already paid the relevant fees, you will be refunded to your payment address within 1 hour (except for transaction fees).', { accountName: accountName }) }}
         </div>
         <Button
+          shape="round"
           class="register-status__button"
           block
-          normal
+          status="normal"
           @click="goHome"
         >
           {{ $tt('Back to home page') }}
@@ -272,7 +277,7 @@ export default Vue.extend({
           else if ([ACCOUNT_STATUS.registeringLockedAccount, ACCOUNT_STATUS.registering, ACCOUNT_STATUS.registeringIncludeProposal, ACCOUNT_STATUS.registeringConfirmProposal].includes(res.status)) {
             this.tipStatus = TIPS.registering
           }
-          else if (res.status === ACCOUNT_STATUS.registered) {
+          else if ([ACCOUNT_STATUS.registered, ACCOUNT_STATUS.onCross].includes(res.status)) {
             this.tipStatus = TIPS.registered
             this.clearCheckAccountStatus()
           }
@@ -289,7 +294,7 @@ export default Vue.extend({
           this.tipStatus = TIPS.registerFailed
           this.clearCheckAccountStatus()
         }
-        else if (res.status === ACCOUNT_STATUS.registered) {
+        else if ([ACCOUNT_STATUS.registered, ACCOUNT_STATUS.onCross].includes(res.status)) {
           this.$alert({
             title: this.$tt('Error'),
             message: this.$tt('{accountName} has been registered by someone else and can no longer be registered', { accountName: this.accountName })
@@ -364,7 +369,8 @@ export default Vue.extend({
   font-size: 24px;
   line-height: 33px;
   margin: 0 0 14px 0;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .register-status__tip {
@@ -377,12 +383,17 @@ export default Vue.extend({
   line-height: 20px;
   text-align: center;
   word-break: break-word;
+  hyphens: auto;
 }
 
 .register-status__go-me-page {
   display: inline-block;
   color: $link-font-color;
   cursor: pointer;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 
 .register-status__button {
@@ -427,5 +438,9 @@ export default Vue.extend({
   display: block;
   color: $link-font-color;
   text-align: left;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 </style>

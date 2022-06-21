@@ -2,14 +2,9 @@
   <button
     v-bind="$attrs"
     class="button"
-    :class="{
-      button_block: block,
-      button_normal: normal,
-      button_primary: primary,
-      button_error: error,
-      button_success: success
-    }"
-    :disabled="$attrs.disabled || loading"
+    :class="buttonClass"
+    :disabled="disabled || loading"
+    @click="onClick"
     v-on="$listeners"
   >
     <span
@@ -19,20 +14,46 @@
     >
       <Iconfont name="loading" color="#D5D5D5" />
     </span>
-    <nuxt-link
-      v-if="to"
-      class="button__link"
-      :to="to"
-    >
-      <slot />
-    </nuxt-link>
-    <slot v-else />
+    <slot />
+    <Iconfont
+      v-if="outlink"
+      class="button__out-link-icon"
+      name="arrow-right-up"
+      size="7"
+      :color="outLinkIconColor"
+    />
   </button>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
+
+enum ButtonType {
+  default = 'default',
+  solid = 'solid',
+  dashed = 'dashed'
+}
+
+enum ButtonSize {
+  small = 'small',
+  middle = 'middle',
+  large = 'large',
+  super = 'super'
+}
+
+enum ButtonStatus {
+  default = 'default',
+  primary = 'primary',
+  normal = 'normal',
+  success = 'success',
+  error = 'error',
+}
+
+enum ButtonShape {
+  default = 'default',
+  round = 'round'
+}
 
 export default Vue.extend({
   name: 'Button',
@@ -49,25 +70,79 @@ export default Vue.extend({
       type: Boolean,
       default: false
     },
-    primary: {
+    disabled: {
       type: Boolean,
       default: false
     },
-    normal: {
-      type: Boolean,
-      default: false
+    border: {
+      type: String as PropType<ButtonType>,
+      default: ButtonType.default
     },
-    error: {
-      type: Boolean,
-      default: false
+    size: {
+      type: String as PropType<ButtonSize>,
+      default: ButtonSize.large
     },
-    success: {
+    status: {
+      type: String as PropType<ButtonStatus>,
+      default: ButtonStatus.default
+    },
+    shape: {
+      type: String as PropType<ButtonShape>,
+      default: ButtonShape.default
+    },
+    outlink: {
       type: Boolean,
       default: false
     },
     to: {
       type: String,
       default: ''
+    },
+    href: {
+      type: String,
+      default: ''
+    },
+    target: {
+      type: String,
+      default: '_self'
+    }
+  },
+  computed: {
+    outLinkIconColor (): string {
+      if (this.disabled) {
+        return '#ffffff'
+      }
+      else if ([ButtonStatus.default, ButtonStatus.normal].includes(this.status)) {
+        return '#11142d'
+      }
+      else {
+        return '#ffffff'
+      }
+    },
+    buttonClass (): string[] {
+      const _class = [
+        `button__border__${this.border}`,
+        `button__size__${this.size}`,
+        `button__status__${this.status}`,
+        `button__shape__${this.shape}`
+      ]
+      if (this.block) {
+        _class.push('button__block')
+      }
+      return _class
+    }
+  },
+  methods: {
+    onClick () {
+      if (this.to) {
+        this.$router.push(this.to)
+      }
+      else if (this.href && this.target === '_blank') {
+        window.open(this.href)
+      }
+      else if (this.href) {
+        window.location.href === this.href
+      }
     }
   }
 })
@@ -80,73 +155,13 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 56px;
-  padding: 0 16px;
-  font-size: 14px;
-  font-weight: 600;
-  color: $primary-font-color;
-  border-radius: 16px;
+  font-weight: 400;
   outline: none;
   cursor: pointer;
-  border: none;
-  box-shadow: none;
-
-  &:disabled {
-    cursor: default;
-    color: $white;
-    background: $disabled-color !important;
-  }
 }
 
-.button__link {
-  padding: 18px;
+.button__block {
   width: 100%;
-  color: unset;
-}
-
-.button_block {
-  width: 100%;
-}
-
-.button_normal {
-  color: $primary-font-color;
-  background: $white;
-
-  &:hover {
-    background: $normal-hover-color;
-  }
-
-  &:disabled {
-    color: rgba(17, 20, 45, 0.3);
-    background: $white !important;
-  }
-}
-
-.button_primary {
-  color: $white;
-  background: $primary-color;
-
-  &:hover {
-    background: $primary-hover-color;
-  }
-}
-
-.button_success {
-  color: $white;
-  background: $success-color;
-
-  &:hover {
-    background: $success-hover-color;
-  }
-}
-
-.button_error {
-  color: $white;
-  background: $error-color;
-
-  &:hover {
-    background: $error-hover-color;
-  }
 }
 
 .button__loading-icon {
@@ -156,6 +171,151 @@ export default Vue.extend({
 }
 
 .button__loading-icon__margin-right-8 {
-  margin-right: 8px;
+  margin-right: 4px;
+}
+
+.button__out-link-icon {
+  margin-top: -12px !important;
+  margin-left: 2px !important;
+}
+
+.button__border__default {
+  border: none;
+  box-shadow: none;
+}
+
+.button__border__solid {
+  border: 1px solid;
+  box-shadow: none;
+}
+
+.button__border__dashed {
+  border: 1px dashed;
+  box-shadow: none;
+}
+
+.button__size__small {
+  height: 38px;
+  padding: 0 8px;
+  font-size: 14px;
+  font-weight: 400;
+
+  &.button__shape__default {
+    border-radius: 8px;
+  }
+
+  &.button__shape__round {
+    border-radius: 18px;
+  }
+}
+
+.button__size__middle {
+  height: 42px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 400;
+
+  &.button__shape__default {
+    border-radius: 12px;
+  }
+
+  &.button__shape__round {
+    border-radius: 21px;
+  }
+}
+
+.button__size__large {
+  height: 52px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+
+  &.button__shape__default {
+    border-radius: 14px;
+  }
+
+  &.button__shape__round {
+    border-radius: 26px;
+  }
+}
+
+.button__size__super {
+  height: 60px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+
+  &.button__shape__default {
+    border-radius: 14px;
+  }
+
+  &.button__shape__round {
+    border-radius: 30px;
+  }
+}
+
+.button__status__default {
+  color: $primary-font-color;
+
+  &:disabled {
+    cursor: no-drop;
+    opacity: 0.2;
+  }
+}
+
+.button__status__primary {
+  color: $white;
+  background: $primary-color;
+
+  &:disabled {
+    cursor: no-drop;
+    opacity: 0.2;
+  }
+
+  &:hover {
+    background: $primary-hover-color;
+  }
+}
+
+.button__status__normal {
+  color: $primary-font-color;
+  background: $normal-color;
+
+  &:disabled {
+    cursor: no-drop;
+    opacity: 0.2;
+  }
+
+  &:hover {
+    background: $normal-hover-color;
+  }
+}
+
+.button__status__success {
+  color: $white;
+  background: $success-color;
+
+  &:disabled {
+    cursor: no-drop;
+    opacity: 0.2;
+  }
+
+  &:hover {
+    background: $success-hover-color;
+  }
+}
+
+.button__status__error {
+  color: $white;
+  background: $error-color;
+
+  &:disabled {
+    cursor: no-drop;
+    opacity: 0.2;
+  }
+
+  &:hover {
+    background: $error-hover-color;
+  }
 }
 </style>

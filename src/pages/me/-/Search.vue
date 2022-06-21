@@ -3,7 +3,7 @@
     v-click-outside="onClickOutside"
     :class="[
       'search',
-      { '_active': active }
+      { '_active': active || !!query }
     ]"
     @click="onClickInput"
   >
@@ -12,11 +12,12 @@
         class="search_icon"
         name="search-small"
         size="24"
-        color="#11142D"
+        color="#636D85"
       />
       <input
         ref="input"
         v-model="query"
+        :placeholder="$tt('Search')"
         class="search_input"
         type="text"
         @keydown="onKeydown"
@@ -105,16 +106,16 @@ export default Vue.extend({
   flex: 1;
 
   .search_container {
-    padding: 6px 6px 6px 12px;
+    padding: 0 6px;
     display: flex;
     align-items: center;
     height: 24px;
-    background: #EAEEF3;
     border-radius: 12px;
+    color: #636D85;
   }
 
   .search_icon {
-    margin-right: 8px;
+    margin-right: 4px;
   }
 
   .search_input {
@@ -122,7 +123,14 @@ export default Vue.extend({
     border: 0;
     background: unset;
     outline: 0;
-    caret-color: #B0B8BF;
+    caret-color: #0DBA85;
+  }
+
+  &._active {
+    .search_container {
+      padding: 6px 6px 6px 12px;
+      background: #EAEEF3;
+    }
   }
 
   .search_clean {

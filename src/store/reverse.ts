@@ -38,11 +38,17 @@ export const mutations: MutationTree<CommonState> = {
 export const actions: ActionTree<CommonState, CommonState> = {
   async [keys.fetchAccountList] ({ rootState, commit, rootGetters }) {
     try {
+      const chainType = rootGetters[ME_KEYS.computedChainType]
+      // @ts-ignore
+      const address = rootState.me.connectedAccount.address
+
+      if (!chainType || !address) {
+        return
+      }
+
       const res = await this.$services.dasReverse.accountList({
-        // @ts-ignore
-        chainType: rootGetters[ME_KEYS.computedChainType],
-        // @ts-ignore
-        address: rootState.me.connectedAccount.address
+        chainType,
+        address
       })
       if (res && res.list) {
         commit(keys.setAccountList, res.list)

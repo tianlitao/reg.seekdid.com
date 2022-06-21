@@ -1,45 +1,50 @@
 <template>
-  <li
-    class="account-status"
-    @click="onClick"
-  >
-    <div class="account-status__container">
-      <div class="account-status__account-info">
-        <IconImage
-          class="account-status__logo"
-          :url="`${IDENTICON_SERVE}${accountInfo.account}`"
-          :alt="accountInfo.account"
-          :size="28"
-          rounded
-        />
-        <span class="account-status__account-name">
-          {{ toHashedStyle(accountInfo.account) }}
-        </span>
-      </div>
-      <Iconfont class="account-status__arrow-right" name="arrow-right" color="#E4E4E4" />
+  <li class="account-status">
+    <div class="account-status__account-info">
+      <IconImage
+        class="account-status__logo"
+        :url="`${IDENTICON_SERVE}${accountInfo.account}`"
+        :alt="accountInfo.account"
+        :size="44"
+        rounded
+      />
+      <span class="account-status__account-name">
+        {{ toHashedStyle(accountInfo.account) }}
+        <div>
+          <template v-if="accountInfo.status">
+            <span
+              v-if="countdownToExpiredDays > 0"
+              class="account-status__status-text account-status__status-text_warn"
+            >
+              <Iconfont
+                name="warning"
+                size="16"
+                color="#FF6B6B"
+              />
+              {{ $tt('Expires in {days} days', { days: countdownToExpiredDays }) }}
+            </span>
+            <span
+              v-else-if="accountInfo.status === ACCOUNT_STATUS.expired"
+              class="account-status__status-text account-status__status-text_warn"
+            >
+              <Iconfont
+                name="warning"
+                size="16"
+                color="#FF6B6B"
+              />
+              {{ $tt('账号回收提示', { days: countdownToRecoveryDays }) }}
+            </span>
+            <span
+              v-else-if="accountInfo.status === ACCOUNT_STATUS.onePriceSell"
+              class="account-status__status-text account-status__status-text__fixed-price-sell"
+            >
+              {{ $tt('On sale on DIDTop') }}
+            </span>
+          </template>
+        </div>
+      </span>
     </div>
-    <div class="account-status__status-text__container">
-      <template v-if="accountInfo.status">
-        <span
-          v-if="accountStatus === ACCOUNT_STATUS.expired"
-          class="account-status__status-text account-status__status-text_warn"
-        >
-          {{ $tt('Recalls after {countdownToRecoveryDays} days, renews immediately', { countdownToRecoveryDays: calcExpiredDay(accountInfo.expired_at) }) }}
-        </span>
-        <span
-          v-if="accountStatus === ACCOUNT_STATUS.registered"
-          class="account-status__status-text account-status__status-text_success"
-        >
-          {{ $tt('In normal use') }}
-        </span>
-        <span
-          v-else-if="accountStatus === ACCOUNT_STATUS.onePriceSell"
-          class="account-status__status-text account-status__status-text__fixed-price-sell"
-        >
-          {{ $tt('On sale') }}
-        </span>
-      </template>
-    </div>
+    <Iconfont class="account-status__arrow-right" name="arrow-right" color="#11142D" />
   </li>
 </template>
 
@@ -52,7 +57,6 @@ import { IAccountInfo } from '~/services/Account'
 import { ACCOUNT_STATUS, IDENTICON_SERVE } from '~/constant'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { COMMON_KEYS } from '~/store/common'
-import config from '~~/config'
 import { toHashedStyle } from '~/modules/tools'
 
 export default Vue.extend({
@@ -71,7 +75,7 @@ export default Vue.extend({
     return {
       ACCOUNT_STATUS,
       IDENTICON_SERVE,
-      accountStatus: this.accountInfo.status
+      oneDayMillisecond: 24 * 60 * 60 * 1000
     }
   },
   computed: {
@@ -83,41 +87,33 @@ export default Vue.extend({
         return this.common.config.account_expiration_grace_period * 1000
       }
       return 0
+    },
+    countdownToExpiredDays (): number | string {
+      const currentTimestamp = new Date().getTime()
+      const { expired_at: expiredAt } = this.accountInfo
+      if (currentTimestamp > expiredAt - (this.oneDayMillisecond * 30) && currentTimestamp < expiredAt) {
+        return new Decimal(expiredAt)
+          .sub(currentTimestamp)
+          .div(this.oneDayMillisecond)
+          .toFixed(0, Decimal.ROUND_UP)
+      }
+      return 0
+    },
+    countdownToRecoveryDays (): number | string {
+      const currentTimestamp = new Date().getTime()
+      const { expired_at: expiredAt } = this.accountInfo
+      if (currentTimestamp > expiredAt && currentTimestamp < expiredAt + this.gracePeriod) {
+        return new Decimal(expiredAt)
+          .add(this.gracePeriod)
+          .sub(currentTimestamp)
+          .div(this.oneDayMillisecond)
+          .toFixed(0, Decimal.ROUND_UP)
+      }
+      return 0
     }
-  },
-  watch: {
-    accountInfo () {
-      this.checkAccountStatus()
-    }
-  },
-  mounted () {
-    this.checkAccountStatus()
   },
   methods: {
-    toHashedStyle,
-    checkAccountStatus () {
-      if (!this.accountInfo.account) {
-        return
-      }
-      if (new Date().getTime() >= this.accountInfo.expired_at) {
-        this.accountStatus = ACCOUNT_STATUS.expired
-      }
-      else {
-        this.accountStatus = this.accountInfo.status
-      }
-    },
-    calcExpiredDay (expiredAt: number): string {
-      const oneDayMillisecond = 24 * 60 * 60 * 1000
-      return new Decimal(expiredAt)
-        .add(this.gracePeriod)
-        .sub(new Date().getTime())
-        .div(oneDayMillisecond)
-        .toFixed(0, Decimal.ROUND_UP)
-    },
-    onClick () {
-      // this.$router.push(`/me/account/${this.accountInfo.account}`)
-      window.location.href = `${config.homepage}/${this.accountInfo.account}`
-    }
+    toHashedStyle
   }
 })
 </script>
@@ -126,19 +122,21 @@ export default Vue.extend({
 @import "src/assets/variables";
 
 .account-status {
-  margin-bottom: 12px;
-  padding: 16px 16px 20px 16px;
-  border-radius: 16px;
-  background: $white;
-  box-shadow: 0px -1px 0px 0px $normal-color;
-  cursor: pointer;
-}
-
-.account-status__container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  padding: 0 20px;
+  margin-bottom: 8px;
+  height: 90px;
+  background: #F6FFFD;
+  box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 3%);
+  border-radius: 16px;
+  border: 1px solid rgba(182, 196, 217, 0.4);
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(246, 255, 253, 0.7);
+  }
 }
 
 .account-status__account-info {
@@ -154,36 +152,31 @@ export default Vue.extend({
   font-size: 18px;
   font-weight: 600;
   color: $primary-font-color;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .account-status__arrow-right {
   min-width: 24px;
 }
 
-.account-status__status-text__container {
-  min-height: 17px;
-}
-
 .account-status__status-text {
-  margin-left: 38px;
+  display: inline-flex;
+  margin-top: 4px;
   padding: 0 6px;
   border-radius: 4px;
   font-size: 12px;
-}
-
-.account-status__status-text_success {
-  color: $success-font-color;
-  background: rgba(0, 223, 155, 0.1);
+  font-weight: 500;
 }
 
 .account-status__status-text__fixed-price-sell {
-  color: #416BDC;
-  background: #EAEFFE;
+  color: #2471FE;
+  background: rgba(192, 203, 246, 0.57);
 }
 
 .account-status__status-text_warn {
-  color: $error-font-color;
-  background: rgba(223, 74, 70, 0.1);
+  align-items: center;
+  color: #FF6B6B;
+  background: rgba(255, 107, 107, 0.1);
 }
 </style>

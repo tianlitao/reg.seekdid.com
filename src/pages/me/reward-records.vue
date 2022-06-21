@@ -172,7 +172,7 @@ export default Vue.extend({
 
 .reward-records {
   flex: 1;
-  background: #F7F8F9;
+  background: $background;
 }
 
 .reward-records__table {
@@ -220,6 +220,10 @@ export default Vue.extend({
   white-space: nowrap;
   text-overflow: ellipsis;
   color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 
 .reward-records__action {
@@ -232,6 +236,10 @@ export default Vue.extend({
 .reward-records__link {
   cursor: pointer;
   color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 
 .reward-records__loading {

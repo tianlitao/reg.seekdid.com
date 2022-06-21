@@ -186,7 +186,8 @@ export default Vue.extend({
 .debug {
   flex: 1;
   padding: 12px 12px 0 12px;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .debug__item {
