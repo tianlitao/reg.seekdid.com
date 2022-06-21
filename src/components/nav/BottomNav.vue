@@ -7,26 +7,13 @@
       :to="menu.path">
       <Iconfont
         :name="menu.icon"
-        :color="isTargetPath(menu.path) ? '#667FFF' : '#A0A1AB'"/>
+        :color="isTargetPath(menu.path) ? '#22C493' : '#A0A1AB'"/>
       <span
         class="bottom-nav__item__text"
         :class="{ 'bottom-nav__item__text_active': isTargetPath(menu.path) }">
         {{ $tt(menu.text) }}
       </span>
     </nuxt-link>
-    <a
-      class="bottom-nav__item"
-      :href="didtop"
-      target="_self"
-    >
-      <Iconfont
-        name="tab-market"
-        color="#A0A1AB"/>
-      <span
-        class="bottom-nav__item__text">
-        {{ $tt('Marketplace') }}
-      </span>
-    </a>
   </nav>
 </template>
 
@@ -34,19 +21,13 @@
 import Vue from 'vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import NavMixin from '~/components/nav/Nav.mixin.vue'
-import { didtop } from '~~/config'
 
 export default Vue.extend({
   name: 'BottomNav',
   components: {
     Iconfont
   },
-  mixins: [NavMixin],
-  data () {
-    return {
-      didtop
-    }
-  }
+  mixins: [NavMixin]
 })
 </script>
 
@@ -81,6 +62,6 @@ export default Vue.extend({
 }
 
 .bottom-nav__item__text_active {
-  color: #667FFF;
+  color: #22C493;
 }
 </style>

@@ -31,13 +31,15 @@
           <Button
             class="reward__share-picture"
             :to="`/me/invitation-link/${invitationAccount}`"
-            success
+            status="success"
+            shape="round"
           >
             {{ $tt('Share image') }}
           </Button>
           <Button
             class="reward__share-on-twitter"
-            success
+            status="success"
+            shape="round"
             @click="onShareTwitter"
           >
             {{ $tt('Share on Twitter') }}
@@ -46,7 +48,8 @@
         <Button
           class="reward__copy-invitation-link"
           block
-          normal
+          status="normal"
+          shape="round"
           @click="onCopyInvitationLink"
         >
           {{ $tt('Copy to friends') }}
@@ -60,8 +63,9 @@
         </div>
         <Button
           class="reward__register-now"
-          success
+          status="success"
           block
+          shape="round"
           @click="goHome"
         >
           {{ $tt('Register Now') }}
@@ -83,7 +87,7 @@
             slot="faq"
           >
             <a
-              :href="$i18n.locale === 'zh-CN' ? 'https://docs.did.id/zh/faq#%E9%82%80%E8%AF%B7%E4%BA%BA-%E6%B8%A0%E9%81%93%E5%A5%96%E5%8A%B1%E7%9A%84%E7%BB%93%E7%AE%97%E6%98%AF%E4%B8%AD%E5%BF%83%E5%8C%96%E7%9A%84%E5%90%97-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%BB%A1%E4%B8%80%E5%AE%9A%E6%95%B0%E9%A2%9D%E4%B9%8B%E5%90%8E%E6%89%8D%E4%BC%9A%E5%8F%91%E6%94%BE' : 'https://docs.did.id/faq#is-the-settlement-of-inviter-channel-rewards-centralized-and-why-are-they-paid-out-only-after-a-certain-amount-is-reached'"
+              :href="$i18n.locale === LANGUAGE.zhCN ? 'https://docs.did.id/zh/faq#%E9%82%80%E8%AF%B7%E4%BA%BA-%E6%B8%A0%E9%81%93%E5%A5%96%E5%8A%B1%E7%9A%84%E7%BB%93%E7%AE%97%E6%98%AF%E4%B8%AD%E5%BF%83%E5%8C%96%E7%9A%84%E5%90%97-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%BB%A1%E4%B8%80%E5%AE%9A%E6%95%B0%E9%A2%9D%E4%B9%8B%E5%90%8E%E6%89%8D%E4%BC%9A%E5%8F%91%E6%94%BE' : 'https://docs.did.id/faq#is-the-settlement-of-inviter-channel-rewards-centralized-and-why-are-they-paid-out-only-after-a-certain-amount-is-reached'"
               target="_blank"
             >
               <Iconfont
@@ -283,6 +287,7 @@ import {
 import { CKB } from '~/constant/chain'
 import { COMMON_KEYS } from '~/store/common'
 import config from '~~/config'
+import { LANGUAGE } from '~/constant/language'
 
 export default Vue.extend({
   name: 'Reward',
@@ -320,6 +325,7 @@ export default Vue.extend({
   },
   data () {
     return {
+      LANGUAGE,
       config,
       CKB,
       IDENTICON_SERVE,
@@ -481,7 +487,7 @@ export default Vue.extend({
 @import "src/assets/variables";
 
 .reward__container {
-  margin: 12px 0 26px 0;
+  margin-bottom: 26px;
   padding: 24px;
   border-radius: 16px;
   background: $white;
@@ -515,7 +521,8 @@ export default Vue.extend({
   border-radius: 12px;
   border: $container-border;
   text-align: left;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
   cursor: pointer;
 
   &:hover {
@@ -555,6 +562,10 @@ export default Vue.extend({
 .reward__account-list__link {
   cursor: pointer;
   color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 
 .reward__account-list__item {
@@ -574,7 +585,8 @@ export default Vue.extend({
 }
 
 .reward__account-list__account-name {
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
   text-align: left;
   margin-right: 14px;
 }
@@ -728,6 +740,10 @@ export default Vue.extend({
   white-space: nowrap;
   text-overflow: ellipsis;
   color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 
 .reward__margin-bottom-32 {

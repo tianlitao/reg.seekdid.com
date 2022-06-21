@@ -3,46 +3,56 @@
   font-family: 'Barlow-Medium';
   src: url('/fonts/Barlow-Medium.ttf');
 }
-$body-font-family: "PingFangSC-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, Arial, /* english */
-"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", "Source Han Sans CN", sans-serif;	/* chinese */
+@font-face {
+  font-family: Emoji;
+  src: local("Apple Color Emoji"), local("Segoe UI Emoji"), local("Segoe UI Symbol"), local("Noto Color Emoji");
+  unicode-range: U+1F000-1F644, U+203C-3299;
+}
+$body-font-family: system-ui, —apple-system, Segoe UI, Rototo, Emoji, Helvetica, Arial, sans-serif;
 $barlow-medium: "Barlow-Medium";
-$monospace-font-family: Courier, FreeMono, monospace;
+$monospace-font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
 // main color
 $white: #FFFFFF;
-$background: #E8EEF4;
-$primary-color: #667FFF;
-$primary-hover-color: #586CDD;
-$normal-color: #F7F7F7;
-$normal-hover-color: #EBEBEB;
+$background: #F9FBFC;
+$primary-color: #2471FE;
+$primary-hover-color: #226CF2;
+$normal-color: rgba(82, 98, 121, 0.1);
+$normal-hover-color: rgba(82, 98, 121, 0.2);
 $success-color: #22C493;
-$success-hover-color: #10A376;
-$error-color: #DF4B46;
-$error-hover-color: #B83E39;
+$success-hover-color: #1EAE82;
+$error-color: #FF6B6B;
+$error-hover-color: #E05656;
 $disabled-color: #A0A1AB;
 $assist-color: #11142D;
 $focus-color: #2D64F6;
-$container-border-color: #E4E4E4;
+$input-color: #F7F7F7;
+$container-border-color: rgba(182, 196, 217, 0.4);
 
 // font color
-$primary-font-color: #11142D;
+$primary-font-color: #121314;
 $assist-font-color: #808191;
 $third-font-color: #B2B3BD;
 $success-font-color: #22C493;
 $link-font-color: #3D66B3;
+$link-hover-font-color: rgba(61, 102, 179, 0.7);
 $warn-font-color: #FFA800;
-$error-font-color: #DF4A46;
+$error-font-color: #FF6B6B;
+
+// font size
+$font-size-14: 14px;
+$font-size-16: 16px;
+$font-size-18: 18px;
+$font-size-24: 24px;
+$font-size-36: 36px;
 
 // layout
 $pc-layout-container-width: 532px;
 $pc-layout-container-min-height: calc(100vh - 108px);
 $pc-layout-container-box-shadow: 0 6px 8px 0 rgb(223 231 227 / 86%);
 
-// nav
-$bottom-nav-height: 48px;
-
 // container
-$container-outer-box-shadow: 0 20px 16px 0 rgb(43 54 77 / 16%);
+$container-outer-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04);
 $container-border: 1px solid $container-border-color;
 
 // split line

@@ -19,8 +19,8 @@
 import Vue from 'vue'
 import { TranslateResult } from 'vue-i18n'
 import { mapState } from 'vuex'
-import LoginStatusCard from '~/components/cards/LoginStatusCard.vue'
 import Tabs from '~/components/Tabs.vue'
+import LoginStatusCard from '~/components/cards/LoginStatusCard.vue'
 import MyDas from '~/pages/me/-/MyDas.vue'
 import Reward from '~/pages/me/-/Reward.vue'
 import { COMMON_KEYS } from '~/store/common'
@@ -56,14 +56,6 @@ export default Vue.extend({
           text: this.$tt('My DAS'),
           value: ME_TABS.myDAS
         },
-        // {
-        //   text: this.$tt('My Auction'),
-        //   value: ME_TABS.myAuction
-        // },
-        // {
-        //   text: this.$tt('Favorites'),
-        //   value: ME_TABS.following
-        // },
         {
           text: this.$tt('Rewards'),
           icon: 'reward',
@@ -87,6 +79,7 @@ export default Vue.extend({
       if (newVal) {
         this.$router.replace({
           query: {
+            ...this.$route.query,
             tab: newVal
           }
         })
@@ -105,7 +98,7 @@ export default Vue.extend({
 
 .me {
   flex: 1;
-  background: #F7F8F9;
+  background: $background;
 }
 
 .me__header {
@@ -121,6 +114,6 @@ export default Vue.extend({
 
 .me__container {
   position: relative;
-  padding: 0 12px;
+  padding: 16px 12px 0 12px;
 }
 </style>

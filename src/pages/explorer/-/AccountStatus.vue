@@ -4,7 +4,7 @@
       <span
         class="account-status__status-text"
         :class="{
-          'account-status__registered': account.status === ACCOUNT_STATUS.registered,
+          'account-status__registered': [ACCOUNT_STATUS.registered, ACCOUNT_STATUS.onCross].includes(account.status),
           'account-status__registerable': [ACCOUNT_STATUS.registerable, ACCOUNT_STATUS.onePriceSell, ACCOUNT_STATUS.auctionSell].includes(account.status)
         }"
       >
@@ -27,7 +27,7 @@
     <Button
       v-if="ACCOUNT_STATUS_LIST[account.status] && ACCOUNT_STATUS_LIST[account.status].href && ACCOUNT_STATUS_LIST[account.status].actionText"
       class="account-status__button"
-      success
+      status="success"
       @click="goPage(account)"
     >
       {{ ACCOUNT_STATUS_LIST[account.status].actionText }}
@@ -36,7 +36,7 @@
       v-else-if="loading"
       :loading="loading"
       class="account-status__button"
-      success
+      status="success"
     />
   </li>
 </template>
@@ -142,10 +142,15 @@ export default Vue.extend({
           href: '',
           actionText: ''
         },
-        [ACCOUNT_STATUS.notCreated]: {
+        [ACCOUNT_STATUS.subAccountNotCreated]: {
           statusText: this.$tt('Not minted'),
           href: '',
           actionText: ''
+        },
+        [ACCOUNT_STATUS.onCross]: {
+          statusText: this.$tt('Already registered'),
+          href: '-',
+          actionText: this.$tt('View')
         }
       }
     }
@@ -165,6 +170,9 @@ export default Vue.extend({
             window.location.href = `https://${account.account}.cc`
           }
         }
+      }
+      else if (account.status === ACCOUNT_STATUS.onCross) {
+        window.location.href = `${config.homepage}/${account.account}`
       }
       else if (account.status === ACCOUNT_STATUS.onePriceSell) {
         window.location.href = `${config.didtop}/account/${account.account}`
@@ -197,7 +205,7 @@ export default Vue.extend({
 }
 
 .account-status__status-text {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   height: 18px;
   font-size: 12px;
@@ -227,7 +235,8 @@ export default Vue.extend({
   width: 218px;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
   white-space: nowrap;
 }
 

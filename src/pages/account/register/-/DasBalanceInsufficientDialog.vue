@@ -8,8 +8,9 @@
     <div>{{ $tt('Before payment, please ensure that your DAS balance is greater than {recommendedDepositAmount} CKB. After payment, the remaining amount must not be less than 116 CKB. Otherwise, the transaction can not be sent.', { recommendedDepositAmount: recommendedDepositAmount }) }}</div>
     <template v-slot:action>
       <Button
+        shape="round"
         block
-        success
+        status="success"
         @click="onManageBalance"
       >
         {{ $tt('Manage Balance') }}

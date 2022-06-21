@@ -1,0 +1,309 @@
+<template>
+  <div class="conversion-processing">
+    <Breadcrumb class="conversion-processing__breadcrumb" :items="breadcrumbItems" />
+    <div v-if="fetchDataLoading" class="conversion-processing__loading">
+      <StatusTip
+        class="conversion-processing__loading__tip"
+        icon="⏳"
+        iconSize="72"
+        :tip="$tt('Loading')"
+        tipFontSize="14"
+      />
+    </div>
+    <template v-else>
+      <ul class="conversion-processing__list">
+        <li
+          v-for="account in processingNfts"
+          :key="account.account"
+          class="conversion-processing__list__item"
+          :class="{ 'conversion-processing__list__item__disabled': account.cross_direction === CrossDirection.toCKB }"
+          @click="onClickAccount(account)"
+        >
+          <div class="account-status__list__container">
+            <IconImage
+              class="conversion-processing__list__logo"
+              :url="`${IDENTICON_SERVE}${account.account}`"
+              :alt="account.account"
+              :size="44"
+              rounded
+            />
+            <span>
+              {{ toHashedStyle(account.account) }}
+              <div>
+                <span
+                  v-if="account.cross_direction === CrossDirection.fromCKB"
+                  class="conversion-processing__list__status-text conversion-processing__list__status-text_from-ckb"
+                >
+                  {{ $tt('Converting to NFT') }}
+                </span>
+                <template v-if="account.cross_direction === CrossDirection.toCKB">
+                  <span
+                    class="conversion-processing__list__status-text conversion-processing__list__status-text_to-ckb"
+                  >
+                    {{ $tt('Converting to a normal .bit') }}
+                  </span>
+                  <a
+                    v-if="account.recycle_hash"
+                    class="conversion-processing__list__trx-id"
+                    :href="`${ETH.explorerTrx}${account.recycle_hash}`"
+                    target="_blank"
+                  >
+                    {{ collapseString(account.recycle_hash, 5, 5) }}
+                    <Iconfont
+                      class="conversion-processing__list__trx-id__icon"
+                      name="arrow-right"
+                      color="#B0B8BF"
+                      size="18"
+                    />
+                  </a>
+                </template>
+              </div>
+            </span>
+          </div>
+          <div
+            v-if="account.cross_direction === CrossDirection.fromCKB"
+            class="conversion-processing__list__status"
+          >
+            <span class="conversion-processing__list__mint">{{ $tt('Mint now') }}</span>
+            <Iconfont name="arrow-right" color="#11142D" />
+          </div>
+        </li>
+      </ul>
+      <div class="conversion-processing__no-more">
+        {{ $tt('No more') }}
+      </div>
+    </template>
+    <MintNft
+      v-model="mintNftDialogShowing"
+      :account="selectAccount"
+      @completed="mintCompleted"
+    />
+    <MintCompleted
+      v-model="mintCompletedDialogShowing"
+      :account="selectAccount"
+    />
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import { TranslateResult } from 'vue-i18n'
+import { mapState } from 'vuex'
+import StatusTip from '~/components/StatusTip.vue'
+import IconImage from '~/components/icon/IconImage.vue'
+import Iconfont from '~/components/icon/Iconfont.vue'
+import { CrossDirection, IDENTICON_SERVE } from '~/constant'
+import { IConnectedAccount, ME_KEYS } from '~/store/me'
+import Breadcrumb from '~/components/Breadcrumb.vue'
+import { IDirectionList } from '~/services/CrossEth'
+import { collapseString, toHashedStyle } from '~/modules/tools'
+import MintCompleted from '~/pages/me/-/MintCompleted.vue'
+import MintNft from '~/pages/me/-/MintNft.vue'
+import { ETH } from '~/constant/chain'
+
+export default Vue.extend({
+  name: 'ConversionProcessing',
+  components: {
+    StatusTip,
+    IconImage,
+    Iconfont,
+    Breadcrumb,
+    MintCompleted,
+    MintNft
+  },
+  computed: {
+    ...mapState({
+      me: ME_KEYS.namespace
+    }),
+    connectedAccount (): IConnectedAccount {
+      return this.me.connectedAccount
+    },
+    breadcrumbItems (): any {
+      return [{
+        text: this.$tt('My'),
+        href: '/me'
+      }, {
+        text: this.$tt('Converting')
+      }]
+    }
+  },
+  data () {
+    return {
+      ETH,
+      CrossDirection,
+      IDENTICON_SERVE,
+      fetchDataLoading: false,
+      processingNfts: [] as IDirectionList[],
+      selectAccount: '',
+      mintNftDialogShowing: false,
+      mintCompletedDialogShowing: false
+    }
+  },
+  head (): { [key: string]: string | TranslateResult } {
+    return {
+      title: this.$tt('Converting')
+    }
+  },
+  mounted () {
+    this.getDirectionList()
+  },
+  methods: {
+    collapseString,
+    toHashedStyle,
+    async getDirectionList () {
+      if (this.processingNfts.length === 0) {
+        this.fetchDataLoading = true
+      }
+      try {
+        const res = await this.$services.crossEth.directionList({
+          key_info: {
+            coin_type: String(this.connectedAccount.chain.coinType),
+            key: this.connectedAccount.address
+          }
+        })
+        if (res) {
+          this.processingNfts = res.list
+        }
+      }
+      catch (err) {
+        console.error(err)
+      }
+      finally {
+        this.fetchDataLoading = false
+      }
+    },
+    onClickAccount (account: IDirectionList) {
+      if (account.cross_direction === CrossDirection.toCKB) {
+        return
+      }
+      this.selectAccount = account.account
+      this.mintNftDialogShowing = true
+    },
+    mintCompleted () {
+      this.getDirectionList()
+      this.mintCompletedDialogShowing = true
+    }
+  }
+})
+</script>
+
+<style lang="scss" scoped>
+@import "src/assets/variables";
+
+.conversion-processing {
+  flex: 1;
+}
+
+.conversion-processing__loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+.conversion-processing__loading__tip {
+  font-weight: 600;
+}
+
+.conversion-processing__list {
+  padding: 12px 12px 0 12px;
+}
+
+.conversion-processing__list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 8px;
+  height: 90px;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.03);
+  border-radius: 16px;
+  border: 1px solid rgba(182, 196, 217, 0.4);
+  cursor: pointer;
+
+  &:hover {
+    background: #F7F9FA;
+  }
+}
+
+.conversion-processing__list__item__disabled {
+  cursor: no-drop;
+  background: #FFFFFF !important;
+}
+
+.account-status__list__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: $primary-font-color;
+  word-break: break-word;
+  hyphens: auto;
+  line-height: 21px;
+}
+
+.conversion-processing__list__logo {
+  margin-right: 12px;
+}
+
+.conversion-processing__list__status {
+  display: flex;
+  align-items: center;
+  flex: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0E7DFF;
+}
+
+.conversion-processing__list__status-text {
+  padding: 0 6px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.conversion-processing__list__status-text_to-ckb {
+  color: $success-font-color;
+  background: #D6EFE7;
+}
+
+.conversion-processing__list__status-text_from-ckb {
+  color: #2471FE;
+  background: rgba(192, 203, 246, 0.57);
+}
+
+.conversion-processing__list__mint {
+  display: flex;
+  margin-right: -8px;
+}
+
+.conversion-processing__no-more {
+  padding: 16px 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #636D85;
+}
+
+.conversion-processing__breadcrumb {
+  padding: 16px 12px 4px 12px;
+}
+
+.conversion-processing__list__trx-id {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  font-size: 12px;
+  font-weight: 400;
+  color: #B0B8BF;
+  line-height: 14px;
+  margin-top: 2px;
+}
+
+.conversion-processing__list__trx-id__icon {
+  margin-left: -8px;
+}
+</style>

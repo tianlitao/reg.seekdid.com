@@ -13,15 +13,15 @@ export default Vue.extend({
           text: 'Explorer',
           path: '/explorer'
         },
-        // {
-        //   icon: 'tab-auction',
-        //   text: 'Bid',
-        //   path: '/auction'
-        // },
         {
           icon: 'tab-me',
           text: 'My',
           path: '/me'
+        },
+        {
+          icon: 'tab-apps',
+          text: 'Apps',
+          path: '/apps'
         }
       ]
     }

@@ -25,7 +25,7 @@
             <input
               v-model.trim="inviter"
               class="account-register__input__input"
-              :class="{ 'account-register__input__input_error': inviterErrorTipShowing }"
+              :class="{ 'account-register__input__input_error': inviterErrorTipShowing || inviterOnCross }"
               :placeholder="$tt('Optional')"
               @input="onInputInviter"
               @blur="onBlurInviter"
@@ -37,6 +37,12 @@
             class="account-register__input__input__error-messages"
           >
             {{ $tt('The account does not exist') }}
+          </span>
+          <span
+            v-if="inviterOnCross"
+            class="account-register__input__input__error-messages"
+          >
+            {{ $tt('This account is in a special status. Please try another one.') }}
           </span>
         </span>
       </div>
@@ -95,9 +101,10 @@
         </span>
       </div>
       <Button
+        shape="round"
         :disabled="onRegisterLoading"
         block
-        success
+        status="success"
         @click="onRegister"
       >
         {{ $tt('Register') }}
@@ -116,7 +123,7 @@
       <a
         class="account-register__deposit-ckb"
         :href="config.dasBalance"
-        target="_blank"
+        :target="isMobile ? '_self' : '_blank'"
       >
         <span>{{ $tt('Deposit CKB to DAS Balance') }}</span>
         <Iconfont name="arrow-right" color="#C4D0CD" size="26" />
@@ -152,11 +159,12 @@
         {{ $tt('The wallet environment does not support {token} payments', { token: TRON.symbol }) }}
       </div>
       <Button
+        shape="round"
         class="account-register__confirm-register__button"
         :loading="confirmRegisterLoading"
         :disabled="(paymentToken.token_id === CKB.tokenId && (isTokenPocket || isCoinbaseWallet)) || (paymentToken.chain_type === ChainType.tron && (isSafePalWallet || isViaWallet))"
         block
-        success
+        status="success"
         @click="onConfirm"
       >
         {{ $tt('Pay') }}
@@ -193,7 +201,7 @@ import {
   isTokenPocket,
   mmJsonHashAndChainIdHex,
   sleep,
-  thousandSplit
+  thousandSplit, isMobile
 } from '~/modules/tools'
 import {
   ACCOUNT_STATUS,
@@ -255,6 +263,7 @@ export default Vue.extend({
       registrationPeriod: 1,
       inviter: '',
       inviterErrorTipShowing: false,
+      inviterOnCross: false,
       confirmRegisterShowing: false,
       confirmRegisterLoading: false,
       paymentToken: {} as IToken,
@@ -272,6 +281,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    isMobile,
     ...mapState({
       common: COMMON_KEYS.namespace,
       me: ME_KEYS.namespace
@@ -396,7 +406,7 @@ export default Vue.extend({
             this.$router.push(`/account/register/status/${this.accountName}`)
             _result = false
           }
-          else if (res.status === ACCOUNT_STATUS.registered) {
+          else if ([ACCOUNT_STATUS.registered, ACCOUNT_STATUS.onCross].includes(res.status)) {
             this.$alert({
               title: this.$tt('Tips'),
               message: this.$tt('You already have {accountName}, no need to register again', { accountName: this.accountName })
@@ -411,7 +421,7 @@ export default Vue.extend({
           })
           _result = false
         }
-        else if (res.status === ACCOUNT_STATUS.registered) {
+        else if ([ACCOUNT_STATUS.registered, ACCOUNT_STATUS.onCross].includes(res.status)) {
           this.$alert({
             title: this.$tt('Tips'),
             message: this.$tt('{accountName} has been registered by someone else and can no longer be registered', { accountName: this.accountName })
@@ -508,6 +518,10 @@ export default Vue.extend({
       }
       await this.checkInviter()
       if (this.inviterErrorTipShowing) {
+        this.onRegisterLoading = false
+        return
+      }
+      if (this.inviterOnCross) {
         this.onRegisterLoading = false
         return
       }
@@ -779,6 +793,7 @@ export default Vue.extend({
     async checkInviter () {
       if (!this.inviter) {
         this.inviterErrorTipShowing = false
+        this.inviterOnCross = false
         return
       }
 
@@ -786,6 +801,10 @@ export default Vue.extend({
         const res = await this.$services.account.accountInfo(this.inviter + ACCOUNT_SUFFIX)
         if ([ACCOUNT_STATUS.registered, ACCOUNT_STATUS.onePriceSell, ACCOUNT_STATUS.auctionSell].includes(res.status)) {
           this.inviterErrorTipShowing = false
+          this.inviterOnCross = false
+        }
+        else if (ACCOUNT_STATUS.onCross) {
+          this.inviterOnCross = true
         }
         else {
           this.inviterErrorTipShowing = true
@@ -798,11 +817,13 @@ export default Vue.extend({
     },
     onInputInviter () {
       this.inviterErrorTipShowing = false
+      this.inviterOnCross = false
     },
     onBlurInviter () {
       this.inviter = this.inviter.toLowerCase()
       this.inviter = this.inviter.replace(/\.bit$/, '')
       this.inviterErrorTipShowing = false
+      this.inviterOnCross = false
     }
   }
 })
@@ -924,8 +945,8 @@ export default Vue.extend({
   height: 16px;
   padding: 12px 40px 12px 12px;
   border-radius: 8px;
-  border: 1px solid $normal-color;
-  background: $normal-color;
+  border: 1px solid $input-color;
+  background: $input-color;
   color: $primary-font-color;
   caret-color: $focus-color;
   outline: none;
@@ -966,6 +987,7 @@ export default Vue.extend({
   line-height: 14px;
   text-align: left;
   word-break: break-word;
+  hyphens: auto;
 }
 
 .account-register__confirm-register__paid-amount__value {
@@ -1024,6 +1046,10 @@ export default Vue.extend({
   height: 22px;
   font-size: 14px;
   font-weight: 400;
-  color: #3D66B3;
+  color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 </style>

@@ -10,6 +10,7 @@
     <template v-slot:action>
       <div class="delete-das-reverse-dialog__buttons">
         <Button
+          shape="round"
           block
           :disabled="disabledButtons"
           @click="onClose"
@@ -17,8 +18,9 @@
           {{ $tt('Cancel') }}
         </Button>
         <Button
+          shape="round"
           :loading="disabledButtons"
-          error
+          status="error"
           block
           @click="onDelete"
         >

@@ -1,16 +1,18 @@
-import {
+import PW, {
   Provider,
   Address,
   AddressType,
-  Platform
+  Platform,
+  IndexerCollector,
+  Amount,
+  Builder
 } from '@lay2/pw-core'
 
-export default class DasEthProvider extends Provider {
-  onAddressChanged: (newAddress: Address) => void;
+class DasEthProvider extends Provider {
+  onAddressChanged?: (newAddress: Address) => void
 
   constructor (onAddressChanged?: (newAddress: Address) => void) {
     super(Platform.eth)
-    // @ts-ignore
     this.onAddressChanged = onAddressChanged
   }
 
@@ -33,19 +35,16 @@ export default class DasEthProvider extends Provider {
 
       return this
     }
-    // @ts-ignore
     else if (window.web3) {
       console.log('[eth-provider] try window.web3')
-      const accounts = await new Promise((resolve, reject) => {
-        // @ts-ignore
-        window.web3.eth.getAccounts((err, result) => {
+      const accounts = await new Promise<string[]>((resolve, reject) => {
+        window.web3.eth.getAccounts((err: Error, result: string[]) => {
           if (err) {
             reject(err)
           }
           resolve(result)
         })
       })
-      // @ts-ignore
       this.address = new Address(accounts[0], AddressType.eth)
 
       return this
@@ -61,8 +60,7 @@ export default class DasEthProvider extends Provider {
     return new Promise((resolve, reject) => {
       const from = this.address.addressString
 
-      // @ts-ignore
-      const handleResult = (result): string => {
+      const handleResult = (result: string): string => {
         let v = Number.parseInt(result.slice(-2), 16)
         if (v >= 27) {
           v -= 27
@@ -77,17 +75,17 @@ export default class DasEthProvider extends Provider {
       if (typeof window.ethereum !== 'undefined') {
         window.ethereum
           .request({ method: 'personal_sign', params: [from, message] })
-          // @ts-ignore
-          .then((result) => {
+          .then((result: string) => {
             resolve(handleResult(result))
           })
+          .catch((err: Error) => {
+            reject(err)
+          })
       }
-      // @ts-ignore
       else if (window.web3) {
-        // @ts-ignore
         window.web3.currentProvider.sendAsync(
           { method: 'personal_sign', params: [message, from], from },
-          // @ts-ignore
+          // @ts-expect-error
           (err, result) => {
             if (err) {
               reject(err)
@@ -112,4 +110,14 @@ export default class DasEthProvider extends Provider {
   close () {
     return true
   }
+}
+
+export {
+  PW,
+  IndexerCollector,
+  Address,
+  AddressType,
+  Amount,
+  Builder,
+  DasEthProvider
 }

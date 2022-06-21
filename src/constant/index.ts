@@ -6,7 +6,7 @@ export const DEBOUNCE_WAIT_TIME = 600
 
 export const CYCLE_CALL_FUNCTION_TIME = 5000
 
-export const TOAST_DURATION_TIME = 1500
+export const TOAST_DURATION_TIME = 1000
 
 export const ACCOUNT_SUFFIX = '.bit'
 
@@ -22,7 +22,7 @@ export const TIME_FORMAT = {
   MMDDHHMM: 'MM-DD HH:mm'
 }
 
-export const DEFAULT_PAGE_SIZE = 100
+export const DEFAULT_PAGE_SIZE = 50
 
 export enum ACCOUNT_STATUS {
   notOpenRegister= -1,
@@ -40,7 +40,8 @@ export enum ACCOUNT_STATUS {
   expired,
   othersRegistering,
   unavailableAccount,
-  notCreated
+  subAccountNotCreated,
+  onCross
 }
 
 export enum TRX_STATUS {
@@ -75,3 +76,16 @@ export const ORDER_ACTION_TYPE = {
   deleteDasReverse: 10,
   editRecords: 12
 }
+
+export enum CrossDirection {
+  fromCKB,
+  toCKB
+}
+
+export const ACCOUNT_TABS = {
+  nfts: 'nfts',
+  bit: 'bit'
+}
+
+export const CrossEthContract = config.isProdData ? '0x60eB332Bd4A0E2a9eEB3212cFdD6Ef03Ce4CB3b5' : '0x7eCBEE03609f353d041942FF50CdA2A120ABddd9'
+export const CrossEthGnosisAddress = config.isProdData ? '0x513EF3F0d5259a0819370459A86930d047Bf8E9d' : '0xd51D9Bc5F462e825e59CCae110675E96519F36Aa'

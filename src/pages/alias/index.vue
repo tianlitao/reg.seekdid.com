@@ -131,7 +131,7 @@
         {{ $tt("Once it is set, your Apps will display DAS account name wherever it currently displays addresses. For example, when you log in the DApp, it will show your DAS account name as if it is your username.") }}
         <a
           class="reverse__tips__link"
-          href="https://www.did.id/bit-as-alias"
+          href="https://www.did.id/bit-alias"
         >
           {{ $tt('Learn more') }}
         </a>
@@ -300,6 +300,11 @@ export default Vue.extend({
       this.checkOrderStatus(action)
     },
     async checkOrderStatus (action?: string | number) {
+      if (!this.computedChainId || !this.computedChainType || !this.connectedAccount.address) {
+        this.trxPending = false
+        return
+      }
+
       try {
         const res = await this.$services.account.trxStatus({
           evm_chain_id: this.computedChainId,
@@ -365,7 +370,8 @@ export default Vue.extend({
 
 .reverse__container__address {
   padding: 16px 80px 18px 80px;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
   font-size: 16px;
   font-weight: bold;
   color: #167B58;
@@ -460,13 +466,18 @@ export default Vue.extend({
 
 .reverse__tips__link {
   color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 
 .reverse__container__account {
   margin: 16px 16px 38px 16px;
   font-weight: 700;
   color: #167B58;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .reverse__container__account__ineffective {
@@ -496,6 +507,10 @@ export default Vue.extend({
   font-weight: 600;
   line-height: 20px;
   color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 
 .reverse__ineffective-faq__rule {
@@ -506,6 +521,7 @@ export default Vue.extend({
   grid-template-columns: 14px auto;
   font-weight: 600;
   word-break: break-word;
+  hyphens: auto;
 }
 
 .reverse__login-status-card {

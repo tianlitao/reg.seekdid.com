@@ -17,12 +17,14 @@
   },
   "dependencies": {
     "@ensdomains/address-encoder": "0.2.3",
+    "@gnosis.pm/safe-core-sdk": "^2.1.0",
+    "@gnosis.pm/safe-web3-lib": "^1.1.0",
     "@lay2/pw-core": "^0.4.0-alpha.9",
     "@metamask/eth-sig-util": "^4.0.0",
-    "@nervosnetwork/ckb-sdk-utils": "^0.102.2",
     "@toruslabs/torus-embed": "^1.22.2",
     "abc-copy": "^0.0.11",
     "axios": "^0.21.1",
+    "blake2b": "^2.1.4",
     "bn.js": "^5.2.0",
     "buffer": "^6.0.3",
     "cbor-js": "^0.1.0",
@@ -42,7 +44,8 @@
     "vee-validate": "^3.4.10",
     "vue-i18n": "^8.25.0",
     "vuex-persistedstate": "^3.2.0",
-    "wallet-sdk-js": "^0.0.6"
+    "wallet-sdk-js": "^0.0.6",
+    "web3": "^1.7.3"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.7",

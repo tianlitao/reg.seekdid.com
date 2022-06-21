@@ -1,5 +1,5 @@
-import abcConfig from './abc.config'
 import { resolve } from 'path'
+import abcConfig from './abc.config'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -12,7 +12,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: '.bit - Your decentralized identity (DID) for Web3.0 life.',
+    title: '.bit - Web3.0 identities for you and your community.',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover' },
@@ -21,24 +21,24 @@ export default {
       { hid: 'keyword', name: 'keywords', content: 'domain, domain name, blockchain domain, nervos, ckb, .bit, domain name registration, purchase domain name, website domain, domain name service, domain name hosting, timyang, .bit, domain investment, DNS, buy domain name' },
       // The Open Graph protocol
       { hid: 'og:description', property: 'og:description', content: '.bit is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. .bit can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
-      { hid: 'og:title', property: 'og:title', content: '.bit - Your decentralized identity (DID) for Web3.0 life.' },
-      { hid: 'og:site_name', property: 'og:site_name', content: '.bit - Your decentralized identity (DID) for Web3.0 life.' },
+      { hid: 'og:title', property: 'og:title', content: '.bit - Web3.0 identities for you and your community.' },
+      { hid: 'og:site_name', property: 'og:site_name', content: '.bit - Web3.0 identities for you and your community.' },
       { hid: 'og:type', property: 'og:type', content: 'article' },
       { hid: 'og:url', property: 'og:url', content: 'https://did.id/' },
       { hid: 'og:image', property: 'og:image', content: `https://${abcConfig.hostname}/images/seo-thumbnail-image.png` },
       // Twitter
       { hid: 'twitter:card', name: 'twitter:card', content: 'summary_large_image' },
-      { hid: 'twitter:site', name: 'twitter:site', content: '.bit - Your decentralized identity (DID) for Web3.0 life.' },
-      { hid: 'twitter:title', name: 'twitter:title', content: '.bit - Your decentralized identity (DID) for Web3.0 life.' },
+      { hid: 'twitter:site', name: 'twitter:site', content: '.bit - Web3.0 identities for you and your community.' },
+      { hid: 'twitter:title', name: 'twitter:title', content: '.bit - Web3.0 identities for you and your community.' },
       { hid: 'twitter:description', name: 'twitter:description', content: '.bit is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. .bit can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
       { hid: 'twitter:image', name: 'twitter:image', content: `https://${abcConfig.hostname}/images/seo-thumbnail-image.png` },
-      { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: '.bit - Your decentralized identity (DID) for Web3.0 life.' }
+      { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: '.bit - Web3.0 identities for you and your community.' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [{
-      src: '//at.alicdn.com/t/font_2342047_yw1er2htdfq.js',
+      src: '//at.alicdn.com/t/font_2342047_irnkihx5fn.js',
       async: true
     }]
   },
@@ -99,7 +99,7 @@ export default {
     // https://nuxtjs.org/guides/directory-structure/static
     // https://www.npmjs.com/package/serve-static
     static: {
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 这里会造成 static/ 目录里面 7 天的缓存，所以如果有紧急换图的场景，需要更换文件名称
+      maxAge: 7 * 24 * 60 * 60 * 1000 // This will cause a 7-day cache inside the static/ directory, so if there is an emergency image change scenario, you will need to change the file name.
     }
   },
 

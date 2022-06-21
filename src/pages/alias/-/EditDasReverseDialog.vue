@@ -14,9 +14,10 @@
     />
     <template v-slot:action>
       <Button
+        shape="round"
         class="edit-das-reverse-dialog__button"
         block
-        success
+        status="success"
         :disabled="!account"
         :loading="confirmLoading"
         @click="onConfirm"

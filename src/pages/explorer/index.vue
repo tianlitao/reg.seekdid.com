@@ -1,5 +1,10 @@
 <template>
-  <div class="explorer">
+  <div
+    class="explorer"
+    :class="{
+      'explorer_mobile': isMobile
+    }"
+  >
     <PublicBetaTips v-if="!config.isProdData" />
     <div class="explorer__lang-switcher">
       <LangSwitcher
@@ -8,7 +13,7 @@
     </div>
     <img class="explorer__logo" src="/images/explorer/das-logo.png" alt="logo">
     <div class="explorer__full-name">
-      {{ $tt('Your decentralized identity (DID) for Web3.0 life') }}
+      {{ $tt('slogan') }}
       <span
         v-if="!config.isProdData"
         class="explorer__full-name__beta"
@@ -29,10 +34,10 @@
       {{ $tt('Account names can only contain lowercase letters, numbers and partial Emoji') }}
       <a
         class="explorer__rules-details"
-        :href="$i18n.locale === 'zh-CN' ? 'https://docs.did.id/zh/register-das/charsets' : 'https://docs.did.id/register-das/charsets'"
-        :target="isMobile ? '_self' : '_blank'"
+        :href="$i18n.locale === LANGUAGE.zhCN ? 'https://docs.did.id/zh/register-das/charsets' : 'https://docs.did.id/register-das/charsets'"
+        target="_blank"
       >
-        {{ $tt('[Rules Details]') }}
+        [{{ $tt('Rules Details') }}]
       </a>
     </div>
     <div
@@ -58,10 +63,9 @@
         />
       </ul>
     </div>
-    <div class="explorer__current-on-chain-time">
-      {{ $tt('Current on-chain time: {date} (UTC+0)', { date: dateOnChain }) }}
-    </div>
-    <div class="explorer__open-registration-rules">
+    <div
+      class="explorer__open-registration-rules"
+    >
       <div class="explorer__open-registration-rules__title">
         {{ $tt('Updates for the release:') }}
       </div>
@@ -91,8 +95,8 @@
 <!--          </i18n>-->
           <a
             class="explorer__rules-details"
-            :href="$i18n.locale === 'zh-CN' ? 'https://docs.did.id/zh/register-das/open-registration-rules' : 'https://docs.did.id/register-das/open-registration-rules'"
-            :target="isMobile ? '_self' : '_blank'"
+            :href="$i18n.locale === LANGUAGE.zhCN ? 'https://docs.did.id/zh/register-das/open-registration-rules' : 'https://docs.did.id/register-das/open-registration-rules'"
+            target="_blank"
           >
             {{ $tt('Releasing plan.') }}
           </a>
@@ -102,6 +106,9 @@
         <span class="explorer__open-registration-rules__item__dot">•</span>
         <span>{{ $tt('1~3 characters: Not released yet.') }}</span>
       </div>
+    </div>
+    <div class="explorer__current-on-chain-time">
+      {{ $tt('Current on-chain time: {date} (UTC+0)', { date: dateOnChain }) }}
     </div>
     <a
       v-if="!searchWord"
@@ -120,7 +127,8 @@ import { Buffer } from 'buffer'
 import Vue from 'vue'
 import debounce from 'lodash.debounce'
 import { mapState, mapGetters } from 'vuex'
-import { blake2b } from '@nervosnetwork/ckb-sdk-utils'
+// @ts-ignore
+import blake2b from 'blake2b'
 import uts46 from 'idna-uts46-hx'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -136,6 +144,7 @@ import { IConfig } from '~/services/Common'
 import PublicBetaTips from '~/components/PublicBetaTips.vue'
 import config from '~~/config'
 import errno from '~/constant/errno'
+import { LANGUAGE } from '~/constant/language'
 
 dayjs.extend(utc)
 
@@ -149,6 +158,7 @@ export default Vue.extend({
   },
   data () {
     return {
+      LANGUAGE,
       config,
       searchWord: '',
       searchResult: {} as ISearchAccount,
@@ -363,7 +373,7 @@ export default Vue.extend({
 .explorer {
   position: relative;
   flex: 1;
-  padding: 16px 16px 0 16px;
+  padding: 16px 48px 0 48px;
   text-align: center;
 }
 
@@ -394,13 +404,17 @@ export default Vue.extend({
   margin-left: 4px;
   font-size: 12px;
   font-weight: 600;
-  color: #DF4A46;
+  color: $error-font-color;
   line-height: 14px;
   text-align: left;
 }
 
 .explorer__rules-details {
   color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 
 .explorer__search_result {
@@ -416,7 +430,7 @@ export default Vue.extend({
 
 .explorer__faq {
   position: absolute;
-  bottom: 10%;
+  bottom: 5%;
   transform: translateX(-50%);
   color: $assist-font-color;
 
@@ -426,36 +440,36 @@ export default Vue.extend({
 }
 
 .explorer__current-on-chain-time {
-  margin-top: 20px;
-  margin-bottom: 8px;
-  padding: 12px;
+  padding: 16px;
   text-align: left;
   font-size: 14px;
   font-weight: 400;
   color: #10152D;
   line-height: 17px;
-  background: #D9F8E4;
+  background: rgba(217, 248, 228, 0.5);
   border-radius: 12px;
-  border: 1px solid rgba(143, 225, 166, 0.4);
+  border: 1px solid rgba(143, 225, 166, 0.2);
 }
 
 .explorer__open-registration-rules {
-  padding: 12px 12px 6px 12px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding: 16px 16px 8px 16px;
   text-align: left;
   font-size: 14px;
   font-weight: 400;
   color: #10152D;
   line-height: 17px;
-  background: #D9F8E4;
+  background: rgba(217, 248, 228, 0.5);
   border-radius: 12px;
-  border: 1px solid rgba(143, 225, 166, 0.4);
+  border: 1px solid rgba(143, 225, 166, 0.2);
 }
 
 .explorer__open-registration-rules__title {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   font-size: 14px;
-  font-weight: bold;
-  color: #10152D;
+  font-weight: 700;
+  color: $primary-font-color;
   line-height: 17px;
 }
 
@@ -473,5 +487,9 @@ export default Vue.extend({
 .explorer__open-registration-rules__item__high-brightness {
   color: #22C493;
   font-weight: 600;
+}
+
+.explorer_mobile {
+  padding: 16px 16px 0 16px;
 }
 </style>

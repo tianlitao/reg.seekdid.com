@@ -3,7 +3,7 @@ interface Window {
   // @ts-ignore
   i18n: any
   ethereum: any
-  Web3: any
+  web3: any
   tronWeb: any
   WalletConnect: any
   WalletConnectQRCodeModal: any

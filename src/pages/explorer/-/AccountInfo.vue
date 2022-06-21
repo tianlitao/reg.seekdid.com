@@ -23,7 +23,7 @@ export default Vue.extend({
   props: {
     accountName: {
       type: String,
-      default: 'test',
+      default: '',
       required: true
     }
   },

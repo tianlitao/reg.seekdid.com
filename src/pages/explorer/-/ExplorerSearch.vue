@@ -1,27 +1,36 @@
 <template>
-  <form
-    class="explorer-search"
-    action=""
-    autocomplete="off"
-    @submit.prevent="onSearch">
-    <Iconfont
-      name="search-big"
-      color="#11142D"/>
-    <input
-      v-bind="$attrs"
-      :value="value"
-      class="explorer-search__input"
-      :class="{ 'explorer-search__input_impure': value }"
-      type="search"
-      v-on="listeners"/>
-    <Button
-      v-show="value"
-      class="explorer-search__button"
-      primary
-      type="submit">
-      {{ $tt('Search') }}
-    </Button>
-  </form>
+  <div class="explorer-search">
+    <form
+      class="explorer-search__form"
+      action=""
+      autocomplete="off"
+      @submit.prevent="onSearch"
+    >
+      <span>
+        <Iconfont
+          name="tab-explorer"
+          size="22"
+          color="#22c493"
+        />
+      </span>
+      <input
+        v-bind="$attrs"
+        :value="value"
+        class="explorer-search__input"
+        :class="{ 'explorer-search__input_impure': value }"
+        type="search"
+        v-on="listeners"
+      >
+      <Button
+        v-show="value"
+        class="explorer-search__button"
+        status="primary"
+        type="submit"
+      >
+        {{ $tt('Search') }}
+      </Button>
+    </form>
+  </div>
 </template>
 
 <script lang="ts">
@@ -81,20 +90,21 @@ export default Vue.extend({
 @import "src/assets/variables";
 
 .explorer-search {
+  background: linear-gradient(90deg, #00DF9B 0%, #0E7DFF 50%);
+  height: 66px;
+  padding: 2px;
+  border-radius: 18px;
+}
+
+.explorer-search__form {
   position: relative;
   display: flex;
   align-items: center;
   padding: 0 19px;
   max-height: 70px;
-  height: 70px;
+  height: 66px;
   border-radius: 16px;
-  border: 1px solid $normal-color;
-  background: $normal-color;
-
-  &:hover {
-    border: 1px solid $focus-color;
-    box-shadow: inset 0 0 0 4px rgba(45, 100, 246, 0.1);
-  }
+  background: $white;
 }
 
 .explorer-search__input {
@@ -104,15 +114,15 @@ export default Vue.extend({
   font-size: 18px;
   font-weight: 600;
   color: $primary-font-color;
-  caret-color: $focus-color;
+  caret-color: #0DBA85;
   outline: none;
   border: none;
-  background: $normal-color;
+  background: $white;
   line-height: 28px;
 
   &::placeholder {
-    color: $assist-font-color;
-    font-weight: 400;
+    color: rgba(62, 82, 102, 0.4);
+    font-weight: 500;
   }
 }
 

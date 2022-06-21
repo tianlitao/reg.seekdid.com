@@ -174,7 +174,7 @@ export default Vue.extend({
 
 .transfer-out-records {
   flex: 1;
-  background: #F7F8F9;
+  background: $background;
 }
 
 .transfer-out-records__table {
@@ -222,6 +222,10 @@ export default Vue.extend({
   white-space: nowrap;
   text-overflow: ellipsis;
   color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 
 .transfer-out-records__action {
@@ -234,6 +238,10 @@ export default Vue.extend({
 .transfer-out-records__link {
   cursor: pointer;
   color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 
 .transfer-out-records__loading {

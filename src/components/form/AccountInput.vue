@@ -266,8 +266,8 @@ export default Vue.extend({
   height: 34px;
   padding: 11px 24px 11px 24px;
   border-radius: 12px;
-  border: 1px solid $normal-color;
-  background: $normal-color;
+  border: 1px solid $input-color;
+  background: $input-color;
   color: $primary-font-color;
   caret-color: $focus-color;
   outline: none;
@@ -362,7 +362,8 @@ export default Vue.extend({
   border: 1px solid #DBDEEB;
   border-radius: 6px;
   background: $white;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
   font-weight: 600;
   text-align: left;
 }

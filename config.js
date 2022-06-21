@@ -8,6 +8,7 @@ module.exports = {
   hostname,
   domain: `https://${hostname}/`,
   servicesApi: isProdData ? '' : '',
+  crossEthApi: isProdData ? '' : '',
   identiconServe: '',
   didtop: isProdData ? 'https://did.top' : 'https://test.did.top',
   homepage: isProdData ? 'https://data.did.id' : 'https://testdata.did.id',

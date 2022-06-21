@@ -185,8 +185,8 @@ export default Vue.extend({
   height: 34px;
   padding: 11px 48px 11px 24px;
   border-radius: 12px;
-  border: 1px solid $normal-color;
-  background: $normal-color;
+  border: 1px solid $input-color;
+  background: $input-color;
   color: $primary-font-color;
   caret-color: $focus-color;
   outline: none;

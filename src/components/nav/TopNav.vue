@@ -3,7 +3,7 @@
     <div class="top-nav__container">
       <a
         href="https://did.id"
-        target="_blank"
+        :target="isMobile ? '_self' : '_blank'"
       >
         <img class="top-nav__logo" src="/images/explorer/das-logo.png" alt="logo">
       </a>
@@ -21,21 +21,6 @@
             class="top-nav__item__tag"
           />
         </nuxt-link>
-        <a
-          class="top-nav__item"
-          :href="didtop"
-          target="_self"
-        >
-          <span class="top-nav__item__text top-nav__item__marketplace">
-            {{ $tt('Marketplace') }}
-            <Iconfont
-              class="top-nav__item__marketplace__icon"
-              name="arrow-right-up"
-              size="7"
-              color="#11142D"
-            />
-          </span>
-        </a>
       </nav>
       <LangSwitcher />
     </div>
@@ -46,20 +31,16 @@
 import Vue from 'vue'
 import NavMixin from '~/components/nav/Nav.mixin.vue'
 import LangSwitcher from '~/components/LangSwitcher.vue'
-import Iconfont from '~/components/icon/Iconfont.vue'
-import { didtop } from '~~/config'
+import { isMobile } from '~/modules/tools'
 
 export default Vue.extend({
   name: 'TopNav',
   components: {
-    LangSwitcher,
-    Iconfont
+    LangSwitcher
   },
   mixins: [NavMixin],
-  data () {
-    return {
-      didtop
-    }
+  computed: {
+    isMobile
   }
 })
 </script>
@@ -81,7 +62,6 @@ export default Vue.extend({
   padding: 0 20px;
   height: 60px;
   max-width: 1200px;
-  box-shadow: 0 1px 0 0 $container-border-color;
 }
 
 .top-nav__logo {
@@ -119,24 +99,15 @@ export default Vue.extend({
 }
 
 .top-nav__item_active {
-  color: #667FFF;
+  color: #22C493;
 }
 
 .top-nav__item__tag {
   position: absolute;
   width: 34px;
   height: 2px;
-  background: #667FFF;
+  background: #22C493;
   border-radius: 100px 100px 0 0;
   bottom: 0;
-}
-
-.top-nav__item__marketplace {
-  display: flex;
-}
-
-.top-nav__item__marketplace__icon {
-  margin-top: 6px;
-  margin-left: 2px;
 }
 </style>

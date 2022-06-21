@@ -220,9 +220,12 @@ export default Vue.extend({
 
 .login-status-card__account__can-copy {
   cursor: pointer;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .login-status-card__account-icon {
+  flex: none;
   margin-right: 12px;
 }
 
@@ -231,6 +234,7 @@ export default Vue.extend({
 }
 
 .login-status-card__connect-wallet {
+  flex: none;
   padding: 0 10px;
   height: 24px;
   border-radius: 12px;

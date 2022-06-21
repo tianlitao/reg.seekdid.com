@@ -11,7 +11,7 @@
           <IconImage
             :url="option.logo"
             :alt="option.symbol"
-            :size="20"
+            :size="28"
           />
         </span>
         <span class="payment-token-select__item__info">

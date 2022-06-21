@@ -4,7 +4,7 @@ import Wallets, { chainIdHexToNumber } from 'wallet-sdk-js'
 import { TranslateResult } from 'vue-i18n'
 import debounce from 'lodash.debounce'
 import WalletsConnect from '~/components/WalletsConnect.vue'
-import { WalletProtocol } from '~/constant'
+import { CrossEthContract, CrossEthGnosisAddress, WalletProtocol } from '~/constant'
 import {
   ChainId,
   ChainIdToCoinTypeMap,
@@ -16,7 +16,7 @@ import {
   EvmCoinTypes
 } from '~/constant/chain'
 import errno from '~/constant/errno'
-import { isMobileDevices, shrinkUnit, sleep } from '~/modules/tools'
+import { isMobileDevices, nftTokenIdHex, shrinkUnit, sleep } from '~/modules/tools'
 import { ME_KEYS } from '~/store/me'
 import { ckbNode, isProdData } from '~~/config'
 import { COMMON_KEYS } from '~/store/common'
@@ -221,7 +221,7 @@ export default class WalletSdk {
         await sleep(1000)
         const { tronWeb } = window
         if (typeof tronWeb !== 'undefined') {
-          if (tronWeb) {
+          if (tronWeb.defaultAddress.base58) {
             provider = tronWeb
           }
           else {
@@ -273,7 +273,8 @@ export default class WalletSdk {
                 protocol: this.protocol,
                 chain: CoinTypeToChainMap[this.coinType]
               })
-              this.reloadPage()
+              this.walletsConnectResetCurrentLogin()
+              this.closeWalletsConnect()
               return
             }
             catch (err) {
@@ -330,11 +331,7 @@ export default class WalletSdk {
     catch (err: any) {
       console.error(err)
       this.walletsConnectResetCurrentLogin()
-      // imtoken wallet error handling
-      if (err.message?.includes(errno.imTokenUserCanceled)) {
-        this.reloadPage()
-      }
-      else if (![errno.metaMaskUserRejectedAccountAccess, errno.metaMaskUserDeniedMessageSignature].includes(err.code)) {
+      if (![errno.metaMaskUserRejectedAccountAccess, errno.metaMaskUserDeniedMessageSignature].includes(err.code) && !err.message?.includes(errno.imTokenUserCanceled)) {
         if (err.code === errno.metaMaskWalletRequestPermissions || err.code === errno.tronLinkAuthorizationRequestsAreBeingProcessed) {
           $alert({
             title: $tt('Tips'),
@@ -419,25 +416,83 @@ export default class WalletSdk {
       return
     }
     try {
-      const PW = await import('@lay2/pw-core')
-      const DasEthProvider = await import('~/modules/DasEthProvider')
-      const pwcore = await new PW.default(ckbNode).init(
-        new DasEthProvider.default(),
-        new PW.IndexerCollector(ckbNode)
+      const res = await import('~/modules/DasEthProvider')
+      const pwcore = await new res.PW(ckbNode).init(
+        new res.DasEthProvider(),
+        new res.IndexerCollector(ckbNode)
       )
 
-      return await pwcore.send(
-        new PW.Address(to, PW.AddressType.ckb),
-        new PW.Amount(shrinkUnit(value, CKB.decimals)),
+      const hash = await pwcore.send(
+        new res.Address(to, res.AddressType.ckb),
+        new res.Amount(shrinkUnit(value, CKB.decimals)),
         {
           data,
-          witnessArgs: PW.Builder.WITNESS_ARGS.RawSecp256k1
+          witnessArgs: res.Builder.WITNESS_ARGS.RawSecp256k1
         }
       )
+      return hash
     }
     catch (err) {
       console.error(err)
       throw err
     }
+  }
+
+  async mintDotBit (uuid: string): Promise<string> {
+    const { store } = this.context.app
+    const connectedAccount = store?.state.me.connectedAccount
+    const address = connectedAccount.address
+    // @ts-ignore
+    const abi: any = await import('./EthNftAbi.json')
+    const Web3 = await import('web3')
+    const web3 = new Web3.default(this.wallet.provider)
+    const contract = new web3.eth.Contract(abi.default, CrossEthContract)
+    const res = await contract.methods.recycle(uuid).send({
+      from: address,
+      gas: 90000
+    })
+    return res.transactionHash
+  }
+
+  async mintEthNft (account: string, data: string, signatures: any[]): Promise<string> {
+    const { store } = this.context.app
+    const connectedAccount = store?.state.me.connectedAccount
+    const address = connectedAccount.address
+    const Web3 = await import('web3')
+    // @ts-ignore
+    const abi = await import('./EthNftGnosisAbi.json')
+    const web3 = new Web3.default(this.wallet.provider)
+    const contract = new web3.eth.Contract(abi.default, CrossEthGnosisAddress)
+    const nonce = await contract.methods.uuidNonces(nftTokenIdHex(account)).call()
+
+    const transaction = {
+      to: CrossEthContract,
+      value: '0',
+      nonce: Number(nonce),
+      data
+    }
+
+    const Web3Adapter = await import('@gnosis.pm/safe-web3-lib')
+    const SafeSDK = await import('@gnosis.pm/safe-core-sdk')
+    const ethAdapter = new Web3Adapter.default({
+      web3,
+      signerAddress: address
+    })
+    const safeSdk = await SafeSDK.default.create({
+      ethAdapter,
+      safeAddress: CrossEthGnosisAddress
+    })
+
+    const tx = await safeSdk.createTransaction(transaction)
+
+    signatures.forEach((signature) => {
+      tx.addSignature(new SafeSDK.EthSignSignature(signature.signer, signature.data))
+    })
+
+    // @ts-ignore
+    safeSdk.getOwnersWhoApprovedTx = () => [] // We ignore sdk's some internal logic for now.
+
+    const { hash } = await safeSdk.executeTransaction(tx)
+    return hash
   }
 }
