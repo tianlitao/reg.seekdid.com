@@ -31,7 +31,7 @@
       v-if="showIncorrectAccountFormat"
       class="explorer__error-tip"
     >
-      {{ $tt('Account names can only contain lowercase letters, numbers and partial Emoji') }}
+      {{ $tt('Account names can only contain lowercase letters, numbers, partial Emoji and "-"') }}
       <a
         class="explorer__rules-details"
         :href="$i18n.locale === LANGUAGE.zhCN ? 'https://docs.did.id/zh/register-das/charsets' : 'https://docs.did.id/register-das/charsets'"

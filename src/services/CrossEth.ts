@@ -79,6 +79,7 @@ export interface IDidNftList {
   coin_type: string,
   account: string,
   uuid: string,
+  expire_at: number
 }
 
 export interface IDidNftListRes {

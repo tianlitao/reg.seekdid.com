@@ -18,7 +18,12 @@
             class="login-status-card__reverse-record__account"
             @click="onCopyAddress(dasReverse.account)"
           >
-            {{ toHashedStyle(dasReverse.account) }}
+            <template v-if="isSubAccount">
+              {{ dasReverse.account.split('.')[1] }}<span class="login-status-card__reverse-record__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}
+            </template>
+            <template v-else>
+              {{ dasReverse.account }}
+            </template>
             <IconImage
               v-if="connectedAccount.protocol === WalletProtocol.walletConnect"
               class="login-status-card__wallet-connect"
@@ -66,7 +71,12 @@
               color="#167B58"
               size="16"
             />
-            {{ toHashedStyle(dasReverse.account) }}
+            <template v-if="isSubAccount">
+              {{ dasReverse.account.split('.')[1] }}<span class="login-status-card__reverse-record__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}
+            </template>
+            <template v-else>
+              {{ dasReverse.account }}
+            </template>
           </span>
         </span>
         <span class="login-status-card__action">
@@ -132,6 +142,7 @@ import IconImage from '~/components/icon/IconImage.vue'
 import { WalletProtocol } from '~/constant'
 import { IReverseLatestRes } from '~/services/DasReverse'
 import { REVERSE_KEYS } from '~/store/reverse'
+import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 export default Vue.extend({
   name: 'LoginStatusCard',
@@ -158,6 +169,9 @@ export default Vue.extend({
     },
     dasReverse (): IReverseLatestRes {
       return this.reverse.dasReverse
+    },
+    isSubAccount (): boolean {
+      return SUB_ACCOUNT_REG_EXP.test(this.dasReverse.account)
     }
   },
   data () {
@@ -305,6 +319,10 @@ export default Vue.extend({
 }
 
 .login-status-card__reverse-record__account {
-  display: flex;
+  display: block;
+}
+
+.login-status-card__reverse-record__sub-account {
+  color: #E4B169;
 }
 </style>

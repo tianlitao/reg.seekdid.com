@@ -148,6 +148,7 @@ interface IDasBalancePayParams {
 interface IAccountInfoParams {
   chain_type: number,
   address: string,
+  category?: number,
   keyword?: string,
   page?: number,
   size?: number
@@ -291,6 +292,7 @@ export default class Account extends BasicService {
    * @param chain_type
    * @param address
    * @param keyword
+   * @param category
    * @param page
    * @param size
    */
@@ -298,6 +300,7 @@ export default class Account extends BasicService {
     chain_type,
     address,
     keyword,
+    category,
     page = 1,
     size = DEFAULT_PAGE_SIZE
   }: IAccountInfoParams): Promise<{ list: IAccountInfo[] }> {
@@ -305,6 +308,7 @@ export default class Account extends BasicService {
       chain_type,
       address,
       keyword,
+      category,
       page,
       size
     })

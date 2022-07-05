@@ -1,6 +1,6 @@
 <template>
   <div class="reward-records">
-    <Breadcrumb class="reward-records__breadcrumb" :items="breadcrumbItems"/>
+    <Breadcrumb class="reward-records__breadcrumb" :items="breadcrumbItems" />
     <div v-if="fetchDataLoading" class="reward-records__loading">
       <StatusTip
         class="reward-records__loading__tip"
@@ -36,7 +36,12 @@
                 class="reward-records__table__link"
                 :to="`/explorer/account/${record.invitee}`"
               >
-                {{ toHashedStyle(record.invitee) }}
+                <template v-if="isSubAccount(record.invitee)">
+                  {{ record.invitee.split('.')[1] }}<span class="reward-records__table__link__sub-account">#{{ record.invitee.split('.')[0] }}</span>.{{ record.invitee.split('.')[2] }}
+                </template>
+                <template v-else>
+                  {{ record.invitee }}
+                </template>
               </nuxt-link>
             </td>
           </tr>
@@ -76,6 +81,7 @@ import { IMyRewardsResInviteList } from '~/services/Account'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
 import Breadcrumb from '~/components/Breadcrumb.vue'
 import { DEFAULT_PAGE_SIZE } from '~/constant'
+import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 export default Vue.extend({
   name: 'RewardRecord',
@@ -124,6 +130,9 @@ export default Vue.extend({
   methods: {
     thousandSplit,
     toHashedStyle,
+    isSubAccount (accont: string): boolean {
+      return SUB_ACCOUNT_REG_EXP.test(accont)
+    },
     async getMyRewards () {
       if (!this.connectedAccount.address) {
         return
@@ -258,4 +267,7 @@ export default Vue.extend({
   padding: 16px 12px;
 }
 
+.reward-records__table__link__sub-account {
+  color: #E4B169;
+}
 </style>

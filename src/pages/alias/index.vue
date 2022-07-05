@@ -56,7 +56,12 @@
             'font-size': `${accountFontSize}px`
           }"
         >
-          {{ toHashedStyle(dasReverse.account) }}
+          <template v-if="isSubAccount">
+            {{ dasReverse.account.split('.')[1] }}<span class="reverse__container__account__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}
+          </template>
+          <template v-else>
+            {{ dasReverse.account }}
+          </template>
         </div>
         <div
           v-if="isIneffective"
@@ -138,7 +143,7 @@
       </div>
     </div>
     <Dialog
-      :showing="ineffectiveFaqDialogShowing"
+      v-model="ineffectiveFaqDialogShowing"
       :title="$tt('Tips')"
       closeButton
       @close="closeIneffectiveFaqDialog"
@@ -146,11 +151,37 @@
       <div>{{ $tt('The reverse record is valid only if any of the following conditions is met.') }}</div>
       <div class="reverse__ineffective-faq__rule">
         <span>1.</span>
-        <span>{{ $tt('Your address is the Owner/Manager of {account};', { account: toHashedStyle(dasReverse.account) }) }}</span>
+        <i18n
+          tag="span"
+          path="反解提示1"
+          :i18nkey="$tt('反解提示1')"
+        >
+          <template slot="account">
+            <template v-if="isSubAccount">
+              {{ dasReverse.account.split('.')[1] }}<span class="reverse__ineffective-faq__rule__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}
+            </template>
+            <template v-else>
+              {{ dasReverse.account }}
+            </template>
+          </template>
+        </i18n>
       </div>
       <div class="reverse__ineffective-faq__rule">
         <span>2.</span>
-        <span>{{ $tt('Your address is in the record of {account}.', { account: toHashedStyle(dasReverse.account) }) }}</span>
+        <i18n
+          tag="span"
+          path="反解提示2"
+          :i18nkey="$tt('反解提示2')"
+        >
+          <template slot="account">
+            <template v-if="isSubAccount">
+              {{ dasReverse.account.split('.')[1] }}<span class="reverse__ineffective-faq__rule__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}
+            </template>
+            <template v-else>
+              {{ dasReverse.account }}
+            </template>
+          </template>
+        </i18n>
       </div>
       <a
         class="reverse__ineffective-faq__link"
@@ -158,7 +189,6 @@
       >
         {{ $tt('Learn more') }}
       </a>
-      <span slot="action" />
     </Dialog>
     <TxPendingDialog v-model="trxPendingDialogShowing" />
     <SetDasReverseDialog
@@ -195,6 +225,7 @@ import errno from '~/constant/errno'
 import { COMMON_KEYS } from '~/store/common'
 import { toHashedStyle } from '~/modules/tools'
 import { LANGUAGE } from '~/constant/language'
+import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 export default Vue.extend({
   name: 'Reverse',
@@ -265,6 +296,9 @@ export default Vue.extend({
       }, {
         text: this.$tt('Reverse record')
       }]
+    },
+    isSubAccount (): boolean {
+      return SUB_ACCOUNT_REG_EXP.test(this.dasReverse.account)
     }
   },
   mounted () {
@@ -553,5 +587,10 @@ export default Vue.extend({
   margin-right: 8px;
   font-family: AppleColorEmoji;
   font-size: 22px;
+}
+
+.reverse__ineffective-faq__rule__sub-account,
+.reverse__container__account__sub-account {
+  color: #E4B169;
 }
 </style>

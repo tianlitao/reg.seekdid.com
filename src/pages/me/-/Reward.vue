@@ -192,7 +192,12 @@
                     class="reward__table__link"
                     :to="`/explorer/account/${record.invitee}`"
                   >
-                    {{ toHashedStyle(record.invitee) }}
+                    <template v-if="isSubAccount(record.invitee)">
+                      {{ record.invitee.split('.')[1] }}<span class="reward__table__link__sub-account">#{{ record.invitee.split('.')[0] }}</span>.{{ record.invitee.split('.')[2] }}
+                    </template>
+                    <template v-else>
+                      {{ record.invitee }}
+                    </template>
                   </nuxt-link>
                 </td>
               </tr>
@@ -226,7 +231,14 @@
                 :size="40"
                 rounded
               />
-              <span class="reward__account-list__account-name">{{ toHashedStyle(item.account) }}</span>
+              <span class="reward__account-list__account-name">
+                <template v-if="isSubAccount(item.account)">
+                  {{ item.account.split('.')[1] }}<span class="reward__account-list__account-name__sub-account">#{{ item.account.split('.')[0] }}</span>.{{ item.account.split('.')[2] }}
+                </template>
+                <template v-else>
+                  {{ item.account }}
+                </template>
+              </span>
             </span>
             <Iconfont
               v-if="invitationAccount === item.account"
@@ -288,6 +300,7 @@ import { CKB } from '~/constant/chain'
 import { COMMON_KEYS } from '~/store/common'
 import config from '~~/config'
 import { LANGUAGE } from '~/constant/language'
+import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 export default Vue.extend({
   name: 'Reward',
@@ -355,6 +368,9 @@ export default Vue.extend({
     thousandSplit,
     collapseString,
     toHashedStyle,
+    isSubAccount (accont: string): boolean {
+      return SUB_ACCOUNT_REG_EXP.test(accont)
+    },
     onManageBalance () {
       if (this.isMobile) {
         window.location.href = config.dasBalance
@@ -748,5 +764,10 @@ export default Vue.extend({
 
 .reward__margin-bottom-32 {
   margin-bottom: 32px;
+}
+
+.reward__account-list__account-name__sub-account,
+.reward__table__link__sub-account {
+  color: #E4B169;
 }
 </style>

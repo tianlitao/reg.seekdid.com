@@ -28,7 +28,12 @@
               rounded
             />
             <span>
-              {{ toHashedStyle(account.account) }}
+              <template v-if="isSubAccount(account.account)">
+                {{ account.account.split('.')[1] }}<span class="conversion-processing__list__sub-account">#{{ account.account.split('.')[0] }}</span>.{{ account.account.split('.')[2] }}
+              </template>
+              <template v-else>
+                {{ account.account }}
+              </template>
               <div>
                 <span
                   v-if="account.cross_direction === CrossDirection.fromCKB"
@@ -100,6 +105,7 @@ import { collapseString, toHashedStyle } from '~/modules/tools'
 import MintCompleted from '~/pages/me/-/MintCompleted.vue'
 import MintNft from '~/pages/me/-/MintNft.vue'
 import { ETH } from '~/constant/chain'
+import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 export default Vue.extend({
   name: 'ConversionProcessing',
@@ -150,6 +156,9 @@ export default Vue.extend({
   methods: {
     collapseString,
     toHashedStyle,
+    isSubAccount (accont: string): boolean {
+      return SUB_ACCOUNT_REG_EXP.test(accont)
+    },
     async getDirectionList () {
       if (this.processingNfts.length === 0) {
         this.fetchDataLoading = true
@@ -305,5 +314,9 @@ export default Vue.extend({
 
 .conversion-processing__list__trx-id__icon {
   margin-left: -8px;
+}
+
+.conversion-processing__list__sub-account {
+  color: #E4B169;
 }
 </style>
