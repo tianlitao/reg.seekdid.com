@@ -36,7 +36,7 @@
               rounded
             />
             <div class="registering-accounts__list__info">
-              <span>{{ toHashedStyle(account.account) }}</span>
+              <span>{{ account.account }}</span>
               <div>
                 <span class="registering-accounts__list__status-text">
                   <Iconfont
@@ -70,7 +70,6 @@ import Iconfont from '~/components/icon/Iconfont.vue'
 import { IDENTICON_SERVE } from '~/constant'
 import { ME_KEYS } from '~/store/me'
 import Breadcrumb from '~/components/Breadcrumb.vue'
-import { toHashedStyle } from '~/modules/tools'
 
 export default Vue.extend({
   name: 'RegisteringAccounts',
@@ -111,7 +110,6 @@ export default Vue.extend({
     this.getRegisteringAccounts()
   },
   methods: {
-    toHashedStyle,
     async getRegisteringAccounts () {
       if (this.registeringAccounts.length === 0) {
         this.fetchDataLoading = true

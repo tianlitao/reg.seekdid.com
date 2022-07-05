@@ -21,7 +21,12 @@
         class="account-status__account-name"
         :class="{ 'account-status__account-name_small': account.account.length > 9 }"
       >
-        {{ toHashedStyle(account.account) }}
+        <template v-if="isSubAccount">
+          {{ account.account.split('.')[1] }}<span class="account-status__account-name__sub-account">#{{ account.account.split('.')[0] }}</span>.{{ account.account.split('.')[2] }}
+        </template>
+        <template v-else>
+          {{ account.account }}
+        </template>
       </span>
     </div>
     <Button
@@ -50,6 +55,7 @@ import Iconfont from '~/components/icon/Iconfont.vue'
 import config from '~~/config'
 import { toHashedStyle } from '~/modules/tools'
 import { LANGUAGE } from '~/constant/language'
+import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 export default Vue.extend({
   name: 'AccountStatus',
@@ -66,6 +72,11 @@ export default Vue.extend({
     account: {
       type: Object as PropType<ISearchAccount>,
       required: true
+    }
+  },
+  computed: {
+    isSubAccount (): boolean {
+      return SUB_ACCOUNT_REG_EXP.test(this.account.account)
     }
   },
   data () {
@@ -163,11 +174,21 @@ export default Vue.extend({
           window.location.href = `${config.homepage}/${account.account}`
         }
         else {
-          if (this.$i18n.locale === LANGUAGE.zhCN) {
-            window.location.href = `https://${account.account}.host`
+          if (this.isSubAccount) {
+            if (this.$i18n.locale === LANGUAGE.zhCN) {
+              window.location.href = `https://bit.host/${account.account}`
+            }
+            else {
+              window.location.href = `https://bit.cc/${account.account}`
+            }
           }
           else {
-            window.location.href = `https://${account.account}.cc`
+            if (this.$i18n.locale === LANGUAGE.zhCN) {
+              window.location.href = `https://${account.account}.host`
+            }
+            else {
+              window.location.href = `https://${account.account}.cc`
+            }
           }
         }
       }
@@ -250,5 +271,9 @@ export default Vue.extend({
   border-radius: 12px;
   font-size: 18px;
   font-weight: 500;
+}
+
+.account-status__account-name__sub-account {
+  color: #E4B169;
 }
 </style>

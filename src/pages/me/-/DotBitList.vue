@@ -1,13 +1,19 @@
 <template>
   <div class="dot-bit-list">
-    <div
-      v-if="myAccounts.length > 0 || searchWord"
-      class="dot-bit-list__manual"
-    >
-      <Search
-        @search="onSearch"
-        @focus="hideManual"
-      />
+    <div class="dot-bit-list__manual">
+      <span class="dot-bit-list__actions">
+        <Search
+          @search="onSearch"
+          @focus="hideManual"
+        />
+        <AccountStatusFilter
+          v-if="!isHide"
+          v-model="filter"
+          class="dot-bit-list__account-status-filter"
+          :options="filterOptions"
+          @input="onFilter"
+        />
+      </span>
       <a
         v-if="!isHide"
         class="dot-bit-list__manual__link"
@@ -31,7 +37,10 @@
         tipFontSize="14"
       />
     </div>
-    <div v-else-if="myAccounts.length === 0 && searchWord === ''" class="dot-bit-list__no-account">
+    <div
+      v-else-if="myAccounts.length === 0 && searchWord === '' && filter === Filters.all"
+      class="dot-bit-list__no-account"
+    >
       <StatusTip
         class="dot-bit-list__no-account__tip"
         icon="📂"
@@ -47,18 +56,6 @@
       >
         {{ $tt('Register one') }}
       </Button>
-      <a
-        class="dot-bit-list__no-account__manual__link"
-        :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit/424' : 'https://talk.did.id/t/getting-started-with-bit/426'"
-        target="_blank"
-      >
-        {{ $tt('Guide2') }}
-        <Iconfont
-          name="help"
-          size="16"
-          color="#636D85"
-        />
-      </a>
     </div>
     <div
       v-if="myAccounts.length > 0 && !config.isProdData"
@@ -128,6 +125,16 @@ import { IAccountInfo } from '~/services/Account'
 import config from '~~/config'
 import { DEFAULT_PAGE_SIZE } from '~/constant'
 import { LANGUAGE } from '~/constant/language'
+import AccountStatusFilter from '~/pages/me/-/AccountStatusFilter.vue'
+
+enum Filters {
+  all = 0,
+  mainAccount = 1,
+  subAccount = 2,
+  onSale = 3,
+  expireSoon = 4,
+  toBeRecycled = 5
+}
 
 export default Vue.extend({
   name: 'DotBitList',
@@ -139,12 +146,13 @@ export default Vue.extend({
     Search,
     ManageBitAccount,
     MintCompleted,
-    MintNft
+    MintNft,
+    AccountStatusFilter
   },
-  props: {},
   data () {
     return {
       LANGUAGE,
+      Filters,
       config,
       fetchDataLoading: false,
       myAccounts: [] as IAccountInfo[],
@@ -159,7 +167,8 @@ export default Vue.extend({
       } as IAccountInfo,
       manageBitAccountDialogShowing: false,
       mintCompletedDialogShowing: false,
-      mintNftDialogShowing: false
+      mintNftDialogShowing: false,
+      filter: Filters.all
     }
   },
   computed: {
@@ -171,6 +180,27 @@ export default Vue.extend({
     }),
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
+    },
+    filterOptions (): { text: string, value: number }[] {
+      return [{
+        text: this.$tt('All'),
+        value: Filters.all
+      }, {
+        text: this.$tt('Main accounts'),
+        value: Filters.mainAccount
+      }, {
+        text: this.$tt('Sub-accounts'),
+        value: Filters.subAccount
+      }, {
+        text: this.$tt('On sale on DIDTop'),
+        value: Filters.onSale
+      }, {
+        text: this.$tt('Expire soon'),
+        value: Filters.expireSoon
+      }, {
+        text: this.$tt('To be recycled'),
+        value: Filters.toBeRecycled
+      }]
     }
   },
   mounted () {
@@ -185,6 +215,10 @@ export default Vue.extend({
     update () {
       this.page = 0
       this.searchWord = ''
+      this.getMyAccounts()
+    },
+    onFilter () {
+      this.page = 0
       this.getMyAccounts()
     },
     async getMyAccounts () {
@@ -205,6 +239,7 @@ export default Vue.extend({
         const res = await this.$services.account.myAccounts({
           chain_type: this.computedChainType,
           address: this.connectedAccount.address,
+          category: this.filter,
           page: this.page,
           keyword: this.searchWord
         })
@@ -276,13 +311,23 @@ export default Vue.extend({
     margin-top: 80px;
   }
 
+  .dot-bit-list__actions {
+    display: inline-flex;
+    flex: 1;
+  }
+
+  .dot-bit-list__account-status-filter {
+    margin-left: 12px;
+    width: 100px;
+  }
+
   .dot-bit-list__no-account {
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin-top: 12px;
-    height: calc(100vh - 360px);
+    height: calc(100vh - 400px);
     background: #FFFFFF;
     box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 3%);
     border-radius: 16px 16px 16px 16px;
@@ -341,28 +386,13 @@ export default Vue.extend({
     margin-top: 12px;
   }
 
-  .dot-bit-list__no-account__manual__link {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #636D85;
-    font-size: 14px;
-    font-weight: 500;
-
-    .iconfont {
-      margin-left: 6px;
-    }
-  }
-
   .dot-bit-list__manual__link {
     margin-left: 24px;
     height: 16px;
     font-size: 14px;
     font-weight: 500;
     color: #636D85;
+    white-space: nowrap;
   }
 }
 </style>

@@ -1,9 +1,6 @@
 <template>
   <div class="eth-nft-list">
-    <div
-      v-if="nfts.length > 0 || searchWord"
-      class="eth-nft-list__manual"
-    >
+    <div class="eth-nft-list__manual">
       <Search
         @search="onSearch"
         @focus="hideManual"
@@ -46,18 +43,6 @@
       >
         {{ $tt('How to mint .bit NFTs on Ethereum?') }}
       </a>
-      <a
-        class="eth-nft-list__no-account__manual__link"
-        :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit/424' : 'https://talk.did.id/t/getting-started-with-bit/426'"
-        target="_blank"
-      >
-        {{ $tt('Guide2') }}
-        <Iconfont
-          name="help"
-          size="16"
-          color="#636D85"
-        />
-      </a>
     </div>
     <ul class="eth-nft-list__account-list">
       <li
@@ -74,7 +59,40 @@
             :size="44"
             rounded
           />
-          <span class="eth-nft-list__account-list__account-name">{{ toHashedStyle(item.account) }}</span>
+          <span class="eth-nft-list__account-list__account-name">
+            <template v-if="isSubAccount(item.account)">
+              {{ item.account.split('.')[1] }}<span class="eth-nft-list__account-list__account-name__sub-account">#{{ item.account.split('.')[0] }}</span>.{{ item.account.split('.')[2] }}
+            </template>
+            <template v-else>
+              {{ item.account }}
+            </template>
+            <div>
+              <template v-if="item.expire_at">
+                <span
+                  v-if="countdownToExpiredDays(item.expire_at) > 0"
+                  class="eth-nft-list__account-list__status-text_warn"
+                >
+                  <Iconfont
+                    name="warning"
+                    size="16"
+                    color="#FF6B6B"
+                  />
+                  {{ $tt('Expires in {days} days', { days: countdownToExpiredDays(item.expire_at) }) }}
+                </span>
+                <span
+                  v-else-if="countdownToRecoveryDays(item.expire_at) > 0"
+                  class="eth-nft-list__account-list__status-text_warn"
+                >
+                  <Iconfont
+                    name="warning"
+                    size="16"
+                    color="#FF6B6B"
+                  />
+                  {{ $tt('账号回收提示', { days: countdownToRecoveryDays(item.expire_at) }) }}
+                </span>
+              </template>
+            </div>
+          </span>
         </div>
         <Iconfont class="eth-nft-list__account-list__arrow-right" name="arrow-right" color="#11142D" />
       </li>
@@ -116,6 +134,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
+import Decimal from 'decimal.js'
 import StatusTip from '~/components/StatusTip.vue'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
 import { DEFAULT_PAGE_SIZE, IDENTICON_SERVE } from '~/constant'
@@ -127,6 +146,8 @@ import IconImage from '~/components/icon/IconImage.vue'
 import { toHashedStyle } from '~/modules/tools'
 import ManageEthAccount from '~/pages/me/-/ManageEthAccount.vue'
 import ConvertToCkbDialog from '~/pages/me/-/ConvertToCkbDialog.vue'
+import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
+import { COMMON_KEYS } from '~/store/common'
 
 export default Vue.extend({
   name: 'EthNftList',
@@ -155,18 +176,26 @@ export default Vue.extend({
       } as IDidNftList,
       manageEthAccountDialogShowing: false,
       convertToCkbDialogShowing: false,
-      isManageData: false
+      isManageData: false,
+      oneDayMillisecond: 24 * 60 * 60 * 1000
     }
   },
   computed: {
     ...mapState({
-      me: ME_KEYS.namespace
+      me: ME_KEYS.namespace,
+      common: COMMON_KEYS.namespace
     }),
     ...mapGetters({
       computedChainType: ME_KEYS.computedChainType
     }),
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
+    },
+    gracePeriod (): number {
+      if (this.common.config.account_expiration_grace_period) {
+        return this.common.config.account_expiration_grace_period * 1000
+      }
+      return 0
     }
   },
   mounted () {
@@ -174,6 +203,30 @@ export default Vue.extend({
   },
   methods: {
     toHashedStyle,
+    countdownToExpiredDays (expiredAt: number): number | string {
+      const currentTimestamp = new Date().getTime()
+      if (expiredAt && currentTimestamp > expiredAt - (this.oneDayMillisecond * 30) && currentTimestamp < expiredAt) {
+        return new Decimal(expiredAt)
+          .sub(currentTimestamp)
+          .div(this.oneDayMillisecond)
+          .toFixed(0, Decimal.ROUND_UP)
+      }
+      return 0
+    },
+    countdownToRecoveryDays (expiredAt: number): number | string {
+      const currentTimestamp = new Date().getTime()
+      if (expiredAt && currentTimestamp > expiredAt && currentTimestamp < expiredAt + this.gracePeriod) {
+        return new Decimal(expiredAt)
+          .add(this.gracePeriod)
+          .sub(currentTimestamp)
+          .div(this.oneDayMillisecond)
+          .toFixed(0, Decimal.ROUND_UP)
+      }
+      return 0
+    },
+    isSubAccount (accont: string): boolean {
+      return SUB_ACCOUNT_REG_EXP.test(accont)
+    },
     onSearch (value: string) {
       this.page = 0
       this.searchWord = value
@@ -278,7 +331,7 @@ export default Vue.extend({
     flex-direction: column;
     justify-content: center;
     margin-top: 12px;
-    height: calc(100vh - 360px);
+    height: calc(100vh - 400px);
     background: #FFFFFF;
     box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 3%);
     border-radius: 16px 16px 16px 16px;
@@ -315,22 +368,6 @@ export default Vue.extend({
     justify-content: space-between;
     align-items: center;
     margin-top: 12px;
-  }
-
-  .eth-nft-list__no-account__manual__link {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #636D85;
-    font-size: 14px;
-    font-weight: 500;
-
-    .iconfont {
-      margin-left: 6px;
-    }
   }
 
   .eth-nft-list__manual__link {
@@ -391,6 +428,22 @@ export default Vue.extend({
 
   .eth-nft-list__account-list__arrow-right {
     min-width: 24px;
+  }
+
+  .eth-nft-list__account-list__account-name__sub-account {
+    color: #E4B169;
+  }
+
+  .eth-nft-list__account-list__status-text_warn {
+    display: inline-flex;
+    margin-top: 4px;
+    padding: 0 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    align-items: center;
+    color: $error-font-color;
+    background: rgba(255, 107, 107, 0.1);
   }
 }
 </style>

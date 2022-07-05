@@ -1,22 +1,26 @@
 <template>
-  <div class="select-das" @click.stop.prevent>
-    <div class="select-das__input__container">
+  <div
+    class="select-das"
+    v-click-outside="onClickOutside"
+  >
+    <div
+      class="select-das__input__container"
+      @click="onFocus"
+    >
       <input
-        ref="input"
         v-bind="$attrs"
-        :value="value"
+        v-model="select"
         class="select-das__input"
         :class="{
           'select-das__input_error': !!errorMessages[0]
         }"
         type="text"
-        v-on="listeners"
+        @input="onInput"
       >
       <Iconfont
         class="select-das__input__arrow-down"
         name="arrow-down"
         color="#11142D"
-        @click="onFocus"
       />
     </div>
     <div
@@ -26,11 +30,11 @@
       {{ errorMessages[0] }}
     </div>
     <ul
-      v-if="optionsShowing && accountList.length > 0"
+      v-show="optionsShowing && showOptios.length > 0"
       class="select-das__options"
     >
       <li
-        v-for="(option, index) in accountList"
+        v-for="(option, index) in showOptios"
         :key="index"
         class="select-das__options__item"
         @click="onSelect(option)"
@@ -42,7 +46,12 @@
           :size="22"
           rounded
         />
-        {{ toHashedStyle(option.text) }}
+        <template v-if="isSubAccount(option.text)">
+          {{ option.text.split('.')[1] }}<span class="select-das__options__sub-account">#{{ option.text.split('.')[0] }}</span>.{{ option.text.split('.')[2] }}
+        </template>
+        <template v-else>
+          {{ option.text }}
+        </template>
       </li>
     </ul>
   </div>
@@ -51,12 +60,15 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+// @ts-ignore
+import vClickOutside from 'v-click-outside'
 import { IDENTICON_SERVE } from '~/constant'
 import { REVERSE_KEYS } from '~/store/reverse'
 import { IAccountListRes } from '~/services/DasReverse'
 import IconImage from '~/components/icon/IconImage.vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { toHashedStyle } from '~/modules/tools'
+import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 interface IOption {
   text: string
@@ -68,6 +80,9 @@ export default Vue.extend({
   components: {
     IconImage,
     Iconfont
+  },
+  directives: {
+    clickOutside: vClickOutside.directive
   },
   inheritAttrs: false,
   model: {
@@ -88,79 +103,80 @@ export default Vue.extend({
     return {
       IDENTICON_SERVE,
       optionsShowing: false,
-      selectOption: {} as IOption
+      showOptios: [] as IOption[],
+      select: '' as String | Number
     }
   },
   computed: {
     ...mapState({
       reverse: REVERSE_KEYS.namespace
     }),
-    listeners (): object {
-      const _vm = this
-      return {
-        ...this.$listeners,
-        input (event: Event) {
-          _vm.$emit('input', (event.target as HTMLInputElement).value)
-        },
-        focus () {
-          _vm.optionsShowing = true
-        }
-      }
-    },
     accountList (): IOption[] {
       const _list: IOption[] = []
-      if (this.value) {
-        this.reverse.accountList.forEach((item: IAccountListRes) => {
-          if (item.account.includes(this.value) || toHashedStyle(item.account).includes(this.value)) {
-            _list.push({
-              text: item.account,
-              value: item.account
-            })
-          }
+      this.reverse.accountList.forEach((item: IAccountListRes) => {
+        _list.push({
+          text: item.account,
+          value: item.account
         })
-      }
-      else {
-        this.reverse.accountList.forEach((item: IAccountListRes) => {
-          _list.push({
-            text: item.account,
-            value: item.account
-          })
-        })
-      }
+      })
       return _list
     }
   },
   watch: {
     value (newVal) {
       if (newVal === '') {
-        this.selectOption = ({} as IOption)
+        this.select = ''
       }
     }
   },
   mounted () {
-    document.addEventListener('click', () => {
-      this.optionsShowing = false
-    })
     if (this.value) {
       const _option = this.accountList.find((option: IOption) => {
         return this.value === option.value
       })
       if (_option) {
-        this.selectOption = _option
+        this.select = _option.text
       }
     }
+    this.showOptios = this.accountList
   },
   methods: {
     toHashedStyle,
+    isSubAccount (accont: string): boolean {
+      return SUB_ACCOUNT_REG_EXP.test(accont)
+    },
     onSelect (option: IOption) {
-      this.selectOption = option
       this.$emit('input', option.value)
+      this.select = toHashedStyle(option.text)
+      this.onInput()
       this.$emit('blur')
       this.optionsShowing = false
     },
     onFocus () {
       this.optionsShowing = true
-      ;(this.$refs.input as HTMLInputElement).focus()
+    },
+    onInput () {
+      let _value = event?.target?.value || ''
+      let _list: IOption[] = []
+      if (_value) {
+        this.accountList.forEach((item: IOption) => {
+          const _text = toHashedStyle(item.text)
+          _value = _value.toLowerCase()
+          console.log(_text + ' - ' + _value)
+          if (_text.includes(_value)) {
+            _list.push(item)
+          }
+        })
+      }
+      else {
+        _list = this.accountList
+      }
+      this.showOptios = _list
+    },
+    onClickOutside () {
+      this.optionsShowing = false
+      this.select = toHashedStyle(this.value)
+      this.onInput()
     }
   }
 })
@@ -270,5 +286,9 @@ export default Vue.extend({
       color: #ffffff;
     }
   }
+}
+
+.select-das__options__sub-account {
+  color: #E4B169;
 }
 </style>

@@ -12,7 +12,7 @@
         class="search_icon"
         name="search-small"
         size="24"
-        color="#636D85"
+        color="#5F6570"
       />
       <input
         ref="input"
@@ -103,15 +103,16 @@ export default Vue.extend({
 
 .search {
   display: inline-block;
-  flex: 1;
 
   .search_container {
-    padding: 0 6px;
-    display: flex;
+    position: relative;
+    padding: 3px 12px 3px 8px;
+    display: inline-flex;
     align-items: center;
     height: 24px;
-    border-radius: 12px;
-    color: #636D85;
+    color: #5F6570;
+    background: $normal-color;
+    border-radius: 15px;
   }
 
   .search_icon {
@@ -120,20 +121,30 @@ export default Vue.extend({
 
   .search_input {
     flex: 1;
+    width: 48px;
     border: 0;
     background: unset;
     outline: 0;
     caret-color: #0DBA85;
+
+    &::placeholder {
+      color: #5F6570;
+      font-weight: 400;
+    }
   }
 
   &._active {
+    flex: 1;
+
     .search_container {
-      padding: 6px 6px 6px 12px;
-      background: #EAEEF3;
+      padding: 3px 28px 3px 8px;
+      display: flex;
     }
   }
 
   .search_clean {
+    position: absolute;
+    right: 12px;
     cursor: pointer;
     border-radius: 24px;
 

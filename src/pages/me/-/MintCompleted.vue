@@ -11,16 +11,21 @@
       :i18nkey="$tt('铸造成功说明')"
     >
       <span
-        class="mint-completed__account"
         slot="account"
+        class="mint-completed__account"
       >
-        {{ toHashedStyle(account) }}
+        <template v-if="isSubAccount">
+          {{ account.split('.')[1] }}<span class="mint-completed__account__sub-account">#{{ account.split('.')[0] }}</span>.{{ account.split('.')[2] }}
+        </template>
+        <template v-else>
+          {{ account }}
+        </template>
       </span>
       <a
+        slot="opensea"
         class="mint-completed__link"
         :href="openseaUrl"
         :target="isMobile ? '_self' : '_blank'"
-        slot="opensea"
       >OpenSea</a>
     </i18n>
   </Dialog>
@@ -31,6 +36,7 @@ import Vue from 'vue'
 import { isMobile, nftTokenId, toHashedStyle } from '~/modules/tools'
 import Dialog from '~/components/Dialog.vue'
 import { CrossEthContract } from '~/constant'
+import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 export default Vue.extend({
   name: 'MintCompleted',
@@ -57,6 +63,9 @@ export default Vue.extend({
     openseaUrl (): string {
       const tokenId = nftTokenId(this.account)
       return `https://opensea.io/assets/ethereum/${CrossEthContract}/${tokenId}`
+    },
+    isSubAccount (): boolean {
+      return SUB_ACCOUNT_REG_EXP.test(this.account)
     }
   },
   methods: {
@@ -81,5 +90,9 @@ export default Vue.extend({
 
 .mint-completed__account {
   color: #0DBA85;
+}
+
+.mint-completed__account__sub-account {
+  color: #E4B169;
 }
 </style>

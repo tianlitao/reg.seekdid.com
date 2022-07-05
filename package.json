@@ -1,6 +1,6 @@
 {
   "name": "app.did.id",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "predev": "npm run i18n",
@@ -44,7 +44,7 @@
     "vee-validate": "^3.4.10",
     "vue-i18n": "^8.25.0",
     "vuex-persistedstate": "^3.2.0",
-    "wallet-sdk-js": "^0.0.6",
+    "wallet-sdk-js": "^0.0.8",
     "web3": "^1.7.3"
   },
   "devDependencies": {
@@ -70,9 +70,5 @@
     "ts-jest": "^26.5.6",
     "vue-jest": "^3.0.4",
     "xlsx": "^0.17.0"
-  },
-  "engines": {
-    "node": ">=12.20.0",
-    "npm": ">=6.14.8"
   }
 }

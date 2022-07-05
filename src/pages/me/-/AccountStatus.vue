@@ -9,7 +9,12 @@
         rounded
       />
       <span class="account-status__account-name">
-        {{ toHashedStyle(accountInfo.account) }}
+        <template v-if="isSubAccount">
+          {{ accountInfo.account.split('.')[1] }}<span class="account-status__account-name__sub-account">#{{ accountInfo.account.split('.')[0] }}</span>.{{ accountInfo.account.split('.')[2] }}
+        </template>
+        <template v-else>
+          {{ accountInfo.account }}
+        </template>
         <div>
           <template v-if="accountInfo.status">
             <span
@@ -24,7 +29,7 @@
               {{ $tt('Expires in {days} days', { days: countdownToExpiredDays }) }}
             </span>
             <span
-              v-else-if="accountInfo.status === ACCOUNT_STATUS.expired"
+              v-else-if="countdownToRecoveryDays > 0"
               class="account-status__status-text account-status__status-text_warn"
             >
               <Iconfont
@@ -58,6 +63,7 @@ import { ACCOUNT_STATUS, IDENTICON_SERVE } from '~/constant'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { COMMON_KEYS } from '~/store/common'
 import { toHashedStyle } from '~/modules/tools'
+import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 export default Vue.extend({
   name: 'AccountStatus',
@@ -110,6 +116,9 @@ export default Vue.extend({
           .toFixed(0, Decimal.ROUND_UP)
       }
       return 0
+    },
+    isSubAccount (): boolean {
+      return SUB_ACCOUNT_REG_EXP.test(this.accountInfo.account)
     }
   },
   methods: {
@@ -176,7 +185,11 @@ export default Vue.extend({
 
 .account-status__status-text_warn {
   align-items: center;
-  color: #FF6B6B;
+  color: $error-font-color;
   background: rgba(255, 107, 107, 0.1);
+}
+
+.account-status__account-name__sub-account {
+  color: #E4B169;
 }
 </style>
