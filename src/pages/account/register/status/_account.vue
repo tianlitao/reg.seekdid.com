@@ -94,7 +94,7 @@
               class="register-status__registered-button__icon"
               url="/images/me/reward-logo.png"
               alt="reward"
-              :size="25"
+              :size="20"
             />
             {{ $tt('Reward') }}
           </Button>
@@ -366,7 +366,7 @@ export default Vue.extend({
 
 .register-status__registered-title,
 .register-status__registering-title {
-  font-size: 24px;
+  font-size: $font-size-24;
   line-height: 33px;
   margin: 0 0 14px 0;
   word-break: break-word;

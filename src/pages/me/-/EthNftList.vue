@@ -14,8 +14,8 @@
         {{ $tt('Guide2') }}
         <Iconfont
           name="help"
-          size="16"
-          color="#636D85"
+          size="15"
+          color="#5F6570"
         />
       </a>
     </div>
@@ -74,7 +74,7 @@
                 >
                   <Iconfont
                     name="warning"
-                    size="16"
+                    size="12"
                     color="#FF6B6B"
                   />
                   {{ $tt('Expires in {days} days', { days: countdownToExpiredDays(item.expire_at) }) }}
@@ -85,7 +85,7 @@
                 >
                   <Iconfont
                     name="warning"
-                    size="16"
+                    size="12"
                     color="#FF6B6B"
                   />
                   {{ $tt('账号回收提示', { days: countdownToRecoveryDays(item.expire_at) }) }}
@@ -94,7 +94,12 @@
             </div>
           </span>
         </div>
-        <Iconfont class="eth-nft-list__account-list__arrow-right" name="arrow-right" color="#11142D" />
+        <Iconfont
+          class="eth-nft-list__account-list__arrow-right"
+          name="arrow-right"
+          color="#121314"
+          size="18"
+        />
       </li>
       <li
         v-if="loadMoreShowing"
@@ -332,7 +337,7 @@ export default Vue.extend({
     justify-content: center;
     margin-top: 12px;
     height: calc(100vh - 400px);
-    background: #FFFFFF;
+    background: $white;
     box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 3%);
     border-radius: 16px 16px 16px 16px;
     border: 1px solid rgba(0, 0, 0, 0.11);
@@ -373,14 +378,14 @@ export default Vue.extend({
   .eth-nft-list__manual__link {
     margin-left: 24px;
     height: 16px;
-    font-size: 14px;
+    font-size: $font-size-14;
     font-weight: 500;
-    color: #636D85;
+    color: $assist-font-color;
   }
 
   .eth-nft-list__no-account__tip__manual__link {
     margin-top: 8px;
-    font-size: 14px;
+    font-size: $font-size-14;
     font-weight: 400;
     color: $link-font-color;
     line-height: 16px;
@@ -419,7 +424,7 @@ export default Vue.extend({
   }
 
   .eth-nft-list__account-list__account-name {
-    font-size: 18px;
+    font-size: $font-size-18;
     font-weight: 600;
     color: $primary-font-color;
     word-break: break-word;
@@ -431,19 +436,23 @@ export default Vue.extend({
   }
 
   .eth-nft-list__account-list__account-name__sub-account {
-    color: #E4B169;
+    color: $warn-font-color;
   }
 
   .eth-nft-list__account-list__status-text_warn {
     display: inline-flex;
     margin-top: 4px;
-    padding: 0 6px;
+    padding: 2px 6px;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: $font-size-12;
     font-weight: 500;
     align-items: center;
     color: $error-font-color;
     background: rgba(255, 107, 107, 0.1);
+
+    .iconfont {
+      margin-right: 4px;
+    }
   }
 }
 </style>

@@ -47,15 +47,15 @@
             >
               <Iconfont
                 name="loading"
-                color="#11142d"
-                size="24"
+                color="#121314"
+                size="18"
               />
             </span>
             <Iconfont
               v-else
-              size="24"
+              size="16"
               name="arrow-right"
-              color="#11142D"
+              color="#121314"
             />
           </span>
         </li>
@@ -92,12 +92,12 @@
           />
         </span>
       </div>
-      <span slot="action" />
     </Dialog>
     <Dialog
       :showing="hardwareWalletTipsShowing"
       :title="$tt('Tips')"
       :actionButtonText="$tt('Understand, Continue')"
+      enableCloseAction
       @close="closeHardwareWalletTips"
     >
       <div class="wallets-connect__hardware-wallet__title">
@@ -112,6 +112,7 @@
       closeButton
       :title="$tt('Connected')"
       :actionButtonText="$tt('OK')"
+      enableCloseAction
       @close="closeTorusLoginSuccessTips"
     >
       <div>
@@ -290,7 +291,7 @@ export default Vue.extend({
 @import "src/assets/variables";
 
 .wallets-connect__cross-chain-tips {
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 400;
   color: $primary-font-color;
   line-height: 16px;
@@ -349,15 +350,15 @@ export default Vue.extend({
 .wallets-connect__select-wallet-list__wallet-info {
   display: flex;
   align-items: center;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: $font-size-16;
+  font-weight: 500;
   color: $primary-font-color;
 }
 
 .wallets-connect__hardware-wallet__title {
   color: $error-font-color;
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 12px;
 }
 
@@ -368,27 +369,33 @@ export default Vue.extend({
 .wallets-connect__tronlink__tips {
   margin-top: 4px;
   font-weight: 400;
-  font-size: 12px;
-  color: #5C6063;
+  font-size: $font-size-12;
+  color: $assist-font-color;
 }
 
 .wallets-connect__select-wallet-list__arrow {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
   min-width: 24px;
   min-height: 24px;
 }
 
 .wallets-connect__select-wallet-list__torus-label {
   margin: 32px 0 8px 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #5C6063;
+  font-size: $font-size-14;
+  font-weight: 500;
+  color: $assist-font-color;
   line-height: 16px;
   text-align: center;
 }
 
 .wallets-connect__select-wallet-list__torus-faq {
-  color: #0E7DFF;
+  color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color;
+  }
 }
 
 .wallets-connect__select-wallet-list__torus-container {
@@ -400,7 +407,7 @@ export default Vue.extend({
   border: 1px solid #F3F3F3;
 
   &:hover {
-    background: #F9FBFC;
+    background: $background;
   }
 }
 

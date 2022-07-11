@@ -57,7 +57,7 @@ export default Vue.extend({
   min-width: 120px;
   border-radius: 8px;
   text-align: center;
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: 600;
   color: $white;
   line-height: 22px;

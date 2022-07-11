@@ -38,7 +38,7 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [{
-      src: '/fonts/iconfont.js',
+      src: 'https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/svg_15353_41.8c4938c03c232d45c4a8c5af1812e298.js',
       async: true
     }]
   },

@@ -1,17 +1,14 @@
 <template>
   <div
     v-click-outside="onClickOutside"
-    :class="[
-      'search',
-      { '_active': active || !!query }
-    ]"
+    class="search"
     @click="onClickInput"
   >
     <div class="search_container">
       <Iconfont
         class="search_icon"
-        name="search-small"
-        size="24"
+        name="search"
+        size="14"
         color="#5F6570"
       />
       <input
@@ -23,14 +20,11 @@
         @keydown="onKeydown"
         @input="onSearch"
       >
-      <Iconfont
-        v-if="query"
-        class="search_clean"
-        name="close"
-        size="24"
-        color="#A0A1AB"
-        @click="onClean"
-      />
+      <span
+        v-if="active"
+        class="search_cancel"
+        @click.stop="onCancel"
+      >{{ $tt('Cancel') }}</span>
     </div>
   </div>
 </template>
@@ -61,7 +55,6 @@ export default Vue.extend({
   methods: {
     onClickOutside () {
       this.active = false
-      this.$emit('focus', this.active)
     },
     onClickInput () {
       if (!this.active) {
@@ -70,7 +63,6 @@ export default Vue.extend({
       window.setTimeout(() => {
         ;(this.$refs.input as HTMLInputElement).focus()
       })
-      this.$emit('focus', this.active)
     },
     onSearch: debounce(function (this: any) {
       let account = this.query
@@ -90,9 +82,10 @@ export default Vue.extend({
         this.onSearch()
       }
     },
-    onClean () {
+    onCancel () {
       this.query = ''
       this.$emit('search', '')
+      this.active = false
     }
   }
 })
@@ -102,15 +95,16 @@ export default Vue.extend({
 @import 'src/assets/variables';
 
 .search {
+  flex: 1;
   display: inline-block;
 
   .search_container {
     position: relative;
-    padding: 3px 12px 3px 8px;
-    display: inline-flex;
+    display: flex;
+    padding: 3px 6px 3px 12px;
     align-items: center;
     height: 24px;
-    color: #5F6570;
+    color: $assist-font-color;
     background: $normal-color;
     border-radius: 15px;
   }
@@ -125,32 +119,23 @@ export default Vue.extend({
     border: 0;
     background: unset;
     outline: 0;
-    caret-color: #0DBA85;
+    caret-color: $input-focus-border-color;
 
     &::placeholder {
-      color: #5F6570;
+      color: $assist-font-color;
       font-weight: 400;
     }
   }
 
-  &._active {
-    flex: 1;
-
-    .search_container {
-      padding: 3px 28px 3px 8px;
-      display: flex;
-    }
-  }
-
-  .search_clean {
-    position: absolute;
-    right: 12px;
+  .search_cancel {
+    margin-left: 10px;
+    padding: 4px 7px;
+    font-size: $font-size-12;
+    background: #EFF2F5;
     cursor: pointer;
-    border-radius: 24px;
-
-    &:hover {
-      background: #d2d6d9;
-    }
+    border-radius: 12px;
+    color: $assist-font-color;
+    font-weight: 500;
   }
 }
 </style>

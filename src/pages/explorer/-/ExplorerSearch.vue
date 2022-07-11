@@ -111,10 +111,10 @@ export default Vue.extend({
   margin: 0 16px;
   width: 100%;
   height: 28px;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 600;
   color: $primary-font-color;
-  caret-color: #0DBA85;
+  caret-color: $input-focus-border-color;
   outline: none;
   border: none;
   background: $white;
@@ -135,7 +135,7 @@ export default Vue.extend({
   right: 8px;
   width: 98px;
   border-radius: 12px;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 500;
 }
 </style>

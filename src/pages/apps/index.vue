@@ -25,7 +25,8 @@
         </span>
         <Iconfont
           name="arrow-right"
-          color="#11142D"
+          color="#121314"
+          size="18"
         />
       </a>
     </div>
@@ -116,9 +117,9 @@ export default Vue.extend({
   background: #F7F8F9;
 
   .apps_group-title {
-    font-size: 14px;
+    font-size: $font-size-14;
     font-weight: bold;
-    color: #121314;
+    color: $primary-font-color;
     line-height: 16px;
     text-align: center;
     margin: 24px 0 16px 0;
@@ -131,12 +132,12 @@ export default Vue.extend({
     padding: 0 24px;
     margin-bottom: 16px;
     height: 108px;
-    background: #FFFFFF;
+    background: $white;
     box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 4%);
     border-radius: 24px 24px 24px 24px;
     border: 1px solid rgba(182, 196, 217, 0.4);
     cursor: pointer;
-    font-size: 16px;
+    font-size: $font-size-16;
     font-weight: bold;
     color: $primary-font-color;
     line-height: 19px;
@@ -160,9 +161,9 @@ export default Vue.extend({
 
   .apps_group_item_info_desc {
     display: inline-block;
-    font-size: 14px;
+    font-size: $font-size-14;
     font-weight: 400;
-    color: #5C6063;
+    color: $assist-font-color;
     line-height: 16px;
     margin-top: 6px;
   }
@@ -175,7 +176,7 @@ export default Vue.extend({
     height: 33px;
     background: rgba(36, 113, 254, 0.1);
     border-radius: 8px;
-    font-size: 14px;
+    font-size: $font-size-14;
     font-weight: 500;
     color: $link-font-color;
 

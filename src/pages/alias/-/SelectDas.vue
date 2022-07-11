@@ -20,7 +20,8 @@
       <Iconfont
         class="select-das__input__arrow-down"
         name="arrow-down"
-        color="#11142D"
+        color="#121314"
+        size="14"
       />
     </div>
     <div
@@ -29,31 +30,33 @@
     >
       {{ errorMessages[0] }}
     </div>
-    <ul
-      v-show="optionsShowing && showOptios.length > 0"
-      class="select-das__options"
-    >
-      <li
-        v-for="(option, index) in showOptios"
-        :key="index"
-        class="select-das__options__item"
-        @click="onSelect(option)"
+    <transition name="select-das-options">
+      <ul
+        v-show="optionsShowing && showOptios.length > 0"
+        class="select-das__options"
       >
-        <IconImage
-          class="select-das__options__avatar"
-          :url="`${IDENTICON_SERVE}${option.text}`"
-          :alt="option.text"
-          :size="22"
-          rounded
-        />
-        <template v-if="isSubAccount(option.text)">
-          {{ option.text.split('.')[1] }}<span class="select-das__options__sub-account">#{{ option.text.split('.')[0] }}</span>.{{ option.text.split('.')[2] }}
-        </template>
-        <template v-else>
-          {{ option.text }}
-        </template>
-      </li>
-    </ul>
+        <li
+          v-for="(option, index) in showOptios"
+          :key="index"
+          class="select-das__options__item"
+          @click="onSelect(option)"
+        >
+          <IconImage
+            class="select-das__options__avatar"
+            :url="`${IDENTICON_SERVE}${option.text}`"
+            :alt="option.text"
+            :size="22"
+            rounded
+          />
+          <template v-if="isSubAccount(option.text)">
+            {{ option.text.split('.')[1] }}<span class="select-das__options__sub-account">#{{ option.text.split('.')[0] }}</span>.{{ option.text.split('.')[2] }}
+          </template>
+          <template v-else>
+            {{ option.text }}
+          </template>
+        </li>
+      </ul>
+    </transition>
   </div>
 </template>
 
@@ -201,25 +204,27 @@ export default Vue.extend({
   height: 34px;
   padding: 11px 48px 11px 24px;
   border-radius: 12px;
-  border: 1px solid $input-color;
-  background: $input-color;
+  border: 1px solid $input-border-color;
+  background: $input-bg-color;
   color: $primary-font-color;
-  caret-color: $focus-color;
+  caret-color: $input-focus-border-color;
   outline: none;
-  font-size: 14px;
+  font-size: $font-size-14;
   -webkit-appearance: none;
   cursor: pointer;
 
-  &:hover,
+  &:hover {
+    border: 1px solid $input-focus-border-color;
+  }
+
   &:focus {
-    border: 1px solid $focus-color;
-    background: $white;
-    box-shadow: inset 0 0 0 4px rgba(45, 100, 246, 0.1);
+    border: 1px solid $input-focus-border-color;
+    background: $input-focus-bg-color;
   }
 
   &::placeholder {
-    color: $assist-font-color;
-    font-weight: 400;
+    font-weight: 500;
+    color: $third-font-color;
   }
 }
 
@@ -236,7 +241,7 @@ export default Vue.extend({
 
 .select-das__input__error-messages {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 600;
   color: $error-font-color;
   line-height: 14px;
@@ -252,7 +257,7 @@ export default Vue.extend({
   padding: 10px 8px;
   max-height: 200px;
   background: $white;
-  box-shadow: $container-outer-box-shadow;
+  box-shadow: $option-outer-box-shadow;
   border-radius: 16px;
   border: $container-border;
   z-index: 2;
@@ -267,7 +272,7 @@ export default Vue.extend({
   border-radius: 8px;
   line-height: 30px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: bold;
 
   .select-das__options__avatar {
@@ -280,15 +285,23 @@ export default Vue.extend({
 
   &:hover {
     background: #667FFF;
-    color: #ffffff;
+    color: $white;
 
     .select-das__options__highlight {
-      color: #ffffff;
+      color: $white;
     }
   }
 }
 
 .select-das__options__sub-account {
-  color: #E4B169;
+  color: $warn-font-color;
+}
+
+.select-das-options-enter-active {
+  animation: fadeInUp 0.1s cubic-bezier(0.75, 0.25, 0.25, 0.75);
+}
+
+.select-das-options-leave-active {
+  animation: fadeOutDown 0.1s cubic-bezier(0.75, 0.25, 0.25, 0.75);
 }
 </style>

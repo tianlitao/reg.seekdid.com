@@ -25,6 +25,7 @@
             class="reward__invitation__icon-toggle"
             name="toggle"
             color="#B2B3BD"
+            size="16"
           />
         </div>
         <div class="reward__invitation-link__action">
@@ -48,7 +49,6 @@
         <Button
           class="reward__copy-invitation-link"
           block
-          status="normal"
           shape="round"
           @click="onCopyInvitationLink"
         >
@@ -93,7 +93,7 @@
               <Iconfont
                 name="info"
                 color="#A0A1AB"
-                size="18"
+                size="14"
               />
             </a>
           </template>
@@ -245,6 +245,7 @@
               class="reward__account-list__icon-check"
               name="check"
               color="#22C493"
+              size="18"
             />
           </li>
           <li
@@ -517,14 +518,14 @@ export default Vue.extend({
 
 .reward__title {
   margin: 24px 0 16px 0;
-  font-size: 24px;
+  font-size: $font-size-24;
   font-weight: 600;
   color: $primary-font-color;
 }
 
 .reward__factor-desc {
   margin-bottom: 24px;
-  font-size: 14px;
+  font-size: $font-size-14;
   color: $assist-font-color;
   line-height: 20px;
 }
@@ -547,7 +548,7 @@ export default Vue.extend({
 }
 
 .reward__invitation-link__label {
-  font-size: 12px;
+  font-size: $font-size-12;
   color: $assist-font-color;
   line-height: 18px;
 }
@@ -618,7 +619,7 @@ export default Vue.extend({
 .reward__account-list__account-info {
   display: flex;
   align-items: center;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: bold;
   color: $primary-font-color;
 }
@@ -632,7 +633,7 @@ export default Vue.extend({
   margin-bottom: 32px;
   height: 52px;
   border-radius: 9px;
-  font-size: 18px;
+  font-size: $font-size-18;
   border: 1px solid #ECEFF6;
 }
 
@@ -640,7 +641,7 @@ export default Vue.extend({
   margin: 24px 0 32px 0;
   height: 52px;
   border-radius: 9px;
-  font-size: 18px;
+  font-size: $font-size-18;
 }
 
 .reward__share-picture {
@@ -648,7 +649,7 @@ export default Vue.extend({
   flex: 1;
   height: 52px;
   border-radius: 9px;
-  font-size: 18px;
+  font-size: $font-size-18;
 }
 
 .reward__share-on-twitter {
@@ -656,7 +657,7 @@ export default Vue.extend({
   flex: 1;
   height: 52px;
   border-radius: 9px;
-  font-size: 18px;
+  font-size: $font-size-18;
   background: #1DA1F2;
 }
 
@@ -674,16 +675,21 @@ export default Vue.extend({
 
 .reward__my-bonus-fiat-currency {
   margin: 6px 0 16px 0;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 600;
   color: $assist-font-color;
 }
 
 .reward__my-bonus__unissued-tip {
   margin: 20px 0;
-  font-size: 14px;
+  font-size: $font-size-14;
   color: $assist-font-color;
   line-height: 16px;
+
+  .iconfont {
+    margin-left: 4px;
+    margin-bottom: 1px;
+  }
 }
 
 .reward__split-line {
@@ -695,7 +701,7 @@ export default Vue.extend({
 
 .reward__action-button {
   height: 30px;
-  color: $focus-color;
+  color: $input-focus-border-color;
   line-height: 30px;
   cursor: pointer;
 }
@@ -710,7 +716,7 @@ export default Vue.extend({
 }
 
 .reward__transfer-out-total {
-  font-size: 12px;
+  font-size: $font-size-12;
   color: $assist-font-color;
 }
 
@@ -729,7 +735,7 @@ export default Vue.extend({
   align-items: center;
   flex: 1;
   height: 28px;
-  font-size: 12px;
+  font-size: $font-size-12;
   color: $assist-font-color;
   font-weight: 400;
 }
@@ -768,6 +774,6 @@ export default Vue.extend({
 
 .reward__account-list__account-name__sub-account,
 .reward__table__link__sub-account {
-  color: #E4B169;
+  color: $warn-font-color;
 }
 </style>

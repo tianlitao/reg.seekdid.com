@@ -7,7 +7,7 @@
     @close="onClose"
   >
     <div>{{ $tt('After deleting the reverse record, the frozen {freezeCKB} CKB will be returned to your balance automatically.', { freezeCKB: thousandSplit(freezeCKB) }) }}</div>
-    <template v-slot:action>
+    <template #action>
       <div class="delete-das-reverse-dialog__buttons">
         <Button
           shape="round"

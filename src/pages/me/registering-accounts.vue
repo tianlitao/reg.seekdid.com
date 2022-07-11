@@ -16,7 +16,7 @@
           class="registering-accounts__tips__icon"
           name="tips"
           size="16"
-          color="#DE4A46"
+          color="#E05656"
         />
         {{ $tt('Automatically closed after 24 hours.') }}
       </div>
@@ -49,7 +49,11 @@
               </div>
             </div>
           </div>
-          <Iconfont name="arrow-right" color="#11142D" />
+          <Iconfont
+            name="arrow-right"
+            color="#121314"
+            size="18"
+          />
         </li>
       </ul>
       <div class="registering-accounts__no-more">
@@ -161,7 +165,7 @@ export default Vue.extend({
   padding: 0 20px;
   margin-bottom: 8px;
   height: 90px;
-  background: #FFFFFF;
+  background: $white;
   box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.03);
   border-radius: 16px;
   border: 1px solid rgba(182, 196, 217, 0.4);
@@ -176,7 +180,7 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 600;
   color: $primary-font-color;
   word-break: break-word;
@@ -187,9 +191,9 @@ export default Vue.extend({
 .registering-accounts__list__info {
   display: flex;
   flex-direction: column;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 600;
-  color: #11142D;
+  color: $primary-font-color;
   word-break: break-word;
   hyphens: auto;
 }
@@ -204,7 +208,7 @@ export default Vue.extend({
   margin-top: 4px;
   padding: 0 6px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: $font-size-12;
   color: $success-font-color;
   background: rgba(0, 223, 155, 0.1);
 
@@ -218,7 +222,7 @@ export default Vue.extend({
   text-align: center;
   font-size: 13px;
   font-weight: 600;
-  color: #636D85;
+  color: $assist-font-color;
 }
 
 .registering-accounts__breadcrumb {
@@ -233,9 +237,9 @@ export default Vue.extend({
   height: 40px;
   background: #FCECEC;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 600;
-  color: #DE4A46;
+  color: $error-font-color;
 }
 
 .registering-accounts__tips__icon {

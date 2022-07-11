@@ -55,7 +55,7 @@ export default Vue.extend({
 .record-container__content {
   margin-top: -18px;
   padding: 18px 16px 8px 16px;
-  background: #FFFFFF;
+  background: $white;
   border: 1px solid #ECEFF6;
   border-radius: 12px;
 }

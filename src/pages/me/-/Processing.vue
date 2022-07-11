@@ -14,7 +14,12 @@
     </span>
     <span class="processing_item">
       <span class="processing_number">{{ number }}</span>
-      <Iconfont name="arrow-right" color="#E9862D" />
+      <Iconfont
+        class="processing_item_arrow-right"
+        name="arrow-right"
+        color="#E9862D"
+        size="16"
+      />
     </span>
   </div>
 </template>
@@ -62,7 +67,7 @@ export default Vue.extend({
   background: #FFEDD3;
   border-radius: 8px;
   cursor: pointer;
-  color: #E9862D;
+  color: $warn-font-color;
   font-weight: 600;
 
   .processing_item {
@@ -74,10 +79,14 @@ export default Vue.extend({
     margin-right: 8px;
   }
 
+  .processing_item_arrow-right {
+    margin-left: 6px;
+  }
+
   .processing_number {
-    font-size: 14px;
+    font-size: $font-size-14;
     font-weight: 600;
-    color: #E9862D;
+    color: $warn-font-color;
     margin-right: -8px;
     margin-top: 1px;
   }

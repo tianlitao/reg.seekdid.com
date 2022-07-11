@@ -200,7 +200,7 @@ export default Vue.extend({
   flex: 1;
   height: 28px;
   padding: 0 16px;
-  font-size: 12px;
+  font-size: $font-size-12;
   color: $assist-font-color;
   font-weight: 400;
 }
@@ -268,6 +268,6 @@ export default Vue.extend({
 }
 
 .reward-records__table__link__sub-account {
-  color: #E4B169;
+  color: $warn-font-color;
 }
 </style>

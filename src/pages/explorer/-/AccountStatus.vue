@@ -229,7 +229,7 @@ export default Vue.extend({
   display: inline-flex;
   align-items: center;
   height: 18px;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 600;
   color: $assist-font-color;
   line-height: 18px;
@@ -262,18 +262,18 @@ export default Vue.extend({
 }
 
 .account-status__account-name_small {
-  font-size: 24px;
+  font-size: $font-size-24;
 }
 
 .account-status__button {
   padding: 0;
   width: 98px;
   border-radius: 12px;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 500;
 }
 
 .account-status__account-name__sub-account {
-  color: #E4B169;
+  color: $warn-font-color;
 }
 </style>

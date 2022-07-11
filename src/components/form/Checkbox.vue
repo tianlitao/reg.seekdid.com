@@ -5,7 +5,10 @@
     <span
       class="checkbox__input"
       :class="{ 'checkbox__input_checked': value }">
-      <span class="checkbox__inner"></span>
+      <span
+        class="checkbox__inner"
+        :class="{ 'checkbox__inner__disabled': $attrs.disabled }"
+      ></span>
       <input
         ref="checkbox"
         class="checkbox__original"
@@ -40,6 +43,9 @@ export default Vue.extend({
       return {
         ...this.$listeners,
         input (event: Event) {
+          if (_vm.$attrs.disabled) {
+            return
+          }
           _vm.$emit('input', (event.target as HTMLInputElement).checked)
         }
       }
@@ -47,6 +53,9 @@ export default Vue.extend({
   },
   methods: {
     onSwitch () {
+      if (this.$attrs.disabled) {
+        return
+      }
       const _value = !this.value
       ;(this.$refs.checkbox as HTMLInputElement).checked = _value
       this.$emit('input', _value)
@@ -61,9 +70,9 @@ export default Vue.extend({
 .checkbox {
   display: inline-flex;
   align-items: center;
-  font-weight: bold;
-  color: $assist-font-color;
-  line-height: 17px;
+  color: $tips-font-color;
+  font-weight: 500;
+  line-height: 16px;
   cursor: pointer;
 }
 
@@ -77,11 +86,10 @@ export default Vue.extend({
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 2px solid #E1E1E1;
+  border: 2px solid $container-border-color;
   border-radius: 4px;
   box-sizing: border-box;
   background-color: $white;
-  z-index: 1;
 
   &:after {
     position: absolute;
@@ -110,8 +118,13 @@ export default Vue.extend({
 
 .checkbox__input.checkbox__input_checked {
   .checkbox__inner {
-    background-color: $primary-color;
-    border-color: $primary-color;
+    background-color: $success-font-color;
+    border-color: $success-font-color;
+  }
+
+  .checkbox__inner__disabled {
+    background-color: $third-font-color;
+    border-color: $third-font-color;
   }
 
   .checkbox__inner:after {

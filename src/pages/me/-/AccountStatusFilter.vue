@@ -3,7 +3,10 @@
     class="account-status-filter"
     v-click-outside="onClickOutside"
   >
-    <div class="account-status-filter_input_container">
+    <div
+      class="account-status-filter_input_container"
+      @click="onClick"
+    >
       <input
         ref="input"
         v-bind="$attrs"
@@ -12,17 +15,15 @@
         type="text"
         readonly="readonly"
         v-on="$listeners"
-        @focus="onFocus"
       >
       <Iconfont
         class="account-status-filter_input_arrow-down"
         name="arrow-down"
         color="#5F6570"
-        size="20"
-        @click="onFocus"
+        size="14"
       />
     </div>
-    <div class="account-status-filter_options_context">
+    <transition name="account-status-filter-options">
       <ul
         v-if="optionsShowing"
         class="account-status-filter_options"
@@ -36,7 +37,7 @@
           {{ option.text }}
         </li>
       </ul>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -97,18 +98,14 @@ export default Vue.extend({
     }
   },
   methods: {
-    onClose () {
-      this.optionsShowing = false
-    },
     onSelect (option: IOption) {
       this.selectOption = option
       this.$emit('input', option.value)
       this.$emit('blur')
       this.optionsShowing = false
     },
-    onFocus () {
-      this.optionsShowing = true
-      ;(this.$refs.input as HTMLInputElement).focus()
+    onClick () {
+      this.optionsShowing = !this.optionsShowing
     },
     onClickOutside () {
       this.optionsShowing = false
@@ -134,13 +131,13 @@ export default Vue.extend({
   display: inline-block;
   width: 100%;
   height: 30px;
-  padding: 0 32px 0 10px;
+  padding: 0 32px 0 12px;
   border-radius: 32px;
   border: 0;
   background: $normal-color;
-  color: #5F6570;
+  color: $assist-font-color;
   outline: none;
-  font-size: 14px;
+  font-size: $font-size-14;
   -webkit-appearance: none;
   cursor: pointer;
 }
@@ -150,20 +147,17 @@ export default Vue.extend({
   right: 10px;
 }
 
-.account-status-filter_options_context {
+.account-status-filter_options {
   position: absolute;
-  padding-top: 4px;
   left: 0;
+  top: 34px;
   z-index: 10;
   text-align: left;
-}
-
-.account-status-filter_options {
   padding: 12px;
-  font-size: 14px;
+  font-size: $font-size-14;
   line-height: 17px;
   background: $white;
-  box-shadow: $container-outer-box-shadow;
+  box-shadow: $option-outer-box-shadow;
   border-radius: 12px;
   border: $container-border;
 }
@@ -173,7 +167,7 @@ export default Vue.extend({
   text-align: left;
   cursor: pointer;
   white-space: nowrap;
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: 500;
   color: $primary-font-color;
 
@@ -181,5 +175,13 @@ export default Vue.extend({
     border-radius: 8px;
     background: $normal-color;
   }
+}
+
+.account-status-filter-options-enter-active {
+  animation: fadeInUp 0.1s cubic-bezier(0.75, 0.25, 0.25, 0.75);
+}
+
+.account-status-filter-options-leave-active {
+  animation: fadeOutDown 0.1s cubic-bezier(0.75, 0.25, 0.25, 0.75);
 }
 </style>

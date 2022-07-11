@@ -23,7 +23,7 @@
             >
               <Iconfont
                 name="warning"
-                size="16"
+                size="12"
                 color="#FF6B6B"
               />
               {{ $tt('Expires in {days} days', { days: countdownToExpiredDays }) }}
@@ -34,7 +34,7 @@
             >
               <Iconfont
                 name="warning"
-                size="16"
+                size="12"
                 color="#FF6B6B"
               />
               {{ $tt('账号回收提示', { days: countdownToRecoveryDays }) }}
@@ -49,7 +49,12 @@
         </div>
       </span>
     </div>
-    <Iconfont class="account-status__arrow-right" name="arrow-right" color="#11142D" />
+    <Iconfont
+      class="account-status__arrow-right"
+      name="arrow-right"
+      color="#121314"
+      size="18"
+    />
   </li>
 </template>
 
@@ -158,7 +163,7 @@ export default Vue.extend({
 }
 
 .account-status__account-name {
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 600;
   color: $primary-font-color;
   word-break: break-word;
@@ -172,14 +177,18 @@ export default Vue.extend({
 .account-status__status-text {
   display: inline-flex;
   margin-top: 4px;
-  padding: 0 6px;
+  padding: 2px 6px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 500;
+
+  .iconfont {
+    margin-right: 6px;
+  }
 }
 
 .account-status__status-text__fixed-price-sell {
-  color: #2471FE;
+  color: $primary-color;
   background: rgba(192, 203, 246, 0.57);
 }
 
@@ -190,6 +199,6 @@ export default Vue.extend({
 }
 
 .account-status__account-name__sub-account {
-  color: #E4B169;
+  color: $warn-font-color;
 }
 </style>

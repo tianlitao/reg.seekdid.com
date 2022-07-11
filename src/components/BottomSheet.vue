@@ -102,19 +102,19 @@ export default Vue.extend({
 }
 
 .fade-enter-active {
-  animation: show-bg 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: show-bg 0.2s cubic-bezier(0.75, 0.25, 0.25, 0.75) both;
 }
 
 .fade-leave-active {
-  animation: hide-bg 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: hide-bg 0.2s cubic-bezier(0.75, 0.25, 0.25, 0.75) both;
 }
 
 .container-enter-active {
-  animation: slide-top 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: slide-top 0.2s cubic-bezier(0.75, 0.25, 0.25, 0.75) both;
 }
 
 .container-leave-active {
-  animation: slide-bottom 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: slide-bottom 0.2s cubic-bezier(0.75, 0.25, 0.25, 0.75) both;
 }
 
 @keyframes show-bg {

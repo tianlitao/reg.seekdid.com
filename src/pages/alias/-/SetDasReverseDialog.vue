@@ -17,7 +17,7 @@
         <span>*</span>
         <span>{{ $tt('Setting the reverse record needs storage space on the chain, and it will freeze {freezeCKB} CKB.', { freezeCKB: thousandSplit(freezeCKB) }) }}</span>
       </div>
-      <template v-slot:action>
+      <template #action>
         <Button
           shape="round"
           block
@@ -39,7 +39,7 @@
       <div class="set-das-reverse-dialog__insufficient-balance__tips">
         {{ $tt('To set the reverse record, please make sure your DAS balance is greater than 350 CKB. 201 CKB needs to be frozen as storage space on the chain. Also, the remaining amount must not be less than 116 CKB. Otherwise, the transaction can not be sent.') }}
       </div>
-      <template v-slot:action>
+      <template #action>
         <Button
           shape="round"
           block
@@ -59,7 +59,7 @@
       <div class="set-das-reverse-dialog__insufficient-balance__tips">
         {{ $tt('DAS is a smart contract that runs on the Nervos. Due to the underlying logic of the contract, the remaining amount is too low (less than 116 CKB) to send a transaction.') }}
       </div>
-      <template v-slot:action>
+      <template #action>
         <Button
           shape="round"
           block
@@ -272,7 +272,7 @@ export default Vue.extend({
   margin-top: 24px;
   margin-bottom: 8px;
   display: block;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 600;
   color: $primary-font-color;
   line-height: 16px;
@@ -287,15 +287,15 @@ export default Vue.extend({
   grid-template-columns: 7px auto;
   border-radius: 8px;
   border: 1px solid #EFF2F5;
-  font-size: 14px;
-  color: #636D85;
+  font-size: $font-size-14;
+  color: $assist-font-color;
   line-height: 17px;
   word-break: break-word;
   hyphens: auto;
 }
 
 .set-das-reverse-dialog__insufficient-balance__tips {
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: 400;
   color: $primary-font-color;
   line-height: 24px;

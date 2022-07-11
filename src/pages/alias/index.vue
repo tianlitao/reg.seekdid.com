@@ -17,7 +17,7 @@
         class="reverse__container__content"
         :class="{ 'reverse__container__ineffective-content': isIneffective }"
       >
-        <Iconfont v-if="isIneffective" name="warning" size="44" color="#F15151" />
+        <Iconfont v-if="isIneffective" name="warning" size="28" color="#F15151" />
         <div
           v-if="dasReverse.account"
           class="reverse__container__text-opacity"
@@ -80,7 +80,7 @@
           class="reverse__action__button reverse__action__button__pending"
         >
           <span class="reverse__action__button__pending__icon">
-            <Iconfont name="loading" color="#11142D" />
+            <Iconfont name="loading" color="#121314" />
           </span>
         </span>
         <div v-else-if="dasReverse.account">
@@ -119,7 +119,7 @@
         {{ $tt('About reverse resolution & FAQ') }}
       </span>
       <Iconfont
-        :size="24"
+        :size="16"
         name="arrow-right"
         color="#D0D0D5"
       />
@@ -146,6 +146,7 @@
       v-model="ineffectiveFaqDialogShowing"
       :title="$tt('Tips')"
       closeButton
+      enableCloseAction
       @close="closeIneffectiveFaqDialog"
     >
       <div>{{ $tt('The reverse record is valid only if any of the following conditions is met.') }}</div>
@@ -391,7 +392,7 @@ export default Vue.extend({
   border-radius: 16px;
   border: 1px solid rgba(53, 199, 144, 0.2);
   text-align: center;
-  font-size: 16px;
+  font-size: $font-size-16;
   color: #167B58;
 }
 
@@ -406,7 +407,7 @@ export default Vue.extend({
   padding: 16px 80px 18px 80px;
   word-break: break-word;
   hyphens: auto;
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: bold;
   color: #167B58;
   line-height: 16px;
@@ -430,6 +431,10 @@ export default Vue.extend({
 
 .reverse__container__ineffective-content {
   margin-top: 90px;
+
+  .iconfont {
+    margin-bottom: 8px;
+  }
 }
 
 .reverse__action {
@@ -443,7 +448,7 @@ export default Vue.extend({
   width: 150px;
   background: $white;
   border-radius: 23px;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 600;
   color: $primary-font-color;
   line-height: 25px;
@@ -454,7 +459,7 @@ export default Vue.extend({
   display: inline-block;
   padding: 10px 30px;
   border-radius: 23px;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 600;
   color: $primary-font-color;
   line-height: 25px;
@@ -480,7 +485,7 @@ export default Vue.extend({
 
 .reverse__tips__title {
   margin-bottom: 18px;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 600;
   color: $primary-font-color;
   line-height: 21px;
@@ -492,7 +497,7 @@ export default Vue.extend({
 
 .reverse__tips__text {
   margin-top: 18px;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 600;
   color: $primary-font-color;
   line-height: 20px;
@@ -527,7 +532,7 @@ export default Vue.extend({
 }
 
 .reverse__container__ineffective__faq-link {
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: 600;
   color: #F15151;
   line-height: 19px;
@@ -573,7 +578,7 @@ export default Vue.extend({
   font-weight: 600;
   border-radius: 16px;
   border: $container-border;
-  font-size: 18px;
+  font-size: $font-size-18;
   color: $primary-font-color;
 }
 
@@ -591,6 +596,6 @@ export default Vue.extend({
 
 .reverse__ineffective-faq__rule__sub-account,
 .reverse__container__account__sub-account {
-  color: #E4B169;
+  color: $warn-font-color;
 }
 </style>

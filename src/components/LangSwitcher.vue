@@ -11,7 +11,7 @@
         class="lang-switcher__icon"
         name="language"
         size="19"
-        color="#11142D"
+        color="#121314"
       />
       {{ option.text }}
     </span>
