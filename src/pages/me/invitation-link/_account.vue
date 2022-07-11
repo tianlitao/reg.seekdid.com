@@ -37,7 +37,7 @@ import QrcodeVue from 'qrcode.vue'
 import { mapState } from 'vuex'
 import Breadcrumb from '~/components/Breadcrumb.vue'
 import config from '~~/config'
-import { isMobile } from '~/modules/tools'
+import { isMobile, toHashedStyle } from '~/modules/tools'
 import { COMMON_KEYS } from '~/store/common'
 
 export default Vue.extend({
@@ -107,20 +107,21 @@ export default Vue.extend({
         const qrcodeImg = new Image()
         qrcodeImg.onload = () => {
           ctx.drawImage(qrcodeImg, 540, 580, 130, 130)
-          if (this.invitationAccount.length > 14) {
+          const _account = toHashedStyle(this.invitationAccount)
+          if (_account.length > 14) {
             ctx.font = 'bold 60px Arial'
             ctx.fillStyle = '#22C493'
-            ctx.fillText(this.invitationAccount, 75, 465)
+            ctx.fillText(_account, 75, 465)
           }
-          else if (this.invitationAccount.length > 10) {
+          else if (_account.length > 10) {
             ctx.font = 'bold 80px Arial'
             ctx.fillStyle = '#22C493'
-            ctx.fillText(this.invitationAccount, 75, 475)
+            ctx.fillText(_account, 75, 475)
           }
           else {
             ctx.font = 'bold 106px Arial'
             ctx.fillStyle = '#22C493'
-            ctx.fillText(this.invitationAccount, 75, 475)
+            ctx.fillText(_account, 75, 475)
           }
           this.inviteLinkImgBase64 = myCanvas.toDataURL('image/jpeg', 1.0)
         }
@@ -146,7 +147,7 @@ export default Vue.extend({
 
 .invitation-link__title {
   margin: 44px 12px 8px 12px;
-  font-size: 24px;
+  font-size: $font-size-24;
   font-weight: 600;
   color: $primary-font-color;
   line-height: 33px;

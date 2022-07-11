@@ -90,7 +90,7 @@ export default Vue.extend({
 
 .account-status-simple-card__status-text {
   height: 18px;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 600;
   color: $assist-font-color;
   line-height: 18px;
@@ -105,6 +105,6 @@ export default Vue.extend({
 }
 
 .account-status-simple-card__account-name_small {
-  font-size: 24px;
+  font-size: $font-size-24;
 }
 </style>

@@ -4,6 +4,7 @@
     :showing="value"
     :actionButtonText="$tt('Got it')"
     closeButton
+    enableCloseAction
     @close="onClose"
   >
     <div class="dialog_icon">📡</div>
@@ -37,6 +38,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+@import "src/assets/variables";
+
 .tx-pending-dialog {
   text-align: center;
 
@@ -47,7 +50,7 @@ export default Vue.extend({
   .dialog_title {
     margin-top: 12px;
     margin-bottom: 8px;
-    font-size: 24px;
+    font-size: $font-size-24;
   }
 
   .account_pending {

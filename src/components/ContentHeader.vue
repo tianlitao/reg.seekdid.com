@@ -8,8 +8,8 @@
     >
       <Iconfont
         name="close"
-        size="36"
-        color="#A0A1AB"
+        size="19"
+        color="#B0B8BF"
       />
     </span>
   </div>
@@ -50,7 +50,7 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 32px 16px 32px 32px;
+  padding: 32px;
 }
 
 .content-header__title {
@@ -58,8 +58,8 @@ export default Vue.extend({
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 24px;
-  font-weight: 600;
+  font-size: $font-size-24;
+  font-weight: 500;
   color: $primary-font-color;
   text-align: left;
   line-height: 28px;
@@ -67,8 +67,13 @@ export default Vue.extend({
 
 .content-header__close {
   position: absolute;
-  right: 16px;
+  right: 24px;
   top: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   cursor: pointer;
 

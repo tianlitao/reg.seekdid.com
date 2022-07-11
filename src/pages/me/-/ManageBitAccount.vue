@@ -20,7 +20,7 @@
             <h2 class="manage-bit-account__title">{{ $tt('Convert it to NFT on Ethereum') }}</h2>
           </span>
           <span :class="{ 'manage-bit-account__info__icon__disabled': isSubAccount || !canManage }">
-            <Iconfont name="arrow-right" color="#11142D" size="24" />
+            <Iconfont name="arrow-right" color="#121314" size="18" />
           </span>
         </li>
         <li
@@ -28,19 +28,23 @@
           @click="manageData"
         >
           <span class="manage-bit-account__info">
-            <Iconfont
-              class="manage-bit-account__info__icon"
-              name="manage-data"
-              size="32"
-            />
-            <h2 class="manage-bit-account__title">{{ $tt('Manage Data') }}</h2>
+            <span>
+              <Iconfont
+                class="manage-bit-account__info__icon"
+                name="manage"
+                size="32"
+              />
+            </span>
+            <span>
+              <h2 class="manage-bit-account__title">{{ $tt('Manage') }}</h2>
+              <span class="manage-bit-account__info__desc">{{ $tt('Manage data, mint sub-accounts, renew, change permissions...') }}</span>
+            </span>
           </span>
           <span>
-            <Iconfont name="arrow-right" color="#11142D" size="24" />
+            <Iconfont name="arrow-right" color="#121314" size="18" />
           </span>
         </li>
       </ul>
-      <span slot="action" />
     </Dialog>
     <NoSupportTronMintTips
       v-model="noSupportTronDialogShowing"
@@ -202,10 +206,17 @@ export default Vue.extend({
 }
 
 .manage-bit-account__title {
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: bold;
   color: $primary-font-color;
   line-height: 19px;
+}
+
+.manage-bit-account__info__desc {
+  font-size: $font-size-12;
+  font-weight: 400;
+  color: $assist-font-color;
+  line-height: 14px;
 }
 
 .manage-bit-account__info {

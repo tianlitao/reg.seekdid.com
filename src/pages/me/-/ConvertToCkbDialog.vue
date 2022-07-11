@@ -43,29 +43,6 @@
         </div>
       </template>
     </Dialog>
-    <Dialog
-      v-model="submittedDialogShowing"
-      :title="$tt('Submitted')"
-      closeButton
-    >
-      <div>
-        {{ $tt('Approximately {number} minutes.', { number: 10 }) }}
-        <a
-          v-if="trxId"
-          class="convert-to-ckb-dialog__trx-id"
-          :href="`${ETH.explorerTrx}${trxId}`"
-          target="_blank"
-        >
-          {{ collapseString(trxId, 5, 5) }}
-          <Iconfont
-            class="convert-to-ckb-dialog__trx-id__icon"
-            name="arrow-right"
-            color="#B0B8BF"
-            size="18"
-          />
-        </a>
-      </div>
-    </Dialog>
     <NoEthereumTips v-model="noEthereumTipsShowing" />
   </div>
 </template>
@@ -82,7 +59,6 @@ import { CrossDirection } from '~/constant'
 import { IDidNftList } from '~/services/CrossEth'
 import { ETH } from '~/constant/chain'
 import { collapseString } from '~/modules/tools'
-import Iconfont from '~/components/icon/Iconfont.vue'
 import NoEthereumTips from '~/pages/me/-/NoEthereumTips.vue'
 
 export default Vue.extend({
@@ -90,7 +66,6 @@ export default Vue.extend({
   components: {
     Dialog,
     Button,
-    Iconfont,
     NoEthereumTips
   },
   model: {
@@ -116,8 +91,6 @@ export default Vue.extend({
       LANGUAGE,
       ETH,
       convertLoading: false,
-      submittedDialogShowing: false,
-      trxId: '',
       noEthereumTipsShowing: false
     }
   },
@@ -155,8 +128,12 @@ export default Vue.extend({
           })
         }
         this.onClose()
-        this.trxId = trxId
-        this.submittedDialogShowing = true
+        this.$alert({
+          title: this.$tt('Submitted'),
+          message: this.$tt('Approximately {number} minutes.', { number: 10 }),
+          txHash: trxId,
+          txHashLink: `${ETH.explorerTrx}${trxId}`
+        })
         this.$emit('completed')
       }
       catch (err: any) {
@@ -200,20 +177,5 @@ export default Vue.extend({
   grid-template-columns: repeat(2, 1fr);
   grid-auto-flow: column;
   grid-column-gap: 24px;
-}
-
-.convert-to-ckb-dialog__trx-id {
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  font-size: 12px;
-  font-weight: 400;
-  color: #B0B8BF;
-  line-height: 14px;
-  margin-top: 10px;
-}
-
-.convert-to-ckb-dialog__trx-id__icon {
-  margin-left: -8px;
 }
 </style>

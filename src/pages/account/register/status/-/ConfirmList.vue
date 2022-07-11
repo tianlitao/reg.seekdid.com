@@ -27,7 +27,7 @@
           v-else
           class="confirm-list__loading-icon"
         >
-          <Iconfont name="loading" color="#D5D5D5" />
+          <Iconfont name="loading" color="#D5D5D5" size="18" />
         </span>
       </span>
     </li>
@@ -60,7 +60,7 @@
           v-else
           class="confirm-list__loading-icon"
         >
-          <Iconfont name="loading" color="#D5D5D5" />
+          <Iconfont name="loading" color="#D5D5D5" size="18" />
         </span>
       </span>
     </li>
@@ -93,7 +93,7 @@
           v-else
           class="confirm-list__loading-icon"
         >
-          <Iconfont name="loading" color="#D5D5D5" />
+          <Iconfont name="loading" color="#D5D5D5" size="18" />
         </span>
       </span>
     </li>
@@ -126,7 +126,7 @@
           v-else
           class="confirm-list__loading-icon"
         >
-          <Iconfont name="loading" color="#D5D5D5" />
+          <Iconfont name="loading" color="#D5D5D5" size="18" />
         </span>
       </span>
     </li>
@@ -159,7 +159,7 @@
           v-else
           class="confirm-list__loading-icon"
         >
-          <Iconfont name="loading" color="#D5D5D5" />
+          <Iconfont name="loading" color="#D5D5D5" size="18" />
         </span>
       </span>
     </li>
@@ -243,7 +243,7 @@ export default Vue.extend({
 .confirm-list__confirm-item__link {
   display: flex;
   align-items: center;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 400;
   color: $assist-font-color;
   line-height: 17px;
@@ -251,7 +251,7 @@ export default Vue.extend({
 
 .confirm-list__confirm-item_succeed {
   font-weight: 600;
-  color: #1DAF83;
+  color: $success-font-color;
 }
 
 .confirm-list__loading-icon {

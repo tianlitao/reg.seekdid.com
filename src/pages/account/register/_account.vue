@@ -63,9 +63,10 @@
               target="_blank"
             >
               <Iconfont
+                class="account-register__item__info-icon"
                 name="info"
                 color="#A0A1AB"
-                size="18"
+                size="14"
               />
             </a>
           </span>
@@ -126,7 +127,7 @@
         :target="isMobile ? '_self' : '_blank'"
       >
         <span>{{ $tt('Deposit CKB to DAS Balance') }}</span>
-        <Iconfont name="arrow-right" color="#C4D0CD" size="26" />
+        <Iconfont name="arrow-right" color="#C4D0CD" size="16" />
       </a>
       <a
         class="account-register__register-with-ckb"
@@ -137,7 +138,7 @@
           <Iconfont
             name="info"
             color="#3D66B3"
-            size="17"
+            size="14"
           />
         </span>
         <span>{{ $tt('How to register with CKB (DAS Balance)?') }}</span>
@@ -201,7 +202,7 @@ import {
   isTokenPocket,
   mmJsonHashAndChainIdHex,
   sleep,
-  thousandSplit, isMobile
+  thousandSplit, isMobile, toHashedStyle, toDottedStyle
 } from '~/modules/tools'
 import {
   ACCOUNT_STATUS,
@@ -372,7 +373,8 @@ export default Vue.extend({
       await this.getOrderInfo()
       this.registrationPeriod = this.orderInfo.register_years
       if (this.orderInfo.inviter_account) {
-        this.inviter = this.orderInfo.inviter_account.replace(/\.bit$/, '')
+        this.inviter = toHashedStyle(this.orderInfo.inviter_account)
+        this.inviter = this.inviter.replace(/\.bit$/, '')
       }
       if (this.orderInfo.channel_account && !this.me.channel) {
         this.$store.commit(ME_KEYS.setChannel, this.orderInfo.channel_account)
@@ -493,7 +495,7 @@ export default Vue.extend({
           pay_address: this.connectedAccount.address,
           pay_type: '',
           register_years: this.registrationPeriod,
-          inviter_account: this.inviter ? this.inviter + ACCOUNT_SUFFIX : '',
+          inviter_account: this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : '',
           channel_account: this.me.channel
         })
       }
@@ -526,7 +528,7 @@ export default Vue.extend({
         return
       }
       if (this.inviter) {
-        this.$store.commit(ME_KEYS.setInviter, this.inviter + ACCOUNT_SUFFIX)
+        this.$store.commit(ME_KEYS.setInviter, toDottedStyle(this.inviter + ACCOUNT_SUFFIX))
       }
       this.onRegisterLoading = false
       this.confirmRegisterShowing = true
@@ -555,7 +557,7 @@ export default Vue.extend({
       try {
         await this.getOrderInfo()
         if (this.orderInfo.order_id) {
-          if (this.orderInfo.register_years !== this.registrationPeriod || this.orderInfo.inviter_account.replace(ACCOUNT_SUFFIX, '') !== this.inviter || this.orderInfo.channel_account !== this.me.channel || this.orderInfo.pay_token_id !== this.paymentToken.token_id) {
+          if (this.orderInfo.register_years !== this.registrationPeriod || this.orderInfo.inviter_account !== toDottedStyle(this.inviter + ACCOUNT_SUFFIX) || this.orderInfo.channel_account !== this.me.channel || this.orderInfo.pay_token_id !== this.paymentToken.token_id) {
             await this.changeOrder()
             await this.getOrderInfo()
           }
@@ -613,7 +615,7 @@ export default Vue.extend({
               data: this.orderInfo.order_id
             }, this.orderInfo.pay_token_id === CKB.tokenId)
 
-            if (typeof trxId === 'string') {
+            if (trxId && typeof trxId === 'string') {
               await this.$services.account.returnRegisteredPaymentTrxId({
                 chain_type: this.computedChainType,
                 address: this.connectedAccount.address,
@@ -643,7 +645,7 @@ export default Vue.extend({
             pay_address: this.connectedAccount.address,
             pay_type: '',
             register_years: this.registrationPeriod,
-            inviter_account: this.inviter ? this.inviter + ACCOUNT_SUFFIX : '',
+            inviter_account: this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : '',
             channel_account: this.me.channel
           })
 
@@ -652,7 +654,7 @@ export default Vue.extend({
           }
 
           if (this.inviter) {
-            this.$store.commit(ME_KEYS.setInviter, this.inviter + ACCOUNT_SUFFIX)
+            this.$store.commit(ME_KEYS.setInviter, toDottedStyle(this.inviter + ACCOUNT_SUFFIX))
           }
 
           if (this.paymentToken.token_id === DASBalanceTokenId) {
@@ -787,7 +789,7 @@ export default Vue.extend({
     getInviter () {
       const _inviter = this.me.inviter
       if (_inviter) {
-        this.inviter = _inviter.replace(/\.bit$/, '')
+        this.inviter = toHashedStyle(_inviter).replace(/\.bit$/, '')
       }
     },
     async checkInviter () {
@@ -798,7 +800,7 @@ export default Vue.extend({
       }
 
       try {
-        const res = await this.$services.account.accountInfo(this.inviter + ACCOUNT_SUFFIX)
+        const res = await this.$services.account.accountInfo(toDottedStyle(this.inviter + ACCOUNT_SUFFIX))
         if ([ACCOUNT_STATUS.registered, ACCOUNT_STATUS.onePriceSell, ACCOUNT_STATUS.auctionSell].includes(res.status)) {
           this.inviterErrorTipShowing = false
           this.inviterOnCross = false
@@ -820,7 +822,11 @@ export default Vue.extend({
       this.inviterOnCross = false
     },
     onBlurInviter () {
+      this.inviter = this.inviter.replace(/\s+/g, '')
       this.inviter = this.inviter.toLowerCase()
+      this.inviter = this.inviter.replace(/\.bit$/, '')
+      this.inviter = this.inviter + ACCOUNT_SUFFIX
+      this.inviter = toHashedStyle(this.inviter)
       this.inviter = this.inviter.replace(/\.bit$/, '')
       this.inviterErrorTipShowing = false
       this.inviterOnCross = false
@@ -853,8 +859,12 @@ export default Vue.extend({
   margin-bottom: 24px;
 }
 
+.account-register__item__info-icon {
+  margin-bottom: 1px;
+}
+
 .account-register__label-tip {
-  font-size: 12px;
+  font-size: $font-size-12;
   color: $assist-font-color;
 }
 
@@ -870,7 +880,7 @@ export default Vue.extend({
 }
 
 .account-register__inviter-discount__tips {
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 400;
   color: $warn-font-color;
 }
@@ -900,7 +910,7 @@ export default Vue.extend({
 
 .account-register__original-price {
   display: block;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 400;
   color: #808191;
   text-align: right;
@@ -922,7 +932,7 @@ export default Vue.extend({
   padding: 0 4px;
   border-radius: 5px;
   border: $container-border;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 400;
   background: rgba(216, 216, 216, 0.14);
   color: $assist-font-color;
@@ -945,23 +955,27 @@ export default Vue.extend({
   height: 16px;
   padding: 12px 40px 12px 12px;
   border-radius: 8px;
-  border: 1px solid $input-color;
-  background: $input-color;
+  border: 1px solid $input-border-color;
+  background: $input-bg-color;
   color: $primary-font-color;
-  caret-color: $focus-color;
+  caret-color: $input-focus-border-color;
   outline: none;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 600;
   line-height: 20px;
   -webkit-appearance: none;
 
   &:hover {
-    border: 1px solid $focus-color;
-    background: $white;
-    box-shadow: inset 0 0 0 4px rgba(45, 100, 246, 0.1);
+    border: 1px solid $input-focus-border-color;
+  }
+
+  &:focus {
+    border: 1px solid $input-focus-border-color;
+    background: $input-focus-bg-color;
   }
 
   &::placeholder {
+    font-weight: 500;
     color: $third-font-color;
   }
 }
@@ -981,7 +995,7 @@ export default Vue.extend({
   display: inline-block;
   width: 154px;
   margin-top: 4px;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 600;
   color: $error-font-color;
   line-height: 14px;
@@ -996,7 +1010,7 @@ export default Vue.extend({
   font-size: 32px;
   font-family: $barlow-medium;
   font-weight: 600;
-  color: #11142D;
+  color: $primary-font-color;
   line-height: 38px;
 }
 
@@ -1013,7 +1027,7 @@ export default Vue.extend({
 }
 
 .account-register__payment-error {
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 600;
   color: $error-font-color;
   text-align: center;
@@ -1030,7 +1044,7 @@ export default Vue.extend({
   background: #F2FFF5;
   border-radius: 12px;
   border: 1px solid #DCF6E2;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 400;
   color: $primary-font-color;
 }
@@ -1044,7 +1058,7 @@ export default Vue.extend({
   align-items: center;
   justify-content: flex-start;
   height: 22px;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 400;
   color: $link-font-color;
 

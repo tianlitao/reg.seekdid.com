@@ -12,14 +12,14 @@
       class="button__loading-icon"
       :class="{'button__loading-icon__margin-right-8': !!$slots.default}"
     >
-      <Iconfont name="loading" color="#D5D5D5" />
+      <Iconfont name="loading" />
     </span>
     <slot />
     <Iconfont
       v-if="outlink"
       class="button__out-link-icon"
       name="arrow-right-up"
-      size="7"
+      size="8"
       :color="outLinkIconColor"
     />
   </button>
@@ -113,7 +113,7 @@ export default Vue.extend({
         return '#ffffff'
       }
       else if ([ButtonStatus.default, ButtonStatus.normal].includes(this.status)) {
-        return '#11142d'
+        return '#121314'
       }
       else {
         return '#ffffff'
@@ -196,24 +196,24 @@ export default Vue.extend({
 
 .button__size__small {
   height: 38px;
-  padding: 0 8px;
-  font-size: 14px;
-  font-weight: 400;
+  padding: 0 12px;
+  font-size: $font-size-14;
+  font-weight: 500;
 
   &.button__shape__default {
     border-radius: 8px;
   }
 
   &.button__shape__round {
-    border-radius: 18px;
+    border-radius: 19px;
   }
 }
 
 .button__size__middle {
   height: 42px;
   padding: 0 16px;
-  font-size: 14px;
-  font-weight: 400;
+  font-size: $font-size-16;
+  font-weight: 500;
 
   &.button__shape__default {
     border-radius: 12px;
@@ -227,8 +227,8 @@ export default Vue.extend({
 .button__size__large {
   height: 52px;
   padding: 0 16px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: $font-size-16;
+  font-weight: 500;
 
   &.button__shape__default {
     border-radius: 14px;
@@ -242,8 +242,8 @@ export default Vue.extend({
 .button__size__super {
   height: 60px;
   padding: 0 16px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: $font-size-16;
+  font-weight: 500;
 
   &.button__shape__default {
     border-radius: 14px;
@@ -256,10 +256,15 @@ export default Vue.extend({
 
 .button__status__default {
   color: $primary-font-color;
+  background: $normal-color;
 
   &:disabled {
     cursor: no-drop;
-    opacity: 0.2;
+    color: rgba(17, 20, 45, 0.3);
+  }
+
+  &:hover {
+    background: $normal-hover-color;
   }
 }
 
@@ -269,7 +274,7 @@ export default Vue.extend({
 
   &:disabled {
     cursor: no-drop;
-    opacity: 0.2;
+    opacity: 0.6;
   }
 
   &:hover {
@@ -279,11 +284,12 @@ export default Vue.extend({
 
 .button__status__normal {
   color: $primary-font-color;
-  background: $normal-color;
+  background: $white;
 
   &:disabled {
     cursor: no-drop;
-    opacity: 0.2;
+    color: rgba(17, 20, 45, 0.3);
+    background: $white !important;
   }
 
   &:hover {
@@ -297,7 +303,7 @@ export default Vue.extend({
 
   &:disabled {
     cursor: no-drop;
-    opacity: 0.2;
+    opacity: 0.6;
   }
 
   &:hover {
@@ -311,7 +317,8 @@ export default Vue.extend({
 
   &:disabled {
     cursor: no-drop;
-    opacity: 0.2;
+    color: $white;
+    background: $disabled-color !important;
   }
 
   &:hover {

@@ -55,13 +55,13 @@ export default Vue.extend({
 
 .bottom-nav__item__text {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 600;
   color: #8E8E93;
   line-height: 12px;
 }
 
 .bottom-nav__item__text_active {
-  color: #22C493;
+  color: $success-font-color;
 }
 </style>

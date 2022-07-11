@@ -35,7 +35,7 @@ export default Vue.extend({
 @import "src/assets/variables";
 
 .wallet-connect-tips {
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 600;
   color: $third-font-color;
   text-align: center;

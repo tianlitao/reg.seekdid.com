@@ -3,6 +3,7 @@
     :showing="showing"
     :title="$tt('Failed')"
     closeButton
+    enableCloseAction
     @close="onClose"
   >
     <div class="signature-error-dialog">

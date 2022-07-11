@@ -13,7 +13,7 @@
     <template v-if="accountInfo && accountInfo.status === ACCOUNT_STATUS.reservedAccount">
       <div class="account-status-card__status">
         <span class="account-status-card__status-text account-status-card__status-text_success account-status-card__reserved-account">
-          <Iconfont name="reserve" color="#22C493" />
+          <Iconfont name="reserve" color="#22C493" size="12" />
           {{ $tt('Reserved account') }}
         </span>
       </div>
@@ -23,6 +23,7 @@
       </div>
       <Button
         shape="round"
+        status="normal"
         class="account-status-card__action-button"
         @click="gotoReservedDasList"
       >
@@ -104,7 +105,7 @@ export default Vue.extend({
 .account-status-card__status-text {
   padding: 0 6px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: $font-size-12;
 }
 
 .account-status-card__status-text_success {
@@ -115,6 +116,11 @@ export default Vue.extend({
 .account-status-card__reserved-account {
   display: inline-flex;
   align-items: center;
+  padding: 2px 4px;
+
+  .iconfont {
+    margin-right: 4px;
+  }
 }
 
 .account-status-card__split-line {

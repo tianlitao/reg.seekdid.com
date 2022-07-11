@@ -12,7 +12,7 @@
       :placeholder="$tt('Select or enter the DAS account')"
       :errorMessages="selectDasErrors"
     />
-    <template v-slot:action>
+    <template #action>
       <Button
         shape="round"
         class="edit-das-reverse-dialog__button"
@@ -201,14 +201,14 @@ export default Vue.extend({
   margin-top: 24px;
   margin-bottom: 8px;
   display: block;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 600;
   color: $primary-font-color;
   line-height: 16px;
 }
 
 .edit-das-reverse-dialog__insufficient-balance__tips {
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: 400;
   color: $primary-font-color;
   line-height: 24px;

@@ -3,6 +3,7 @@
     :showing="showing"
     :title="'🎉 ' + $tt('Completed')"
     closeButton
+    enableCloseAction
     @close="onClose"
   >
     <i18n
@@ -89,10 +90,10 @@ export default Vue.extend({
 }
 
 .mint-completed__account {
-  color: #0DBA85;
+  color: $success-font-color;
 }
 
 .mint-completed__account__sub-account {
-  color: #E4B169;
+  color: $warn-font-color;
 }
 </style>

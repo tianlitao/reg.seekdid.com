@@ -81,7 +81,7 @@ export default Vue.extend({
   justify-content: center;
   flex: 1;
   height: 60px;
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: 600;
   color: $primary-font-color;
   cursor: pointer;
@@ -99,14 +99,14 @@ export default Vue.extend({
 }
 
 .top-nav__item_active {
-  color: #22C493;
+  color: $success-font-color;
 }
 
 .top-nav__item__tag {
   position: absolute;
   width: 34px;
   height: 2px;
-  background: #22C493;
+  background: $success-color;
   border-radius: 100px 100px 0 0;
   bottom: 0;
 }

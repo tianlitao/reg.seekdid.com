@@ -402,7 +402,7 @@ export default Vue.extend({
 .explorer__error-tip {
   margin-top: 4px;
   margin-left: 4px;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 600;
   color: $error-font-color;
   line-height: 14px;
@@ -442,9 +442,9 @@ export default Vue.extend({
 .explorer__current-on-chain-time {
   padding: 16px;
   text-align: left;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 400;
-  color: #10152D;
+  color: $primary-font-color;
   line-height: 17px;
   background: rgba(217, 248, 228, 0.5);
   border-radius: 12px;
@@ -456,9 +456,9 @@ export default Vue.extend({
   margin-bottom: 8px;
   padding: 16px 16px 8px 16px;
   text-align: left;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 400;
-  color: #10152D;
+  color: $primary-font-color;
   line-height: 17px;
   background: rgba(217, 248, 228, 0.5);
   border-radius: 12px;
@@ -467,7 +467,7 @@ export default Vue.extend({
 
 .explorer__open-registration-rules__title {
   margin-bottom: 10px;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 700;
   color: $primary-font-color;
   line-height: 17px;
@@ -481,11 +481,11 @@ export default Vue.extend({
 .explorer__open-registration-rules__item__dot {
   width: 8px;
   margin-right: 8px;
-  color: #636D85;
+  color: $assist-font-color;
 }
 
 .explorer__open-registration-rules__item__high-brightness {
-  color: #22C493;
+  color: $success-font-color;
   font-weight: 600;
 }
 

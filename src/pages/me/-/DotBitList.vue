@@ -2,20 +2,15 @@
   <div class="dot-bit-list">
     <div class="dot-bit-list__manual">
       <span class="dot-bit-list__actions">
-        <Search
-          @search="onSearch"
-          @focus="hideManual"
-        />
         <AccountStatusFilter
-          v-if="!isHide"
           v-model="filter"
           class="dot-bit-list__account-status-filter"
           :options="filterOptions"
           @input="onFilter"
         />
+        <Search @search="onSearch" />
       </span>
       <a
-        v-if="!isHide"
         class="dot-bit-list__manual__link"
         :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit/424' : 'https://talk.did.id/t/getting-started-with-bit/426'"
         target="_blank"
@@ -23,8 +18,8 @@
         {{ $tt('Guide2') }}
         <Iconfont
           name="help"
-          size="16"
-          color="#636D85"
+          size="15"
+          color="#5F6570"
         />
       </a>
     </div>
@@ -161,7 +156,6 @@ export default Vue.extend({
       loadingShowing: false,
       noMoreShowing: false,
       searchWord: '',
-      isHide: false,
       selectAccount: {
         account: ''
       } as IAccountInfo,
@@ -274,9 +268,6 @@ export default Vue.extend({
     goRegister () {
       this.$router.push('/explorer')
     },
-    hideManual (value: boolean) {
-      this.isHide = value
-    },
     onClickAccount (account: IAccountInfo) {
       this.selectAccount = account
       this.manageBitAccountDialogShowing = true
@@ -317,7 +308,7 @@ export default Vue.extend({
   }
 
   .dot-bit-list__account-status-filter {
-    margin-left: 12px;
+    margin-right: 12px;
     width: 100px;
   }
 
@@ -328,7 +319,7 @@ export default Vue.extend({
     justify-content: center;
     margin-top: 12px;
     height: calc(100vh - 400px);
-    background: #FFFFFF;
+    background: $white;
     box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 3%);
     border-radius: 16px 16px 16px 16px;
     border: 1px solid rgba(0, 0, 0, 0.11);
@@ -372,7 +363,7 @@ export default Vue.extend({
     background: #FCECEC;
     border-radius: 9px;
     line-height: 20px;
-    color: #DE4A46;
+    color: $error-font-color;
   }
 
   .dot-bit-list__testnet-tips__icon {
@@ -387,11 +378,11 @@ export default Vue.extend({
   }
 
   .dot-bit-list__manual__link {
-    margin-left: 24px;
+    margin-left: 12px;
     height: 16px;
-    font-size: 14px;
+    font-size: $font-size-14;
     font-weight: 500;
-    color: #636D85;
+    color: $assist-font-color;
     white-space: nowrap;
   }
 }

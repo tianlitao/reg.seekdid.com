@@ -22,6 +22,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+@import "src/assets/variables";
+
 .index {
   padding: 65px 20px 0 20px;
   background-color: aliceblue;
@@ -29,7 +31,7 @@ export default Vue.extend({
 }
 
 .index__title {
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 600;
   margin-bottom: 14px;
 }

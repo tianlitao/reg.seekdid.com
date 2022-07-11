@@ -81,7 +81,7 @@
               class="mint-nft__setp__trx-id__icon"
               name="arrow-right"
               color="#B0B8BF"
-              size="18"
+              size="14"
             />
           </a>
         </div>
@@ -129,12 +129,11 @@
               class="mint-nft__setp__trx-id__icon"
               name="arrow-right"
               color="#B0B8BF"
-              size="18"
+              size="14"
             />
           </a>
         </div>
       </div>
-      <span slot="action" />
     </Dialog>
     <CanNotBeLockedTips
       v-model="canNotBeLockedDialogShowing"
@@ -559,10 +558,10 @@ export default Vue.extend({
   height: 21px;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 30px 30px 30px 30px;
-  padding: 0 12px;
-  font-size: 14px;
+  padding: 2px 12px;
+  font-size: $font-size-14;
   font-weight: 600;
-  color: #5E5F5F;
+  color: $assist-font-color;
 }
 
 .mint-nft__setp__processing {
@@ -571,14 +570,14 @@ export default Vue.extend({
   background: #D6EFE7;
   border-radius: 60px;
   padding: 8px 12px;
-  color: #22C493;
-  font-size: 12px;
+  color: $success-font-color;
+  font-size: $font-size-12;
 }
 
 .mint-nft__setp__processing__title {
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 600;
-  color: #22C493;
+  color: $success-font-color;
   line-height: 16px;
 }
 
@@ -597,9 +596,9 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 600;
-  color: #0DBA85;
+  color: $success-font-color;
 }
 
 .mint-nft__desc__rule {
@@ -622,14 +621,14 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   justify-content: left;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 400;
-  color: #B0B8BF;
+  color: $third-font-color;
   line-height: 14px;
   margin-top: 18px;
 }
 
 .mint-nft__setp__trx-id__icon {
-  margin-left: -8px;
+  margin-left: -2px;
 }
 </style>

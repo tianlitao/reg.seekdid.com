@@ -58,7 +58,7 @@
                       class="conversion-processing__list__trx-id__icon"
                       name="arrow-right"
                       color="#B0B8BF"
-                      size="18"
+                      size="14"
                     />
                   </a>
                 </template>
@@ -70,7 +70,11 @@
             class="conversion-processing__list__status"
           >
             <span class="conversion-processing__list__mint">{{ $tt('Mint now') }}</span>
-            <Iconfont name="arrow-right" color="#11142D" />
+            <Iconfont
+              name="arrow-right"
+              color="#121314"
+              size="16"
+            />
           </div>
         </li>
       </ul>
@@ -226,7 +230,7 @@ export default Vue.extend({
   padding: 0 20px;
   margin-bottom: 8px;
   height: 90px;
-  background: #FFFFFF;
+  background: $white;
   box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.03);
   border-radius: 16px;
   border: 1px solid rgba(182, 196, 217, 0.4);
@@ -239,14 +243,14 @@ export default Vue.extend({
 
 .conversion-processing__list__item__disabled {
   cursor: no-drop;
-  background: #FFFFFF !important;
+  background: $white !important;
 }
 
 .account-status__list__container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 600;
   color: $primary-font-color;
   word-break: break-word;
@@ -262,16 +266,20 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   flex: none;
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 500;
-  color: #0E7DFF;
+  color: $primary-color;
+
+  .iconfont {
+    margin-left: 6px;
+  }
 }
 
 .conversion-processing__list__status-text {
-  padding: 0 6px;
+  padding: 2px 6px;
   border-radius: 4px;
   font-weight: 500;
-  font-size: 12px;
+  font-size: $font-size-12;
 }
 
 .conversion-processing__list__status-text_to-ckb {
@@ -280,7 +288,7 @@ export default Vue.extend({
 }
 
 .conversion-processing__list__status-text_from-ckb {
-  color: #2471FE;
+  color: $primary-color;
   background: rgba(192, 203, 246, 0.57);
 }
 
@@ -294,7 +302,7 @@ export default Vue.extend({
   text-align: center;
   font-size: 13px;
   font-weight: 600;
-  color: #636D85;
+  color: $assist-font-color;
 }
 
 .conversion-processing__breadcrumb {
@@ -305,18 +313,18 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   justify-content: left;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 400;
-  color: #B0B8BF;
+  color: $third-font-color;
   line-height: 14px;
   margin-top: 2px;
 }
 
 .conversion-processing__list__trx-id__icon {
-  margin-left: -8px;
+  margin-left: -2px;
 }
 
 .conversion-processing__list__sub-account {
-  color: #E4B169;
+  color: $warn-font-color;
 }
 </style>

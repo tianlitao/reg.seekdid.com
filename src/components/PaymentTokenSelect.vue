@@ -11,7 +11,7 @@
           <IconImage
             :url="option.logo"
             :alt="option.symbol"
-            :size="28"
+            :size="36"
           />
         </span>
         <span class="payment-token-select__item__info">
@@ -22,12 +22,16 @@
           <span class="payment-token-select__item__name">{{ option.name }}</span>
         </span>
       </span>
-      <Iconfont
+      <span
         v-if="selectOption.token_id === option.token_id"
-        name="check-strong"
-        color="#22C493"
-        size="29"
-      />
+        class="payment-token-select__item__selected"
+      >
+        <Iconfont
+          name="check"
+          color="#FFFFFF"
+          size="16"
+        />
+      </span>
       <span
         v-else
         class="payment-token-select__item__unselect"
@@ -120,6 +124,7 @@ export default Vue.extend({
       const options = this.options.filter((option: IToken) => {
         return option.token_id === CKB.tokenId
       })
+
       if (options && [CoinType.eth].includes(this.connectedAccount.chain?.coinType)) {
         return options
       }
@@ -129,6 +134,7 @@ export default Vue.extend({
       const options = this.options.filter((option: IToken) => {
         return option.token_id === DASBalanceTokenId
       })
+
       if (options) {
         return options
       }
@@ -203,8 +209,7 @@ export default Vue.extend({
 @import "src/assets/variables";
 
 .payment-token-select {
-  padding: 8px 12px 8px 8px;
-  height: 224px;
+  padding: 12px 0;
   background: $normal-color;
   border-radius: 12px;
   border: $container-border;
@@ -225,14 +230,11 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 9px 4px 9px 8px;
-  height: 30px;
-  line-height: 30px;
+  padding: 12px 16px;
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.03);
-    border-radius: 12px;
+    background-color: $normal-color;
   }
 }
 
@@ -250,17 +252,18 @@ export default Vue.extend({
 
 .payment-token-select__item__symbol {
   display: flex;
-  line-height: 17px;
-  font-weight: 600;
+  font-size: $font-size-16;
+  font-weight: 500;
+  color: $primary-font-color;
+  line-height: 19px;
 }
 
 .payment-token-select__no-gas {
-  background: rgba(34, 196, 147, 0.25);
-  border-radius: 3px;
-  border: 1px solid rgba(34, 196, 147, 0.25);
-  font-size: 12px;
+  background: rgba(40, 188, 139, 0.22);
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: $font-size-12;
   color: $success-font-color;
-  line-height: 15px;
   margin-left: 6px;
   padding: 0 2px;
 }
@@ -270,10 +273,10 @@ export default Vue.extend({
 }
 
 .payment-token-select__item__name {
-  font-size: 12px;
-  color: $third-font-color;
-  line-height: 15px;
-  font-weight: 600;
+  font-size: $font-size-14;
+  font-weight: 400;
+  color: $assist-font-color;
+  line-height: 16px;
 }
 
 .payment-token-select__item__unselect {
@@ -283,6 +286,17 @@ export default Vue.extend({
   height: 16px;
   background: $white;
   border-radius: 100%;
-  border: 2px solid #E1E1E1;
+  border: 2px solid $third-font-color;
+}
+
+.payment-token-select__item__selected {
+  margin: 0 5px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  background: $success-color;
+  border-radius: 100%;
 }
 </style>

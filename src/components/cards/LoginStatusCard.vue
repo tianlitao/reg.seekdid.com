@@ -81,7 +81,12 @@
         </span>
         <span class="login-status-card__action">
           {{ $tt('Edit') }}
-          <Iconfont class="login-status-card__action__icon" name="arrow-right" color="#62BFA0" />
+          <Iconfont
+            class="login-status-card__action__icon"
+            name="arrow-right"
+            color="#62BFA0"
+            size="16"
+          />
         </span>
         <img
           class="login-status-card__background-image"
@@ -97,16 +102,22 @@
           <span>{{ $tt('Reverse record') }}</span>
           <span class="login-status-card__edit-das-reverse__account">
             <Iconfont
+              class="login-status-card__edit-das-reverse__account__icon"
               name="warning"
               color="#167B58"
-              size="16"
+              size="11"
             />
             {{ $tt('Invalid') }}
           </span>
         </span>
         <span class="login-status-card__action">
           {{ $tt('Learn more') }}
-          <Iconfont class="login-status-card__action__icon" name="arrow-right" color="#62BFA0" />
+          <Iconfont
+            class="login-status-card__action__icon"
+            name="arrow-right"
+            color="#62BFA0"
+            size="16"
+          />
         </span>
         <img
           class="login-status-card__background-image"
@@ -121,7 +132,12 @@
         <span>{{ $tt('Reverse record') }}</span>
         <span class="login-status-card__action">
           {{ $tt('Not set') }}
-          <Iconfont class="login-status-card__action__icon" name="arrow-right" color="#62BFA0" />
+          <Iconfont
+            class="login-status-card__action__icon"
+            name="arrow-right"
+            color="#62BFA0"
+            size="16"
+          />
         </span>
         <img
           class="login-status-card__background-image"
@@ -213,7 +229,7 @@ export default Vue.extend({
 
 .login-status-card__login-status {
   margin-bottom: 10px;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 600;
   color: $third-font-color;
 }
@@ -227,7 +243,7 @@ export default Vue.extend({
 .login-status-card__account {
   display: flex;
   align-items: center;
-  font-size: 18px;
+  font-size: $font-size-18;
   font-weight: 600;
   color: $white;
 }
@@ -256,7 +272,7 @@ export default Vue.extend({
   line-height: 24px;
   text-align: center;
   font-weight: 600;
-  font-size: 12px;
+  font-size: $font-size-12;
   color: $white;
   cursor: pointer;
 }
@@ -273,7 +289,7 @@ export default Vue.extend({
   background: #94E1C0 linear-gradient(270deg, #C6F2E1 0%, #94E1C0 100%);
   border-radius: 8px;
   border: 1px solid rgba(53, 199, 144, 0.2);
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: 600;
   color: #167B58;
   cursor: pointer;
@@ -288,14 +304,14 @@ export default Vue.extend({
 .login-status-card__action {
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: $font-size-14;
   color: #167B58;
   line-height: 16px;
   z-index: 1;
 }
 
 .login-status-card__action__icon {
-  margin-left: -10px;
+  margin-left: -2px;
 }
 
 .login-status-card__edit-das-reverse__header {
@@ -306,14 +322,18 @@ export default Vue.extend({
   margin-left: -2px;
   display: flex;
   align-items: center;
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 400;
   color: #167B58;
   line-height: 14px;
 }
 
+.login-status-card__edit-das-reverse__account__icon {
+  margin-right: 4px;
+}
+
 .login-status-card__reverse-record__address {
-  font-size: 12px;
+  font-size: $font-size-12;
   font-weight: 600;
   color: $third-font-color;
 }
@@ -323,6 +343,6 @@ export default Vue.extend({
 }
 
 .login-status-card__reverse-record__sub-account {
-  color: #E4B169;
+  color: $warn-font-color;
 }
 </style>

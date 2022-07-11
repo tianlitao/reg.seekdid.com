@@ -20,7 +20,7 @@
             <h2 class="manage-eth-account__title">{{ $tt('Sell it on OpenSea') }}</h2>
           </span>
           <span>
-            <Iconfont name="arrow-right" color="#11142D" size="24" />
+            <Iconfont name="arrow-right" color="#121314" size="24" />
           </span>
         </li>
         <li
@@ -28,15 +28,20 @@
           @click="manageData"
         >
           <span class="manage-eth-account__info">
-            <Iconfont
-              class="manage-eth-account__info__icon"
-              name="manage-data"
-              size="32"
-            />
-            <h2 class="manage-eth-account__title">{{ $tt('Manage Data') }}</h2>
+            <span>
+              <Iconfont
+                class="manage-eth-account__info__icon"
+                name="manage"
+                size="32"
+              />
+            </span>
+            <span>
+              <h2 class="manage-eth-account__title">{{ $tt('Manage') }}</h2>
+              <span class="manage-eth-account__info__desc">{{ $tt('Manage data, mint sub-accounts, renew, change permissions...') }}</span>
+            </span>
           </span>
           <span>
-            <Iconfont name="arrow-right" color="#11142D" size="24" />
+            <Iconfont name="arrow-right" color="#121314" size="24" />
           </span>
         </li>
         <li
@@ -52,11 +57,10 @@
             <h2 class="manage-eth-account__title">{{ $tt('Convert it to a normal .bit') }}</h2>
           </span>
           <span>
-            <Iconfont name="arrow-right" color="#11142D" size="24" />
+            <Iconfont name="arrow-right" color="#121314" size="24" />
           </span>
         </li>
       </ul>
-      <span slot="action" />
     </Dialog>
   </div>
 </template>
@@ -162,16 +166,16 @@ export default Vue.extend({
 }
 
 .manage-eth-account__title {
-  font-size: 16px;
+  font-size: $font-size-16;
   font-weight: bold;
   color: $primary-font-color;
   line-height: 19px;
 }
 
 .manage-eth-account__desc {
-  font-size: 14px;
+  font-size: $font-size-14;
   font-weight: 400;
-  color: #5C6063;
+  color: $assist-font-color;
   line-height: 16px;
   margin-top: 4px;
   display: inline-block;
@@ -180,6 +184,13 @@ export default Vue.extend({
 .manage-eth-account__info {
   display: flex;
   align-items: center;
+}
+
+.manage-eth-account__info__desc {
+  font-size: $font-size-12;
+  font-weight: 400;
+  color: $assist-font-color;
+  line-height: 14px;
 }
 
 .manage-eth-account__info__icon {

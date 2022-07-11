@@ -6,7 +6,13 @@
       class="tabs__button"
       :class="{ 'tabs__button_active': value === item.value }"
       @click="onChange(item.value)">
-      <Iconfont v-if="item.icon" :name="item.icon" size="16" color="#FE61A0" />
+      <Iconfont
+        v-if="item.icon"
+        class="tabs__button__icon"
+        :name="item.icon"
+        size="16"
+        color="#FE61A0"
+      />
       {{ item.text }}
     </button>
   </div>
@@ -73,7 +79,7 @@ export default Vue.extend({
   margin: 0 2px;
   border: 0;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: $font-size-14;
   color: rgba(31, 43, 77, 0.66);
   background: unset;
   outline: 0;
@@ -84,5 +90,9 @@ export default Vue.extend({
   background: $white;
   font-weight: bold;
   color: $primary-font-color;
+}
+
+.tabs__button__icon {
+  margin-bottom: 1px;
 }
 </style>

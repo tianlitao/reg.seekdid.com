@@ -47,8 +47,8 @@ import Iconfont from '~/components/icon/Iconfont.vue'
 const MIN_VALUE = 1
 const MAX_VALUE = 20
 const DISABLED_ICON_COLOR = '#A0A1AB'
-const NORMAL_ICON_COLOR = '#11142D'
-const ICON_SIZE = 24
+const NORMAL_ICON_COLOR = '#121314'
+const ICON_SIZE = 16
 
 export default Vue.extend({
   name: 'InputCounter',
@@ -136,7 +136,7 @@ export default Vue.extend({
   border: none;
   height: 40px;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
   font-family: $barlow-medium;
   color: $primary-font-color;
   text-align: center;
@@ -148,7 +148,7 @@ export default Vue.extend({
   align-items: flex-end;
   margin: 0 12px 9px -4px;
   min-width: 30px;
-  font-size: 12px;
+  font-size: $font-size-12;
   color: $assist-font-color;
 }
 
