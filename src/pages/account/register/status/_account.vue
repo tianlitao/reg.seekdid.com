@@ -129,7 +129,6 @@
           shape="round"
           class="register-status__button"
           block
-          status="normal"
           @click="goHome"
         >
           {{ $tt('Back to home page') }}

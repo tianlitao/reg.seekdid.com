@@ -9,12 +9,13 @@
         rounded
       />
       <span class="account-status__account-name">
-        <template v-if="isSubAccount">
-          {{ accountInfo.account.split('.')[1] }}<span class="account-status__account-name__sub-account">#{{ accountInfo.account.split('.')[0] }}</span>.{{ accountInfo.account.split('.')[2] }}
-        </template>
-        <template v-else>
-          {{ accountInfo.account }}
-        </template>
+<!--        <template v-if="isSubAccount">-->
+<!--          {{ accountInfo.account.split('.')[1] }}<span class="account-status__account-name__sub-account">#{{ accountInfo.account.split('.')[0] }}</span>.{{ accountInfo.account.split('.')[2] }}-->
+<!--        </template>-->
+<!--        <template v-else>-->
+<!--          {{ accountInfo.account }}-->
+<!--        </template>-->
+        {{ accountInfo.account }}
         <div>
           <template v-if="accountInfo.status">
             <span
@@ -67,7 +68,6 @@ import { IAccountInfo } from '~/services/Account'
 import { ACCOUNT_STATUS, IDENTICON_SERVE } from '~/constant'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { COMMON_KEYS } from '~/store/common'
-import { toHashedStyle } from '~/modules/tools'
 import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 export default Vue.extend({
@@ -125,9 +125,6 @@ export default Vue.extend({
     isSubAccount (): boolean {
       return SUB_ACCOUNT_REG_EXP.test(this.accountInfo.account)
     }
-  },
-  methods: {
-    toHashedStyle
   }
 })
 </script>

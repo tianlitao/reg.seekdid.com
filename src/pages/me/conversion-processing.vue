@@ -28,12 +28,13 @@
               rounded
             />
             <span>
-              <template v-if="isSubAccount(account.account)">
-                {{ account.account.split('.')[1] }}<span class="conversion-processing__list__sub-account">#{{ account.account.split('.')[0] }}</span>.{{ account.account.split('.')[2] }}
-              </template>
-              <template v-else>
-                {{ account.account }}
-              </template>
+<!--              <template v-if="isSubAccount(account.account)">-->
+<!--                {{ account.account.split('.')[1] }}<span class="conversion-processing__list__sub-account">#{{ account.account.split('.')[0] }}</span>.{{ account.account.split('.')[2] }}-->
+<!--              </template>-->
+<!--              <template v-else>-->
+<!--                {{ account.account }}-->
+<!--              </template>-->
+              {{ account.account }}
               <div>
                 <span
                   v-if="account.cross_direction === CrossDirection.fromCKB"
@@ -105,7 +106,7 @@ import { CrossDirection, IDENTICON_SERVE } from '~/constant'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
 import Breadcrumb from '~/components/Breadcrumb.vue'
 import { IDirectionList } from '~/services/CrossEth'
-import { collapseString, toHashedStyle } from '~/modules/tools'
+import { collapseString } from '~/modules/tools'
 import MintCompleted from '~/pages/me/-/MintCompleted.vue'
 import MintNft from '~/pages/me/-/MintNft.vue'
 import { ETH } from '~/constant/chain'
@@ -159,7 +160,6 @@ export default Vue.extend({
   },
   methods: {
     collapseString,
-    toHashedStyle,
     isSubAccount (accont: string): boolean {
       return SUB_ACCOUNT_REG_EXP.test(accont)
     },

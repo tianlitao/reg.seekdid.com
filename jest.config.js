@@ -2,6 +2,7 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^~/(.*)$': '<rootDir>/src/$1',
+    '^~~/(.*)$': '<rootDir>/$1',
     '^vue$': 'vue/dist/vue.common.js'
   },
   moduleFileExtensions: [
@@ -16,7 +17,5 @@ module.exports = {
     '.*\\.(vue)$': 'vue-jest'
   },
   collectCoverage: true,
-  collectCoverageFrom: [
-    '<rootDir>/src/**/*.{vue,ts,js}'
-  ]
+  testEnvironment: 'jsdom'
 }

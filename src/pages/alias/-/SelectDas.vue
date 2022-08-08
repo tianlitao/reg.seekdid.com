@@ -48,12 +48,13 @@
             :size="22"
             rounded
           />
-          <template v-if="isSubAccount(option.text)">
-            {{ option.text.split('.')[1] }}<span class="select-das__options__sub-account">#{{ option.text.split('.')[0] }}</span>.{{ option.text.split('.')[2] }}
-          </template>
-          <template v-else>
-            {{ option.text }}
-          </template>
+<!--          <template v-if="isSubAccount(option.text)">-->
+<!--            {{ option.text.split('.')[1] }}<span class="select-das__options__sub-account">#{{ option.text.split('.')[0] }}</span>.{{ option.text.split('.')[2] }}-->
+<!--          </template>-->
+<!--          <template v-else>-->
+<!--            {{ option.text }}-->
+<!--          </template>-->
+          {{ option.text }}
         </li>
       </ul>
     </transition>

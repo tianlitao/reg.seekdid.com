@@ -32,7 +32,7 @@ export default class Explorer extends BasicService {
   }: {
     account: string,
     chain_type: ChainType,
-    address:string
+    address: string
   }): Promise<ISearchAccount> {
     account = account.replace(/\.bit$/, '')
     return this.axios.post('/account/search', {

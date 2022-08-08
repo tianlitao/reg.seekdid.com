@@ -21,12 +21,13 @@
         class="account-status__account-name"
         :class="{ 'account-status__account-name_small': account.account.length > 9 }"
       >
-        <template v-if="isSubAccount">
-          {{ account.account.split('.')[1] }}<span class="account-status__account-name__sub-account">#{{ account.account.split('.')[0] }}</span>.{{ account.account.split('.')[2] }}
-        </template>
-        <template v-else>
-          {{ account.account }}
-        </template>
+<!--        <template v-if="isSubAccount">-->
+<!--          {{ account.account.split('.')[1] }}<span class="account-status__account-name__sub-account">#{{ account.account.split('.')[0] }}</span>.{{ account.account.split('.')[2] }}-->
+<!--        </template>-->
+<!--        <template v-else>-->
+<!--          {{ account.account }}-->
+<!--        </template>-->
+        {{ account.account }}
       </span>
     </div>
     <Button
@@ -53,7 +54,6 @@ import { ISearchAccount } from '~/services/Explorer'
 import Button from '~/components/Button.vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import config from '~~/config'
-import { toHashedStyle } from '~/modules/tools'
 import { LANGUAGE } from '~/constant/language'
 import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
@@ -167,7 +167,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    toHashedStyle,
     goPage (account: ISearchAccount) {
       if (account.status === ACCOUNT_STATUS.registered) {
         if (account.is_self) {

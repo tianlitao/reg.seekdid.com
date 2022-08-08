@@ -60,12 +60,13 @@
             rounded
           />
           <span class="eth-nft-list__account-list__account-name">
-            <template v-if="isSubAccount(item.account)">
-              {{ item.account.split('.')[1] }}<span class="eth-nft-list__account-list__account-name__sub-account">#{{ item.account.split('.')[0] }}</span>.{{ item.account.split('.')[2] }}
-            </template>
-            <template v-else>
-              {{ item.account }}
-            </template>
+<!--            <template v-if="isSubAccount(item.account)">-->
+<!--              {{ item.account.split('.')[1] }}<span class="eth-nft-list__account-list__account-name__sub-account">#{{ item.account.split('.')[0] }}</span>.{{ item.account.split('.')[2] }}-->
+<!--            </template>-->
+<!--            <template v-else>-->
+<!--              {{ item.account }}-->
+<!--            </template>-->
+            {{ item.account }}
             <div>
               <template v-if="item.expire_at">
                 <span
@@ -148,7 +149,6 @@ import { LANGUAGE } from '~/constant/language'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { IDidNftList } from '~/services/CrossEth'
 import IconImage from '~/components/icon/IconImage.vue'
-import { toHashedStyle } from '~/modules/tools'
 import ManageEthAccount from '~/pages/me/-/ManageEthAccount.vue'
 import ConvertToCkbDialog from '~/pages/me/-/ConvertToCkbDialog.vue'
 import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
@@ -207,7 +207,6 @@ export default Vue.extend({
     this.getDidNftList()
   },
   methods: {
-    toHashedStyle,
     countdownToExpiredDays (expiredAt: number): number | string {
       const currentTimestamp = new Date().getTime()
       if (expiredAt && currentTimestamp > expiredAt - (this.oneDayMillisecond * 30) && currentTimestamp < expiredAt) {

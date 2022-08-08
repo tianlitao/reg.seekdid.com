@@ -308,7 +308,12 @@ export default Vue.extend({
       return _amount
     },
     premium (): number {
-      return 1 + Number(this.common.config?.premium || 0.1)
+      if (this.common.config?.premium) {
+        return 1 + Number(this.common.config?.premium)
+      }
+      else {
+        return 1
+      }
     },
     discountAmount (): Decimal {
       if (!this.inviter) {
@@ -495,6 +500,7 @@ export default Vue.extend({
           pay_address: this.connectedAccount.address,
           pay_type: '',
           register_years: this.registrationPeriod,
+          coin_type: this.connectedAccount.chain.coinType,
           inviter_account: this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : '',
           channel_account: this.me.channel
         })
@@ -557,7 +563,7 @@ export default Vue.extend({
       try {
         await this.getOrderInfo()
         if (this.orderInfo.order_id) {
-          if (this.orderInfo.register_years !== this.registrationPeriod || this.orderInfo.inviter_account !== toDottedStyle(this.inviter + ACCOUNT_SUFFIX) || this.orderInfo.channel_account !== this.me.channel || this.orderInfo.pay_token_id !== this.paymentToken.token_id) {
+          if (this.orderInfo.register_years !== this.registrationPeriod || this.orderInfo.inviter_account !== (this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : this.inviter) || this.orderInfo.channel_account !== this.me.channel || this.orderInfo.pay_token_id !== this.paymentToken.token_id || this.orderInfo.coin_type !== this.connectedAccount.chain.coinType) {
             await this.changeOrder()
             await this.getOrderInfo()
           }
@@ -645,6 +651,7 @@ export default Vue.extend({
             pay_address: this.connectedAccount.address,
             pay_type: '',
             register_years: this.registrationPeriod,
+            coin_type: this.connectedAccount.chain.coinType,
             inviter_account: this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : '',
             channel_account: this.me.channel
           })
