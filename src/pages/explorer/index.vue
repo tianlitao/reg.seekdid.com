@@ -31,7 +31,7 @@
       v-if="showIncorrectAccountFormat"
       class="explorer__error-tip"
     >
-      {{ $tt('Account names can only contain lowercase letters, numbers, partial Emoji and "-"') }}
+      {{ incorrectAccountFormatText }}
       <a
         class="explorer__rules-details"
         :href="$i18n.locale === LANGUAGE.zhCN ? 'https://docs.did.id/zh/register-das/charsets' : 'https://docs.did.id/register-das/charsets'"
@@ -134,11 +134,11 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import LangSwitcher from '~/components/LangSwitcher.vue'
 import ExplorerSearch from '~/pages/explorer/-/ExplorerSearch.vue'
-import { ACCOUNT_STATUS, ACCOUNT_SUFFIX, CHAR_TYPE, DEBOUNCE_WAIT_TIME } from '~/constant'
+import { ACCOUNT_STATUS, ACCOUNT_SUFFIX, CHAR_TYPE, DEBOUNCE_WAIT_TIME, ErrorAccountList } from '~/constant'
 import { ISearchAccount } from '~/services/Explorer'
 import AccountStatus from '~/pages/explorer/-/AccountStatus.vue'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
-import { isMobile, splitAccount, toDottedStyle } from '~/modules/tools'
+import { accountChars, isMobile, splitAccount, toDottedStyle } from '~/modules/tools'
 import { COMMON_KEYS } from '~/store/common'
 import { IConfig } from '~/services/Common'
 import PublicBetaTips from '~/components/PublicBetaTips.vue'
@@ -167,7 +167,8 @@ export default Vue.extend({
       showIllegalStringLength: false,
       notOpenForRegistrationShowing: false,
       registrableDate: '',
-      fetchConfigTimer: 0
+      fetchConfigTimer: 0,
+      incorrectAccountFormatText: ''
     }
   },
   computed: {
@@ -211,12 +212,58 @@ export default Vue.extend({
     clearInterval(this.fetchConfigTimer)
   },
   methods: {
+    incorrectAccountFormat (account: string) {
+      const linker = this.$i18n.locale === LANGUAGE.zhCN ? '、' : ', '
+      this.incorrectAccountFormatText = ''
+      const list = accountChars(account)
+      // Characters x, y, z are not included
+      let notIncluded: string[] = []
+      list.forEach((item) => {
+        if (item.char_set_name === CHAR_TYPE.notKnown) {
+          notIncluded.push(item.char)
+        }
+      })
+      if (notIncluded.length > 0) {
+        notIncluded = [...new Set(notIncluded)]
+        this.incorrectAccountFormatText = this.$tt('Characters {list} are not included.', { list: notIncluded.join(linker) })
+      }
+      else {
+        // For safety, character x and y cannot be used in combination
+        let charTypes: CHAR_TYPE[] = []
+        list.forEach((item) => {
+          charTypes.push(item.char_set_name)
+        })
+        const charTypesSet = new Set(charTypes)
+        charTypesSet.delete(CHAR_TYPE.emoji)
+        charTypesSet.delete(CHAR_TYPE.number)
+        charTypesSet.delete(CHAR_TYPE.notKnown)
+        const language: { [key: string]: string } = {
+          [CHAR_TYPE.english]: this.$tt('English'),
+          [CHAR_TYPE.simplifiedChinese]: this.$tt('Simplified chinese'),
+          [CHAR_TYPE.traditionalChinese]: this.$tt('Traditional chinese'),
+          [CHAR_TYPE.japanese]: this.$tt('Japanese'),
+          [CHAR_TYPE.korean]: this.$tt('Korean'),
+          [CHAR_TYPE.russian]: this.$tt('Russian'),
+          [CHAR_TYPE.turkish]: this.$tt('Turkish'),
+          [CHAR_TYPE.thai]: this.$tt('Thai'),
+          [CHAR_TYPE.vietnamese]: this.$tt('Vietnamese')
+        }
+        charTypes = [...charTypesSet]
+        const languageList = charTypes.map((item) => {
+          return language[item]
+        })
+        if (languageList.length > 1) {
+          this.incorrectAccountFormatText = this.$tt('For safety, {list} cannot be used in combination.', { list: languageList.join(linker) })
+        }
+      }
+    },
     checkSearchWord (value: string, isSubAccount?: boolean) {
       try {
         value = uts46.toAscii(value, { useStd3ASCII: true, transitional: false, verifyDnsLength: false })
         value = uts46.toUnicode(value, { useStd3ASCII: true })
       }
       catch (err) {
+        console.error(err)
         this.showIncorrectAccountFormat = true
       }
 
@@ -253,6 +300,31 @@ export default Vue.extend({
       value = value.replace(/\.bit$/, '')
       value = value + ACCOUNT_SUFFIX
       value = toDottedStyle(value)
+
+      if (ErrorAccountList.includes(value)) {
+        this.loading = true
+        this.searchResult = {
+          account: value
+        }
+        try {
+          const res = await this.$services.account.accountInfo(value)
+          if (res) {
+            this.searchResult = {
+              account: value,
+              ...res
+            }
+          }
+          return
+        }
+        catch (err: any) {
+          console.error(err)
+          this.searchResult = {}
+        }
+        finally {
+          this.loading = false
+        }
+      }
+
       value = value.replace(/\.bit$/, '')
 
       this.searchResult = {}
@@ -272,11 +344,12 @@ export default Vue.extend({
       })
 
       const accountList = value.split('.')
-
       if (accountList[0]) {
+        this.incorrectAccountFormat(accountList[0])
         this.checkSearchWord(accountList[0], accountList.length === 2)
       }
       if (accountList[1]) {
+        this.incorrectAccountFormat(accountList[1])
         this.checkSearchWord(accountList[1])
       }
 

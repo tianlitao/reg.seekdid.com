@@ -36,12 +36,13 @@
                 class="reward-records__table__link"
                 :to="`/explorer/account/${record.invitee}`"
               >
-                <template v-if="isSubAccount(record.invitee)">
-                  {{ record.invitee.split('.')[1] }}<span class="reward-records__table__link__sub-account">#{{ record.invitee.split('.')[0] }}</span>.{{ record.invitee.split('.')[2] }}
-                </template>
-                <template v-else>
-                  {{ record.invitee }}
-                </template>
+<!--                <template v-if="isSubAccount(record.invitee)">-->
+<!--                  {{ record.invitee.split('.')[1] }}<span class="reward-records__table__link__sub-account">#{{ record.invitee.split('.')[0] }}</span>.{{ record.invitee.split('.')[2] }}-->
+<!--                </template>-->
+<!--                <template v-else>-->
+<!--                  {{ record.invitee }}-->
+<!--                </template>-->
+                {{ record.invitee }}
               </nuxt-link>
             </td>
           </tr>
@@ -74,7 +75,7 @@
 import Vue from 'vue'
 import { TranslateResult } from 'vue-i18n'
 import { mapState, mapGetters } from 'vuex'
-import { shrinkUnit, thousandSplit, toHashedStyle } from '~/modules/tools'
+import { shrinkUnit, thousandSplit } from '~/modules/tools'
 import StatusTip from '~/components/StatusTip.vue'
 import { CKB } from '~/constant/chain'
 import { IMyRewardsResInviteList } from '~/services/Account'
@@ -129,7 +130,6 @@ export default Vue.extend({
   },
   methods: {
     thousandSplit,
-    toHashedStyle,
     isSubAccount (accont: string): boolean {
       return SUB_ACCOUNT_REG_EXP.test(accont)
     },

@@ -56,12 +56,13 @@
             'font-size': `${accountFontSize}px`
           }"
         >
-          <template v-if="isSubAccount">
-            {{ dasReverse.account.split('.')[1] }}<span class="reverse__container__account__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}
-          </template>
-          <template v-else>
-            {{ dasReverse.account }}
-          </template>
+<!--          <template v-if="isSubAccount">-->
+<!--            {{ dasReverse.account.split('.')[1] }}<span class="reverse__container__account__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}-->
+<!--          </template>-->
+<!--          <template v-else>-->
+<!--            {{ dasReverse.account }}-->
+<!--          </template>-->
+          {{ dasReverse.account }}
         </div>
         <div
           v-if="isIneffective"
@@ -158,12 +159,13 @@
           :i18nkey="$tt('反解提示1')"
         >
           <template slot="account">
-            <template v-if="isSubAccount">
-              {{ dasReverse.account.split('.')[1] }}<span class="reverse__ineffective-faq__rule__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}
-            </template>
-            <template v-else>
-              {{ dasReverse.account }}
-            </template>
+<!--            <template v-if="isSubAccount">-->
+<!--              {{ dasReverse.account.split('.')[1] }}<span class="reverse__ineffective-faq__rule__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}-->
+<!--            </template>-->
+<!--            <template v-else>-->
+<!--              {{ dasReverse.account }}-->
+<!--            </template>-->
+            {{ dasReverse.account }}
           </template>
         </i18n>
       </div>
@@ -175,12 +177,13 @@
           :i18nkey="$tt('反解提示2')"
         >
           <template slot="account">
-            <template v-if="isSubAccount">
-              {{ dasReverse.account.split('.')[1] }}<span class="reverse__ineffective-faq__rule__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}
-            </template>
-            <template v-else>
-              {{ dasReverse.account }}
-            </template>
+<!--            <template v-if="isSubAccount">-->
+<!--              {{ dasReverse.account.split('.')[1] }}<span class="reverse__ineffective-faq__rule__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}-->
+<!--            </template>-->
+<!--            <template v-else>-->
+<!--              {{ dasReverse.account }}-->
+<!--            </template>-->
+            {{ dasReverse.account }}
           </template>
         </i18n>
       </div>
@@ -224,7 +227,6 @@ import LoginStatusCard from '~/components/cards/LoginStatusCard.vue'
 import { CYCLE_CALL_FUNCTION_TIME, ORDER_ACTION_TYPE, TRX_STATUS } from '~/constant'
 import errno from '~/constant/errno'
 import { COMMON_KEYS } from '~/store/common'
-import { toHashedStyle } from '~/modules/tools'
 import { LANGUAGE } from '~/constant/language'
 import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
@@ -313,7 +315,6 @@ export default Vue.extend({
     clearTimeout(this.checkOrderStatusTimer)
   },
   methods: {
-    toHashedStyle,
     openIneffectiveFaqDialog () {
       this.ineffectiveFaqDialogShowing = true
     },

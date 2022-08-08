@@ -15,12 +15,13 @@
         slot="account"
         class="mint-completed__account"
       >
-        <template v-if="isSubAccount">
-          {{ account.split('.')[1] }}<span class="mint-completed__account__sub-account">#{{ account.split('.')[0] }}</span>.{{ account.split('.')[2] }}
-        </template>
-        <template v-else>
-          {{ account }}
-        </template>
+<!--        <template v-if="isSubAccount">-->
+<!--          {{ account.split('.')[1] }}<span class="mint-completed__account__sub-account">#{{ account.split('.')[0] }}</span>.{{ account.split('.')[2] }}-->
+<!--        </template>-->
+<!--        <template v-else>-->
+<!--          {{ account }}-->
+<!--        </template>-->
+        {{ account }}
       </span>
       <a
         slot="opensea"
@@ -34,7 +35,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { isMobile, nftTokenId, toHashedStyle } from '~/modules/tools'
+import { isMobile, nftTokenId } from '~/modules/tools'
 import Dialog from '~/components/Dialog.vue'
 import { CrossEthContract } from '~/constant'
 import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
@@ -70,7 +71,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    toHashedStyle,
     onClose () {
       this.$emit('close', false)
     }

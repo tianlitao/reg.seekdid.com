@@ -131,7 +131,7 @@ export default Vue.extend({
 }
 
 .input-counter__input {
-  min-width: 40px;
+  width: 40px;
   outline: none;
   border: none;
   height: 40px;

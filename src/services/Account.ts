@@ -71,6 +71,7 @@ export interface IOrderDetailRes {
   code_url: string
   pay_type: string
   channel_account: string
+  coin_type: string
 }
 
 export interface ITrxStatusRes {
@@ -112,6 +113,7 @@ interface ISubmitRegisterOrderParams {
   pay_address: string
   pay_type: string
   register_years: number
+  coin_type: string
   inviter_account: string
   channel_account: string
 }
@@ -175,6 +177,7 @@ export default class Account extends BasicService {
    * @param pay_address
    * @param pay_type
    * @param register_years
+   * @param coin_type
    * @param inviter_account
    * @param channel_account
    */
@@ -187,6 +190,7 @@ export default class Account extends BasicService {
     pay_address,
     pay_type,
     register_years,
+    coin_type,
     inviter_account = '',
     channel_account = ''
   }: ISubmitRegisterOrderParams): Promise<ISubmitRegisterOrderRes> {
@@ -200,6 +204,7 @@ export default class Account extends BasicService {
       pay_address,
       pay_type,
       register_years,
+      coin_type,
       inviter_account,
       channel_account,
       account_char_str: splitAccount(account, true)

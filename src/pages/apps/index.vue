@@ -69,6 +69,11 @@ export default Vue.extend({
         tools: {
           title: this.$tt('Data Providers & Tools'),
           list: [{
+            icon: '/images/apps/seekdid.svg',
+            href: 'https://seekdid.com/',
+            title: 'SEEKDID',
+            desc: this.$tt('SEEK a DID for your Web3 life.')
+          }, {
             icon: '/images/apps/dasla.svg',
             href: 'https://das.la/',
             title: 'DAS.LA',
@@ -77,12 +82,12 @@ export default Vue.extend({
             icon: '/images/apps/link3.svg',
             href: 'https://link3.io',
             title: 'Link3',
-            desc: this.$tt('Link your .bit to Web3.0 World.')
+            desc: this.$tt('Link your .bit to Web3 World.')
           }, {
             icon: '/images/apps/about3.svg',
             href: 'https://about3.me',
             title: 'About³.me',
-            desc: this.$tt('Your Web3.0 profile.')
+            desc: this.$tt('Your Web3 profile.')
           }]
         },
         registrars: {

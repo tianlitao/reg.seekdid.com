@@ -192,12 +192,13 @@
                     class="reward__table__link"
                     :to="`/explorer/account/${record.invitee}`"
                   >
-                    <template v-if="isSubAccount(record.invitee)">
-                      {{ record.invitee.split('.')[1] }}<span class="reward__table__link__sub-account">#{{ record.invitee.split('.')[0] }}</span>.{{ record.invitee.split('.')[2] }}
-                    </template>
-                    <template v-else>
-                      {{ record.invitee }}
-                    </template>
+<!--                    <template v-if="isSubAccount(record.invitee)">-->
+<!--                      {{ record.invitee.split('.')[1] }}<span class="reward__table__link__sub-account">#{{ record.invitee.split('.')[0] }}</span>.{{ record.invitee.split('.')[2] }}-->
+<!--                    </template>-->
+<!--                    <template v-else>-->
+<!--                      {{ record.invitee }}-->
+<!--                    </template>-->
+                    {{ record.invitee }}
                   </nuxt-link>
                 </td>
               </tr>
@@ -232,12 +233,13 @@
                 rounded
               />
               <span class="reward__account-list__account-name">
-                <template v-if="isSubAccount(item.account)">
-                  {{ item.account.split('.')[1] }}<span class="reward__account-list__account-name__sub-account">#{{ item.account.split('.')[0] }}</span>.{{ item.account.split('.')[2] }}
-                </template>
-                <template v-else>
-                  {{ item.account }}
-                </template>
+<!--                <template v-if="isSubAccount(item.account)">-->
+<!--                  {{ item.account.split('.')[1] }}<span class="reward__account-list__account-name__sub-account">#{{ item.account.split('.')[0] }}</span>.{{ item.account.split('.')[2] }}-->
+<!--                </template>-->
+<!--                <template v-else>-->
+<!--                  {{ item.account }}-->
+<!--                </template>-->
+                {{ item.account }}
               </span>
             </span>
             <Iconfont
@@ -284,8 +286,7 @@ import {
   fromSatoshi,
   shrinkUnit,
   thousandSplit,
-  isMobile,
-  toHashedStyle
+  isMobile
 } from '~/modules/tools'
 import { DEFAULT_PAGE_SIZE, IDENTICON_SERVE } from '~/constant'
 import RecordContainer from '~/pages/me/-/RecordContainer.vue'
@@ -368,7 +369,6 @@ export default Vue.extend({
     shrinkUnit,
     thousandSplit,
     collapseString,
-    toHashedStyle,
     isSubAccount (accont: string): boolean {
       return SUB_ACCOUNT_REG_EXP.test(accont)
     },

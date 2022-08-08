@@ -33,7 +33,10 @@
       <div>chainId: <span class="debug__value">{{ chainIdHexToNumber(ethereumComputed.networkVersion || ethereumComputed.chainId) }}</span></div>
     </div>
     <div class="debug__item">
-      userAgent: <span class="debug__value">{{ userAgent }}</span>
+      navigator.userAgent: <span class="debug__value">{{ userAgent }}</span>
+    </div>
+    <div class="debug__item">
+      navigator.language: <span class="debug__value">{{ language }}</span>
     </div>
     <div>-----eip-712------</div>
     <div>
@@ -74,6 +77,7 @@ import {
 } from '~/modules/tools'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
 import config from '~~/config'
+import { VuexPersistedStateKey } from '~/plugins/vuex-persistedstate'
 
 export default Vue.extend({
   name: 'Debug',
@@ -109,11 +113,14 @@ export default Vue.extend({
     userAgent (): string {
       return window.navigator.userAgent
     },
+    language (): string {
+      return window.navigator.language
+    },
     origin (): string {
       return window.location.origin
     },
     localStorageValue (): string {
-      return localStorage.getItem(config.appNmae + 'v2') || ''
+      return localStorage.getItem(VuexPersistedStateKey) || ''
     }
   },
   beforeMount () {
@@ -173,7 +180,7 @@ export default Vue.extend({
       })
     },
     onClearCache () {
-      localStorage.removeItem(config.appNmae + 'v2')
+      localStorage.removeItem(VuexPersistedStateKey)
       window.location.href = config.domain
     }
   }

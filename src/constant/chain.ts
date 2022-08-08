@@ -19,41 +19,41 @@ export enum ChainId {
 
 // SLIP-0044 : Registered coin types for BIP-0044 https://github.com/ethereum-lists/chains
 export enum CoinType {
-  btc = 0,
-  doge = 3,
-  eth = 60,
-  trx = 195,
-  ckb = 309,
-  bnb = 714,
-  matic = 966
+  btc = '0',
+  doge = '3',
+  eth = '60',
+  trx = '195',
+  ckb = '309',
+  bsc = '9006',
+  matic = '966'
 }
 
-export const EvmCoinTypes = [CoinType.eth, CoinType.bnb, CoinType.matic]
+export const EvmCoinTypes = [CoinType.eth, CoinType.bsc, CoinType.matic]
 
 export const CoinTypeToChainIdMap: { [key: string]: number } = {
   [CoinType.eth]: ChainId.eth,
-  [CoinType.bnb]: ChainId.bsc,
+  [CoinType.bsc]: ChainId.bsc,
   [CoinType.matic]: ChainId.polygon
 }
 
 export const CoinTypeToChainTypeMap: { [key: string]: number } = {
   [CoinType.eth]: ChainType.eth,
-  [CoinType.bnb]: ChainType.bsc,
+  [CoinType.bsc]: ChainType.bsc,
   [CoinType.matic]: ChainType.polygon,
   [CoinType.trx]: ChainType.tron
 }
 
 export const CoinTypeToTorusHostMap: { [key: string]: string } = {
   [CoinType.eth]: isProdData ? 'mainnet' : 'goerli',
-  [CoinType.bnb]: isProdData ? 'bsc_mainnet' : 'bsc_testnet',
+  [CoinType.bsc]: isProdData ? 'bsc_mainnet' : 'bsc_testnet',
   [CoinType.matic]: isProdData ? 'matic' : 'mumbai'
 }
 
-export const ChainIdToCoinTypeMap: { [key: string]: number } = {
+export const ChainIdToCoinTypeMap: { [key: string]: CoinType } = {
   1: CoinType.eth,
   5: CoinType.eth,
-  56: CoinType.bnb,
-  97: CoinType.bnb,
+  56: CoinType.bsc,
+  97: CoinType.bsc,
   137: CoinType.matic,
   80001: CoinType.matic
 }
@@ -112,7 +112,7 @@ export const TRON: IMainChain = {
 export const BSC: IMainChain = {
   name: 'BSC',
   symbol: 'BNB',
-  coinType: CoinType.bnb,
+  coinType: CoinType.bsc,
   decimals: 18,
   icon: 'binance-smart-chain',
   tokenId: 'bsc_bnb',
@@ -160,123 +160,7 @@ export const TOKEN_ID_TO_CHAIN: { [key: string]: IMainChain } = {
 
 export const CoinTypeToChainMap: { [key: string]: IMainChain } = {
   [CoinType.eth]: ETH,
-  [CoinType.bnb]: BSC,
+  [CoinType.bsc]: BSC,
   [CoinType.matic]: Polygon,
   [CoinType.trx]: TRON
 }
-
-export const PARSING_RECORD_SUPPORT_CHAINS = [{
-  text: 'ADA',
-  value: 'ada'
-}, {
-  text: 'ATOM',
-  value: 'atom'
-}, {
-  text: 'Avalanche',
-  value: 'avalanche'
-}, {
-  text: 'BCH',
-  value: 'bch'
-}, {
-  text: 'BSC',
-  value: 'bsc'
-}, {
-  text: 'BSV',
-  value: 'bsv'
-}, {
-  text: BTC.symbol,
-  value: BTC.symbol.toLowerCase()
-}, {
-  text: 'Celo',
-  value: 'celo'
-}, {
-  text: CKB.symbol,
-  value: CKB.symbol.toLowerCase()
-}, {
-  text: 'DASH',
-  value: 'dash'
-}, {
-  text: 'Dfinity',
-  value: 'dfinity'
-}, {
-  text: 'DOGE',
-  value: 'doge'
-}, {
-  text: 'DOT',
-  value: 'dot'
-}, {
-  text: 'EOS',
-  value: 'eos'
-}, {
-  text: 'ETC',
-  value: 'etc'
-}, {
-  text: ETH.symbol,
-  value: ETH.symbol.toLowerCase()
-}, {
-  text: 'FIL',
-  value: 'fil'
-}, {
-  text: 'FLOW',
-  value: 'flow'
-}, {
-  text: 'HECO',
-  value: 'heco'
-}, {
-  text: 'IOST',
-  value: 'iost'
-}, {
-  text: 'IOTA',
-  value: 'iota'
-}, {
-  text: 'KSM',
-  value: 'ksm'
-}, {
-  text: 'LTC',
-  value: 'ltc'
-}, {
-  text: 'NEAR',
-  value: 'near'
-}, {
-  text: 'Polygon',
-  value: 'polygon'
-}, {
-  text: 'SC',
-  value: 'sc'
-}, {
-  text: 'SOL',
-  value: 'sol'
-}, {
-  text: 'Stacks',
-  value: 'stacks'
-}, {
-  text: 'Terra',
-  value: 'terra'
-}, {
-  text: TRON.symbol,
-  value: TRON.symbol.toLowerCase()
-}, {
-  text: 'VET',
-  value: 'vet'
-}, {
-  text: 'XEM',
-  value: 'xem'
-}, {
-  text: 'XLM',
-  value: 'xlm'
-}, {
-  text: 'XMR',
-  value: 'xmr'
-}, {
-  text: 'XRP',
-  value: 'xrp'
-}, {
-  text: 'XTZ',
-  value: 'xtz'
-}, {
-  text: 'ZEC',
-  value: 'zec'
-}, {
-  text: 'ZIL',
-  value: 'zil'
-}]

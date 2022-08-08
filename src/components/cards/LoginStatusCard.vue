@@ -18,12 +18,13 @@
             class="login-status-card__reverse-record__account"
             @click="onCopyAddress(dasReverse.account)"
           >
-            <template v-if="isSubAccount">
-              {{ dasReverse.account.split('.')[1] }}<span class="login-status-card__reverse-record__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}
-            </template>
-            <template v-else>
-              {{ dasReverse.account }}
-            </template>
+<!--            <template v-if="isSubAccount">-->
+<!--              {{ dasReverse.account.split('.')[1] }}<span class="login-status-card__reverse-record__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}-->
+<!--            </template>-->
+<!--            <template v-else>-->
+<!--              {{ dasReverse.account }}-->
+<!--            </template>-->
+            {{ dasReverse.account }}
             <IconImage
               v-if="connectedAccount.protocol === WalletProtocol.walletConnect"
               class="login-status-card__wallet-connect"
@@ -71,12 +72,13 @@
               color="#167B58"
               size="16"
             />
-            <template v-if="isSubAccount">
-              {{ dasReverse.account.split('.')[1] }}<span class="login-status-card__reverse-record__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}
-            </template>
-            <template v-else>
-              {{ dasReverse.account }}
-            </template>
+<!--            <template v-if="isSubAccount">-->
+<!--              {{ dasReverse.account.split('.')[1] }}<span class="login-status-card__reverse-record__sub-account">#{{ dasReverse.account.split('.')[0] }}</span>.{{ dasReverse.account.split('.')[2] }}-->
+<!--            </template>-->
+<!--            <template v-else>-->
+<!--              {{ dasReverse.account }}-->
+<!--            </template>-->
+            {{ dasReverse.account }}
           </span>
         </span>
         <span class="login-status-card__action">
@@ -152,7 +154,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
-import { collapseString, copyText, toHashedStyle } from '~/modules/tools'
+import { collapseString, copyText } from '~/modules/tools'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import IconImage from '~/components/icon/IconImage.vue'
 import { WalletProtocol } from '~/constant'
@@ -196,7 +198,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    toHashedStyle,
     collapseString,
     onConnectWallet () {
       this.$walletSdk.walletsConnect()

@@ -90,7 +90,7 @@ export default class WalletSdk {
       case CoinType.eth:
         message = isProdData ? $tt('Please switch your wallet to the Ethereum main network before connecting') : $tt('Please switch your wallet to the Goerli test network before connecting')
         break
-      case CoinType.bnb:
+      case CoinType.bsc:
         message = isProdData ? $tt('Please switch your wallet to the BSC main network before connecting') : $tt('Please switch your wallet to the BSC Testnet before connecting')
         break
       case CoinType.matic:
@@ -188,6 +188,7 @@ export default class WalletSdk {
       }
       else if (this.protocol === WalletProtocol.torus) {
         const Torus = await import('@toruslabs/torus-embed')
+        // eslint-disable-next-line new-cap
         this.torusWallet = new Torus.default({
           buttonPosition: 'bottom-right'
         })
@@ -445,6 +446,7 @@ export default class WalletSdk {
     // @ts-ignore
     const abi: any = await import('./EthNftAbi.json')
     const Web3 = await import('web3')
+    // eslint-disable-next-line new-cap
     const web3 = new Web3.default(this.wallet.provider)
     const contract = new web3.eth.Contract(abi.default, CrossEthContract)
     const res = await contract.methods.recycle(uuid).send({
@@ -461,6 +463,7 @@ export default class WalletSdk {
     const Web3 = await import('web3')
     // @ts-ignore
     const abi = await import('./EthNftGnosisAbi.json')
+    // eslint-disable-next-line new-cap
     const web3 = new Web3.default(this.wallet.provider)
     const contract = new web3.eth.Contract(abi.default, CrossEthGnosisAddress)
     const nonce = await contract.methods.uuidNonces(nftTokenIdHex(account)).call()
@@ -474,6 +477,7 @@ export default class WalletSdk {
 
     const Web3Adapter = await import('@gnosis.pm/safe-web3-lib')
     const SafeSDK = await import('@gnosis.pm/safe-core-sdk')
+    // eslint-disable-next-line new-cap
     const ethAdapter = new Web3Adapter.default({
       web3,
       signerAddress: address
