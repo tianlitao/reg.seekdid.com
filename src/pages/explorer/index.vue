@@ -219,7 +219,7 @@ export default Vue.extend({
       // Characters x, y, z are not included
       let notIncluded: string[] = []
       list.forEach((item) => {
-        if (item.char_set_name === CHAR_TYPE.notKnown) {
+        if (item.char_set_name === CHAR_TYPE.unknown) {
           notIncluded.push(item.char)
         }
       })
@@ -236,7 +236,7 @@ export default Vue.extend({
         const charTypesSet = new Set(charTypes)
         charTypesSet.delete(CHAR_TYPE.emoji)
         charTypesSet.delete(CHAR_TYPE.number)
-        charTypesSet.delete(CHAR_TYPE.notKnown)
+        charTypesSet.delete(CHAR_TYPE.unknown)
         const language: { [key: string]: string } = {
           [CHAR_TYPE.english]: this.$tt('English'),
           [CHAR_TYPE.simplifiedChinese]: this.$tt('Simplified chinese'),
@@ -269,7 +269,7 @@ export default Vue.extend({
 
       const splitArr = splitAccount(value)
       const nonComplianceChar = splitArr.find((item: { char_set_name: number, char: string }) => {
-        return item.char_set_name === CHAR_TYPE.notKnown
+        return item.char_set_name === CHAR_TYPE.unknown
       })
       const accountLength = splitArr.length
 
