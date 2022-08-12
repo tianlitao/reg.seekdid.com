@@ -72,7 +72,7 @@ export enum CHAR_TYPE {
   turkish,
   thai,
   vietnamese,
-  notKnown = 99
+  unknown = 99
 }
 
 export const ORDER_ACTION_TYPE = {

@@ -52,7 +52,7 @@
           shape="round"
           @click="onCopyInvitationLink"
         >
-          {{ $tt('Copy to friends') }}
+          {{ $tt('Copy invitation link') }}
         </Button>
       </template>
       <template v-else>

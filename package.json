@@ -1,6 +1,6 @@
 {
   "name": "app.did.id",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "scripts": {
     "predev": "npm run i18n",
@@ -12,7 +12,8 @@
     "analyze": "nuxt build --analyze",
     "i18n": "i18n-abc scan && i18n-abc transform",
     "lint": "eslint --ext .js,.vue,.ts --ignore-path .gitignore .",
-    "test": "jest"
+    "test": "jest",
+    "character": "node ./.bin/get_character_list.js"
   },
   "dependencies": {
     "@gnosis.pm/safe-core-sdk": "^2.1.0",
