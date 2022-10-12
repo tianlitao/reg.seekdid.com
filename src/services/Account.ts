@@ -16,6 +16,7 @@ export interface IAccountInfo {
   owner_chain_type: ChainType
   manager_chain_type: ChainType
   confirm_proposal_hash: string
+  cross_coin_type?: string
 }
 
 export interface ITrxStatusParam {
@@ -72,6 +73,7 @@ export interface IOrderDetailRes {
   pay_type: string
   channel_account: string
   coin_type: string
+  cross_coin_type: string
 }
 
 export interface ITrxStatusRes {
@@ -83,25 +85,12 @@ export interface ITrxStatusRes {
 export interface IMyRewardsResInviteList {
   invitee: string
   reward: string
+  invitation_time: string
 }
 
 interface IMyRewardsRes {
   total: number
   list: IMyRewardsResInviteList[]
-}
-
-export interface ITransferOutRecordsResList {
-  hash: string
-  block_number: number
-  receiver_chain_type: number
-  receiver_address: string
-  amount: string
-}
-
-interface ITransferOutRecordsRes {
-  count: number
-  total: number
-  list: ITransferOutRecordsResList[]
 }
 
 interface ISubmitRegisterOrderParams {
@@ -116,6 +105,7 @@ interface ISubmitRegisterOrderParams {
   coin_type: string
   inviter_account: string
   channel_account: string
+  cross_coin_type: string
 }
 
 interface ISubmitRegisterOrderRes {
@@ -128,7 +118,9 @@ interface ISubmitRegisterOrderRes {
   pay_type?: string
 }
 
-interface IChangeOrderParams extends ISubmitRegisterOrderParams {}
+interface IChangeOrderParams extends ISubmitRegisterOrderParams {
+  cross_coin_type: string
+}
 
 interface IChangeOrderRes extends ISubmitRegisterOrderRes {}
 
@@ -180,6 +172,7 @@ export default class Account extends BasicService {
    * @param coin_type
    * @param inviter_account
    * @param channel_account
+   * @param cross_coin_type
    */
   submitRegisterOrder ({
     chain_type,
@@ -192,7 +185,8 @@ export default class Account extends BasicService {
     register_years,
     coin_type,
     inviter_account = '',
-    channel_account = ''
+    channel_account = '',
+    cross_coin_type = ''
   }: ISubmitRegisterOrderParams): Promise<ISubmitRegisterOrderRes> {
     account = account.replace(/\.bit$/, '')
     return this.axios.post('/account/order/register', {
@@ -207,7 +201,8 @@ export default class Account extends BasicService {
       coin_type,
       inviter_account,
       channel_account,
-      account_char_str: splitAccount(account, true)
+      account_char_str: splitAccount(account, true),
+      cross_coin_type
     })
   }
 
@@ -243,6 +238,7 @@ export default class Account extends BasicService {
    * @param pay_type
    * @param register_years
    * @param coin_type
+   * @param cross_coin_type
    * @param inviter_account
    * @param channel_account
    */
@@ -256,6 +252,7 @@ export default class Account extends BasicService {
     pay_type,
     register_years,
     coin_type,
+    cross_coin_type,
     inviter_account = '',
     channel_account = ''
   }: IChangeOrderParams): Promise<IChangeOrderRes> {
@@ -270,7 +267,8 @@ export default class Account extends BasicService {
       register_years,
       coin_type,
       inviter_account,
-      channel_account
+      channel_account,
+      cross_coin_type
     })
   }
 
@@ -351,27 +349,6 @@ export default class Account extends BasicService {
     size = DEFAULT_PAGE_SIZE
   }: { address: string, chainType: number, page?: number, size?: number }): Promise<IMyRewardsRes> {
     return this.axios.post('/rewards/mine', {
-      chain_type: chainType,
-      address,
-      page,
-      size
-    })
-  }
-
-  /**
-   * get transfer out records
-   * @param address
-   * @param chainType
-   * @param page
-   * @param size
-   */
-  transferOutRecords ({
-    address,
-    chainType,
-    page = 1,
-    size = DEFAULT_PAGE_SIZE
-  }: { address: string, chainType: number, page?: number, size?: number }): Promise<ITransferOutRecordsRes> {
-    return this.axios.post('/withdraw/list', {
       chain_type: chainType,
       address,
       page,

@@ -14,8 +14,19 @@
         :errorMessages="selectDasErrors"
       />
       <div class="set-das-reverse-dialog__tips">
-        <span>*</span>
-        <span>{{ $tt('Setting the reverse record needs storage space on the chain, and it will freeze {freezeCKB} CKB.', { freezeCKB: thousandSplit(freezeCKB) }) }}</span>
+        <div class="set-das-reverse-dialog__item">
+          <span>*</span>
+          <span>{{ $tt('Setting the reverse record needs storage space on the chain, and it will freeze {freezeCKB} CKB.', { freezeCKB: thousandSplit(freezeCKB) }) }}</span>
+        </div>
+        <div class="set-das-reverse-dialog__item">
+          <span>*</span>
+          <span>
+            {{ $tt('If the dotbit account has been converted to Ethereum NFT your dotbit alias will be invalid You can convert it to a normal dotbit account and try again') }}
+            <a class="set-das-reverse-dialog__link" :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit-ethereum-nft/482#ethereum-bit-nft-bit-3' : 'https://talk.did.id/t/convert-your-bit-to-nft-on-ethereum-now/481#iii-how-to-convert-your-bit-nft-on-ethereum-to-a-normal-bit-3' ">
+              {{ $tt('How to convert your dotbit NFT on Ethereum to a normal dotbit') }}
+            </a>
+          </span>
+        </div>
       </div>
       <template #action>
         <Button
@@ -88,6 +99,7 @@ import { NEW_LOCK_SCRIPT_TYPE } from '~/constant/chain'
 import errno from '~/constant/errno'
 import { ACCOUNT_STATUS, ORDER_ACTION_TYPE } from '~/constant'
 import { COMMON_KEYS } from '~/store/common'
+import { LANGUAGE } from '~/constant/language'
 
 export default Vue.extend({
   name: 'SetDasReverseDialog',
@@ -112,7 +124,8 @@ export default Vue.extend({
       notEnoughChangeDialogShowing: false,
       confirmLoading: false,
       account: '',
-      selectDasErrors: [] as string[]
+      selectDasErrors: [] as string[],
+      LANGUAGE
     }
   },
   computed: {
@@ -156,11 +169,14 @@ export default Vue.extend({
       this.onClose()
     },
     onManageBalance () {
+      const address = this.connectedAccount?.address
+      const chainName = this.connectedAccount?.chain?.name
+      const link = `${config.dasBalance}?originAddress=${address}&originChainName=${chainName}`
       if (this.isMobile) {
-        window.location.href = config.dasBalance
+        window.location.href = link
       }
       else {
-        window.open(config.dasBalance)
+        window.open(link)
       }
     },
     async onConfirm () {
@@ -172,6 +188,10 @@ export default Vue.extend({
         if (accountInfo) {
           if ([ACCOUNT_STATUS.notOpenRegister, ACCOUNT_STATUS.unavailableAccount, ACCOUNT_STATUS.reservedAccount].includes(accountInfo.status)) {
             this.selectDasErrors = [(this.$tt('The account is not registered and does not support the reverse record') as string)]
+            return
+          }
+          else if ([ACCOUNT_STATUS.onCross].includes(accountInfo.status)) {
+            this.selectDasErrors = [(this.$tt('This account has been converted to Ethereum NFT and does not support the reverse record') as string)]
             return
           }
         }
@@ -278,20 +298,29 @@ export default Vue.extend({
   line-height: 16px;
 }
 
+.set-das-reverse-dialog__item {
+  display: flex;
+  gap: 2px;
+}
+
 .set-das-reverse-dialog__tips {
   margin-top: 70px;
   padding: 8px;
-  display: inline-grid;
-  grid-auto-flow: column;
-  grid-column-gap: 2px;
-  grid-template-columns: 7px auto;
   border-radius: 8px;
   border: 1px solid #EFF2F5;
   font-size: $font-size-14;
   color: $assist-font-color;
   line-height: 17px;
   word-break: break-word;
-  hyphens: auto;
+}
+
+.set-das-reverse-dialog__link {
+  color: $link-font-color;
+  cursor: pointer;
+
+  &:hover {
+    color: $link-hover-font-color;
+  }
 }
 
 .set-das-reverse-dialog__insufficient-balance__tips {

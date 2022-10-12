@@ -8,8 +8,8 @@
       @click="onFocus"
     >
       <input
-        v-bind="$attrs"
         v-model="select"
+        v-bind="$attrs"
         class="select-das__input"
         :class="{
           'select-das__input_error': !!errorMessages[0]
@@ -71,7 +71,7 @@ import { REVERSE_KEYS } from '~/store/reverse'
 import { IAccountListRes } from '~/services/DasReverse'
 import IconImage from '~/components/icon/IconImage.vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
-import { toHashedStyle } from '~/modules/tools'
+import { digitalEmojiHandle, toHashedStyle } from '~/modules/tools'
 import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
 
 interface IOption {
@@ -152,7 +152,6 @@ export default Vue.extend({
     onSelect (option: IOption) {
       this.$emit('input', option.value)
       this.select = toHashedStyle(option.text)
-      this.onInput()
       this.$emit('blur')
       this.optionsShowing = false
     },
@@ -160,13 +159,14 @@ export default Vue.extend({
       this.optionsShowing = true
     },
     onInput () {
-      let _value = event?.target?.value || ''
+      let _value = digitalEmojiHandle(event?.target?.value || '')
+      this.select = toHashedStyle(_value)
+      this.$emit('input', _value)
       let _list: IOption[] = []
       if (_value) {
         this.accountList.forEach((item: IOption) => {
           const _text = toHashedStyle(item.text)
           _value = _value.toLowerCase()
-          console.log(_text + ' - ' + _value)
           if (_text.includes(_value)) {
             _list.push(item)
           }
@@ -179,8 +179,6 @@ export default Vue.extend({
     },
     onClickOutside () {
       this.optionsShowing = false
-      this.select = toHashedStyle(this.value)
-      this.onInput()
     }
   }
 })

@@ -1,17 +1,10 @@
 <template>
   <div class="my-das">
     <Processing
-      v-if="registeringAccounts > 0"
-      class="my-das__registering-accounts"
-      :title="$tt('Registering')"
-      :number="registeringAccounts"
-      to="/me/registering-accounts"
-    />
-    <Processing
-      v-if="processingNfts > 0"
-      :title="$tt('Converting')"
-      :number="processingNfts"
-      to="/me/conversion-processing"
+      v-if="processingNfts > 0 || registeringAccounts > 0"
+      :title="$tt('Pending')"
+      :number="processingNfts + registeringAccounts"
+      to="/me/pending"
     />
     <Tabs
       v-model="currentTab"

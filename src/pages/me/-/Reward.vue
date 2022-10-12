@@ -71,96 +71,30 @@
           {{ $tt('Register Now') }}
         </Button>
       </template>
-      <RecordContainer class="reward__bonus" :title="$tt('Transferable Balance')">
+      <RecordContainer :title="$tt('Reward records')">
         <i18n
           tag="div"
-          class="reward__my-bonus__unissued-tip"
+          class="reward__balance-tip"
           path="邀请奖励说明"
           :i18nkey="$tt('邀请奖励说明')"
         >
-          <template
-            slot="minMergeBonus"
-          >
-            {{ `${thousandSplit(shrinkUnit(minMergeBonus, 0))}` }}
-          </template>
-          <template
-            slot="faq"
-          >
+          <template #balance>
             <a
-              :href="$i18n.locale === LANGUAGE.zhCN ? 'https://docs.did.id/zh/faq#%E9%82%80%E8%AF%B7%E4%BA%BA-%E6%B8%A0%E9%81%93%E5%A5%96%E5%8A%B1%E7%9A%84%E7%BB%93%E7%AE%97%E6%98%AF%E4%B8%AD%E5%BF%83%E5%8C%96%E7%9A%84%E5%90%97-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%BB%A1%E4%B8%80%E5%AE%9A%E6%95%B0%E9%A2%9D%E4%B9%8B%E5%90%8E%E6%89%8D%E4%BC%9A%E5%8F%91%E6%94%BE' : 'https://docs.did.id/faq#is-the-settlement-of-inviter-channel-rewards-centralized-and-why-are-they-paid-out-only-after-a-certain-amount-is-reached'"
-              target="_blank"
+              class="reward__balance-tip-link"
+              href="https://balance.did.id"
             >
-              <Iconfont
-                name="info"
-                color="#A0A1AB"
-                size="14"
-              />
+              {{ $tt('dotbit Balance') }}
+            </a>
+          </template>
+          <template #faq>
+            <a
+              class="reward__balance-tip-link"
+              :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit/630' :'https://talk.did.id/t/bits-reward-system/631'"
+            >
+              {{ $tt('Why are some rewards not being credited?') }}
             </a>
           </template>
         </i18n>
-        <div class="reward__split-line" />
-        <div
-          class="reward__action-button"
-          @click="onManageBalance"
-        >
-          {{ $tt('Manage Balance') }}
-        </div>
-      </RecordContainer>
-      <RecordContainer
-        class="reward__margin-bottom-32"
-        :title="$tt('Transfer out records')"
-      >
-        <template v-if="transferOutRecords.length === 0">
-          <div class="reward__no-record">
-            {{ $tt('No record') }}
-          </div>
-        </template>
-        <template v-else>
-          <div class="reward__transfer-out-total">
-            {{ $tt('Cumulative transfer out {transferOutTotal} CKB', { transferOutTotal: thousandSplit(transferOutTotal) }) }}
-          </div>
-          <table class="reward__table">
-            <thead>
-              <tr class="reward__thead__tr">
-                <th class="reward__thead__th">
-                  {{ $tt('Bonus (CKB)') }}
-                </th>
-                <th class="reward__thead__th reward__thead__th__align-right">
-                  Hash
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(record, index) in transferOutRecords"
-                :key="index"
-                class="reward__tbody__tr"
-              >
-                <td class="reward__tbody__td">
-                  {{ record.amount }}
-                </td>
-                <td class="reward__tbody__td reward__thead__th__align-right">
-                  <a
-                    class="reward__table__link"
-                    :href="`${CKB.explorerTrx}${record.hash}`"
-                    target="_blank"
-                  >
-                    {{ collapseString(record.hash, 8, 8) }}
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="reward__split-line" />
-          <div
-            class="reward__action-button"
-            @click="goTransferOutRecords"
-          >
-            {{ $tt('View all') }}
-          </div>
-        </template>
-      </RecordContainer>
-      <RecordContainer :title="$tt('Reward records')">
         <template v-if="rewardRecords.length === 0">
           <div class="reward__no-record">
             {{ $tt('No record, go ahead and invite~') }}
@@ -185,19 +119,24 @@
                 class="reward__tbody__tr"
               >
                 <td class="reward__tbody__td">
-                  {{ record.reward }}
+                  <div>
+                    <div>{{ record.reward }}</div>
+                    <div class="reward__records__time">
+                      {{ record.invitation_time }}
+                    </div>
+                  </div>
                 </td>
                 <td class="reward__tbody__td reward__thead__th__align-right">
                   <nuxt-link
                     class="reward__table__link"
                     :to="`/explorer/account/${record.invitee}`"
                   >
-<!--                    <template v-if="isSubAccount(record.invitee)">-->
-<!--                      {{ record.invitee.split('.')[1] }}<span class="reward__table__link__sub-account">#{{ record.invitee.split('.')[0] }}</span>.{{ record.invitee.split('.')[2] }}-->
-<!--                    </template>-->
-<!--                    <template v-else>-->
-<!--                      {{ record.invitee }}-->
-<!--                    </template>-->
+                    <!--                    <template v-if="isSubAccount(record.invitee)">-->
+                    <!--                      {{ record.invitee.split('.')[1] }}<span class="reward__table__link__sub-account">#{{ record.invitee.split('.')[0] }}</span>.{{ record.invitee.split('.')[2] }}-->
+                    <!--                    </template>-->
+                    <!--                    <template v-else>-->
+                    <!--                      {{ record.invitee }}-->
+                    <!--                    </template>-->
                     {{ record.invitee }}
                   </nuxt-link>
                 </td>
@@ -233,12 +172,12 @@
                 rounded
               />
               <span class="reward__account-list__account-name">
-<!--                <template v-if="isSubAccount(item.account)">-->
-<!--                  {{ item.account.split('.')[1] }}<span class="reward__account-list__account-name__sub-account">#{{ item.account.split('.')[0] }}</span>.{{ item.account.split('.')[2] }}-->
-<!--                </template>-->
-<!--                <template v-else>-->
-<!--                  {{ item.account }}-->
-<!--                </template>-->
+                <!--                <template v-if="isSubAccount(item.account)">-->
+                <!--                  {{ item.account.split('.')[1] }}<span class="reward__account-list__account-name__sub-account">#{{ item.account.split('.')[0] }}</span>.{{ item.account.split('.')[2] }}-->
+                <!--                </template>-->
+                <!--                <template v-else>-->
+                <!--                  {{ item.account }}-->
+                <!--                </template>-->
                 {{ item.account }}
               </span>
             </span>
@@ -283,10 +222,10 @@ import Iconfont from '~/components/icon/Iconfont.vue'
 import {
   collapseString,
   copyText,
-  fromSatoshi,
   shrinkUnit,
   thousandSplit,
-  isMobile
+  isMobile,
+  formatDateTime
 } from '~/modules/tools'
 import { DEFAULT_PAGE_SIZE, IDENTICON_SERVE } from '~/constant'
 import RecordContainer from '~/pages/me/-/RecordContainer.vue'
@@ -295,8 +234,7 @@ import IconImage from '~/components/icon/IconImage.vue'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
 import {
   IAccountInfo,
-  IMyRewardsResInviteList,
-  ITransferOutRecordsResList
+  IMyRewardsResInviteList
 } from '~/services/Account'
 import { CKB } from '~/constant/chain'
 import { COMMON_KEYS } from '~/store/common'
@@ -326,10 +264,6 @@ export default Vue.extend({
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
     },
-    minMergeBonus (): string {
-      const minValue = this.common.config.income_cell_min_transfer_value
-      return minValue ? fromSatoshi(minValue) : '0'
-    },
     invitationLink (): string {
       return `${config.domain}explorer?inviter=${this.invitationAccount}`
     },
@@ -346,9 +280,7 @@ export default Vue.extend({
       IDENTICON_SERVE,
       selectAccountShowing: false,
       invitationAccount: this.$route.query.invitationAccount,
-      transferOutTotal: '0',
       rewardRecords: [] as IMyRewardsResInviteList[],
-      transferOutRecords: [] as ITransferOutRecordsResList[],
       myAccounts: [] as IAccountInfo[],
       page: 0,
       loadMoreShowing: false,
@@ -361,7 +293,6 @@ export default Vue.extend({
       this.invitationAccount = this.myAccounts[0] ? this.myAccounts[0].account : ''
     }
     this.$store.dispatch(COMMON_KEYS.fetchTokens)
-    this.getTransferOutRecords()
     this.getMyRewards()
     this.getMyAccounts()
   },
@@ -371,14 +302,6 @@ export default Vue.extend({
     collapseString,
     isSubAccount (accont: string): boolean {
       return SUB_ACCOUNT_REG_EXP.test(accont)
-    },
-    onManageBalance () {
-      if (this.isMobile) {
-        window.location.href = config.dasBalance
-      }
-      else {
-        window.open(config.dasBalance)
-      }
     },
     onShareTwitter () {
       const text = `\uD83E\uDD29I have got a cool "${this.invitationAccount}"! @dotbitHQ\n\n\uD83D\uDE80Come get your .bit now!\n\nRegister & Get a ✨5% discount:\n${config.domain}explorer?inviter=${this.invitationAccount}`
@@ -398,33 +321,11 @@ export default Vue.extend({
         const list = res.list && res.list.map((item: IMyRewardsResInviteList) => {
           return {
             ...item,
-            reward: thousandSplit(shrinkUnit(item.reward, CKB.decimals))
+            reward: thousandSplit(shrinkUnit(item.reward, CKB.decimals)),
+            invitation_time: formatDateTime(item.invitation_time)
           }
         })
         this.rewardRecords = list
-      }
-      catch (err) {
-        console.error(err)
-      }
-    },
-    async getTransferOutRecords () {
-      if (!this.connectedAccount.address) {
-        return
-      }
-      try {
-        const res = await this.$services.account.transferOutRecords({
-          address: this.connectedAccount.address,
-          chainType: this.computedChainType,
-          size: 10
-        })
-        this.transferOutTotal = shrinkUnit(res.total, CKB.decimals)
-        const list = res.list && res.list.map((item: ITransferOutRecordsResList) => {
-          return {
-            ...item,
-            amount: thousandSplit(shrinkUnit(item.amount, CKB.decimals))
-          }
-        })
-        this.transferOutRecords = list
       }
       catch (err) {
         console.error(err)
@@ -446,6 +347,7 @@ export default Vue.extend({
           address: this.connectedAccount.address,
           page: this.page,
           keyword: ''
+          // category: 6
         })
         this.loadingShowing = false
         if (res && res.list) {
@@ -492,9 +394,6 @@ export default Vue.extend({
     },
     goRewardRecords () {
       this.$router.push('/me/reward-records')
-    },
-    goTransferOutRecords () {
-      this.$router.push('/me/transfer-out-records')
     }
   }
 })
@@ -661,10 +560,6 @@ export default Vue.extend({
   background: #1DA1F2;
 }
 
-.reward__bonus {
-  margin-bottom: 32px;
-}
-
 .reward__my-bonus {
   margin-top: 12px;
   line-height: 38px;
@@ -678,18 +573,6 @@ export default Vue.extend({
   font-size: $font-size-12;
   font-weight: 600;
   color: $assist-font-color;
-}
-
-.reward__my-bonus__unissued-tip {
-  margin: 20px 0;
-  font-size: $font-size-14;
-  color: $assist-font-color;
-  line-height: 16px;
-
-  .iconfont {
-    margin-left: 4px;
-    margin-bottom: 1px;
-  }
 }
 
 .reward__split-line {
@@ -712,11 +595,6 @@ export default Vue.extend({
   height: 80px;
   align-items: center;
   font-weight: 600;
-  color: $assist-font-color;
-}
-
-.reward__transfer-out-total {
-  font-size: $font-size-12;
   color: $assist-font-color;
 }
 
@@ -751,6 +629,7 @@ export default Vue.extend({
 .reward__tbody__td {
   display: flex;
   align-items: center;
+  text-align: left;
   flex: 1;
   height: 50px;
   font-weight: 600;
@@ -768,12 +647,30 @@ export default Vue.extend({
   }
 }
 
-.reward__margin-bottom-32 {
-  margin-bottom: 32px;
-}
-
 .reward__account-list__account-name__sub-account,
 .reward__table__link__sub-account {
   color: $warn-font-color;
+}
+
+.reward__records__time {
+  font-size: 12px;
+  color: $third-font-color;
+}
+
+.reward__balance-tip {
+  margin-bottom: 12px;
+  color: $assist-font-color;
+  text-align: center;
+  background: $normal-color;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.reward__balance-tip-link {
+  color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color;
+  }
 }
 </style>

@@ -1,3 +1,22 @@
+@import 'add-to-calendar-button/assets/css/atcb.css';
+
+// overlay styles
+#atcb-bgoverlay {
+  cursor: auto !important;
+  background: rgba(27, 29, 33, 0.7);
+  backdrop-filter: unset;
+
+  .atcb-list.atcb-modal {
+    box-shadow: unset;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+
+  #atcb-btn-custom-close {
+    display: none;
+  }
+}
+
 // animation
 @keyframes rotate360DegAnimation {
   100% {

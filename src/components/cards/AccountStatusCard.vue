@@ -27,7 +27,7 @@
         class="account-status-card__action-button"
         @click="gotoReservedDasList"
       >
-        {{ $tt('About Reserved Account') }}
+        {{ $tt('Claim Reserved Account') }}
       </Button>
     </template>
   </div>
@@ -62,7 +62,7 @@ export default Vue.extend({
   },
   methods: {
     gotoReservedDasList () {
-      window.open('https://github.com/dotbitHQ/cell-data-generator/blob/master/data/reserved_accounts.txt')
+      window.open('https://dotbit.medium.com/29cdccea1db1')
     }
   }
 })

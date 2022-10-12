@@ -5,15 +5,9 @@
       'explorer_mobile': isMobile
     }"
   >
-    <PublicBetaTips v-if="!config.isProdData" />
-    <div class="explorer__lang-switcher">
-      <LangSwitcher
-        v-if="isMobile"
-      />
-    </div>
     <img class="explorer__logo" src="/images/explorer/das-logo.png" alt="logo">
     <div class="explorer__full-name">
-      {{ $tt('slogan') }}
+      {{ $tt('Cross-chain Web3 identities for you and your community') }}
       <span
         v-if="!config.isProdData"
         class="explorer__full-name__beta"
@@ -24,6 +18,7 @@
     <ExplorerSearch
       v-model.trim="searchWord"
       :placeholder="$tt('Find your perfect DAS account')"
+      :loading="loading"
       @input="onInput"
       @search="onSearch"
     />
@@ -50,18 +45,34 @@
       v-else-if="notOpenForRegistrationShowing"
       class="explorer__error-tip"
     >
-      {{ registrableDate ? $tt('To be released at on-chain time: {date}.', { date: registrableDate }) : $tt('Try another one. This account is not open for registration yet.') }}
+      <template v-if="registrableDate">
+        {{ $tt('To be released at on-chain time: {date}.', { date: registrableDate }) }}
+        <span
+          class="explorer__add-to-calendar"
+          @click="addToCalendar"
+        >{{ $tt('Add to calendar') }}
+        </span>
+      </template>
+      <i18n
+        v-else
+        tag="span"
+        path="注册提示"
+        :i18nkey="$tt('注册提示')"
+      >
+        <a
+          slot="twitter"
+          class="explorer__twitter"
+          href="https://twitter.com/dotbitHQ"
+          target="_blank">@dotbitHQ</a>
+      </i18n>
     </div>
     <div class="explorer__search_result">
-      <ul
-        v-if="searchResult.account"
+      <div
+        v-if="searchResult.account && !loading"
         class="explorer__search_result__list"
       >
-        <AccountStatus
-          :account="searchResult"
-          :loading="loading"
-        />
-      </ul>
+        <AccountStatus :account="searchResult"/>
+      </div>
     </div>
     <div
       class="explorer__open-registration-rules"
@@ -77,22 +88,22 @@
         <span class="explorer__open-registration-rules__item__dot">•</span>
         <span>
           {{ $tt('4~9 characters: Randomly release 60%.') }}
-<!--          <i18n-->
-<!--            tag="span"-->
-<!--            path="开放注册通知"-->
-<!--            :i18nkey="$tt('开放注册通知')"-->
-<!--          >-->
-<!--            <span-->
-<!--              slot="percentage"-->
-<!--              class="explorer__open-registration-rules__item__high-brightness"-->
-<!--            >60%</span>-->
-<!--            <span-->
-<!--              slot="date"-->
-<!--              class="explorer__open-registration-rules__item__high-brightness"-->
-<!--            >-->
-<!--              {{ $tt('12:00 PM (UTC+0) on April 18th') }}-->
-<!--            </span>-->
-<!--          </i18n>-->
+          <i18n
+            tag="span"
+            path="开放注册通知"
+            :i18nkey="$tt('开放注册通知')"
+          >
+            <span
+              slot="percentage"
+              class="explorer__open-registration-rules__item__high-brightness"
+            >100%</span>
+            <span
+              slot="date"
+              class="explorer__open-registration-rules__item__high-brightness"
+            >
+              {{ $tt('12:00 PM (UTC+0) on October 18th') }}
+            </span>
+          </i18n>
           <a
             class="explorer__rules-details"
             :href="$i18n.locale === LANGUAGE.zhCN ? 'https://docs.did.id/zh/register-das/open-registration-rules' : 'https://docs.did.id/register-das/open-registration-rules'"
@@ -110,11 +121,28 @@
     <div class="explorer__current-on-chain-time">
       {{ $tt('Current on-chain time: {date} (UTC+0)', { date: dateOnChain }) }}
     </div>
+    <div
+      v-if="isMobile"
+      class="explorer__lang-switcher"
+    >
+      <LangSwitcher block />
+      <a
+        class="explorer__faq__mobile"
+        href="https://did.id"
+        target="_self"
+      >
+        <Iconfont
+          name="logo"
+          size="16"
+        />
+        {{ $tt('What is DAS?') }}
+      </a>
+    </div>
     <a
-      v-if="!searchWord"
+      v-if="!isMobile"
       class="explorer__faq"
       href="https://did.id"
-      :target="isMobile ? '_self' : '_blank'"
+      target="_blank"
     >
       {{ $tt('What is DAS?') }}
     </a>
@@ -122,39 +150,36 @@
 </template>
 
 <script lang="ts">
-// @ts-ignore
-import { Buffer } from 'buffer'
 import Vue from 'vue'
 import debounce from 'lodash.debounce'
 import { mapState, mapGetters } from 'vuex'
-// @ts-ignore
-import blake2b from 'blake2b'
-import uts46 from 'idna-uts46-hx'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { atcb_action } from 'add-to-calendar-button'
 import LangSwitcher from '~/components/LangSwitcher.vue'
 import ExplorerSearch from '~/pages/explorer/-/ExplorerSearch.vue'
-import { ACCOUNT_STATUS, ACCOUNT_SUFFIX, CHAR_TYPE, DEBOUNCE_WAIT_TIME, ErrorAccountList } from '~/constant'
+import { ACCOUNT_STATUS, ACCOUNT_SUFFIX, CHAR_TYPE, DEBOUNCE_WAIT_TIME } from '~/constant'
 import { ISearchAccount } from '~/services/Explorer'
 import AccountStatus from '~/pages/explorer/-/AccountStatus.vue'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
-import { accountChars, isMobile, splitAccount, toDottedStyle } from '~/modules/tools'
+import { accountChars, digitalEmojiHandle, isMobile, splitAccount, toDottedStyle } from '~/modules/tools'
 import { COMMON_KEYS } from '~/store/common'
 import { IConfig } from '~/services/Common'
-import PublicBetaTips from '~/components/PublicBetaTips.vue'
 import config from '~~/config'
 import errno from '~/constant/errno'
 import { LANGUAGE } from '~/constant/language'
+import Iconfont from '~/components/icon/Iconfont.vue'
 
 dayjs.extend(utc)
 
 export default Vue.extend({
   name: 'Explorer',
+  layout: 'explorer',
   components: {
     LangSwitcher,
     ExplorerSearch,
     AccountStatus,
-    PublicBetaTips
+    Iconfont
   },
   data () {
     return {
@@ -203,7 +228,7 @@ export default Vue.extend({
     }, 5000)
     const _searchWord = this.$route.query.searchWord
     if (_searchWord) {
-      this.searchWord = (_searchWord as string)
+      this.searchWord = digitalEmojiHandle(_searchWord as string)
       this.onInput()
       this.onSearch(this.searchWord)
     }
@@ -258,15 +283,6 @@ export default Vue.extend({
       }
     },
     checkSearchWord (value: string, isSubAccount?: boolean) {
-      try {
-        value = uts46.toAscii(value, { useStd3ASCII: true, transitional: false, verifyDnsLength: false })
-        value = uts46.toUnicode(value, { useStd3ASCII: true })
-      }
-      catch (err) {
-        console.error(err)
-        this.showIncorrectAccountFormat = true
-      }
-
       const splitArr = splitAccount(value)
       const nonComplianceChar = splitArr.find((item: { char_set_name: number, char: string }) => {
         return item.char_set_name === CHAR_TYPE.unknown
@@ -284,16 +300,11 @@ export default Vue.extend({
       this.showIllegalStringLength = false
       this.notOpenForRegistrationShowing = false
       this.registrableDate = ''
-      try {
-        let _searchWord = this.searchWord.toLowerCase()
-        _searchWord = uts46.toAscii(_searchWord, { useStd3ASCII: true, transitional: false, verifyDnsLength: false })
-        this.searchWord = uts46.toUnicode(_searchWord, { useStd3ASCII: true })
-      }
-      catch (err) {
-        this.searchWord = this.searchWord.toLowerCase()
-      }
+      this.searchWord = this.searchWord.toLowerCase()
     },
     onSearch: debounce(async function (this: any, value: string) {
+      this.loading = true
+      value = digitalEmojiHandle(value)
       value = value.replace(/\s+/g, '')
       value = value.toLowerCase()
       this.searchWord = value
@@ -301,28 +312,22 @@ export default Vue.extend({
       value = value + ACCOUNT_SUFFIX
       value = toDottedStyle(value)
 
-      if (ErrorAccountList.includes(value)) {
-        this.loading = true
-        this.searchResult = {
-          account: value
-        }
-        try {
-          const res = await this.$services.account.accountInfo(value)
-          if (res) {
-            this.searchResult = {
-              account: value,
-              ...res
-            }
+      this.searchResult = {
+        account: value
+      }
+      try {
+        const res = await this.$services.account.accountInfo(value)
+        if (res) {
+          this.searchResult = {
+            account: value,
+            ...res
           }
-          return
         }
-        catch (err: any) {
-          console.error(err)
-          this.searchResult = {}
-        }
-        finally {
-          this.loading = false
-        }
+        this.loading = false
+        return
+      }
+      catch (err: any) {
+        console.error(err)
       }
 
       value = value.replace(/\.bit$/, '')
@@ -334,6 +339,7 @@ export default Vue.extend({
       this.registrableDate = ''
 
       if (!value) {
+        this.loading = false
         return
       }
 
@@ -354,10 +360,10 @@ export default Vue.extend({
       }
 
       if (this.showIncorrectAccountFormat || this.showIllegalStringLength) {
+        this.loading = false
         return
       }
 
-      this.loading = true
       this.searchResult = {
         account: value + ACCOUNT_SUFFIX
       }
@@ -387,29 +393,7 @@ export default Vue.extend({
           if (res.status === ACCOUNT_STATUS.notOpenRegister) {
             this.searchResult = {}
             this.notOpenForRegistrationShowing = true
-            const buf = Buffer.from(value + ACCOUNT_SUFFIX)
-            const personal = Buffer.from('2021-07-22 12:00')
-            const hasher = blake2b(32, null, null, personal)
-            hasher.update(buf)
-            const hash = hasher.digest('binary') as Uint8Array
-            const first4Bytes = Buffer.from(hash.slice(0, 4)) as Buffer
-            const luckyNum = first4Bytes.readUInt32BE(0)
-
-            if (luckyNum <= 1717986918) {
-              this.registrableDate = '2022–03–21 12:00PM (UTC+0)'
-            }
-            else if (luckyNum <= 1932735282) {
-              this.registrableDate = '2022–03–28 12:00PM (UTC+0)'
-            }
-            else if (luckyNum <= 2147483647) {
-              this.registrableDate = '2022–04–04 12:00PM (UTC+0)'
-            }
-            else if (luckyNum <= 2362232012) {
-              this.registrableDate = '2022–04–11 12:00PM (UTC+0)'
-            }
-            else if (luckyNum <= 2576980377) {
-              this.registrableDate = '2022–04–18 12:00PM (UTC+0)'
-            }
+            this.registrableDate = '2022–10–18 12:00PM (UTC+0)'
           }
           else {
             this.searchResult = {
@@ -435,7 +419,32 @@ export default Vue.extend({
       finally {
         this.loading = false
       }
-    }, DEBOUNCE_WAIT_TIME)
+    }, DEBOUNCE_WAIT_TIME),
+    addToCalendar () {
+      const account = /\.bit$/.test(this.searchWord) ? this.searchWord : this.searchWord + ACCOUNT_SUFFIX
+      const config = {
+        name: 'All 4~9 digits .bit accounts will release to 100% at 12:00 PM(UTC+0), October 18th.',
+        description: `${account} registration link: [url]https://app.did.id/explorer?searchWord=${account}[/url]`,
+        startDate: '2022-10-18',
+        options: ['Apple', 'Google', 'iCal', 'Microsoft365', 'Outlook.com', 'MicrosoftTeams', 'Yahoo'],
+        trigger: 'click',
+        iCalFileName: 'dotbit-reminder-event'
+      }
+      // @ts-ignore
+      atcb_action(config)
+      const list = document.getElementsByClassName('atcb-list-item')
+      for (let i = 0; i < list.length; i++) {
+        let eventLabel: any = list[i]?.childNodes[1]
+        eventLabel = (eventLabel as HTMLElement).innerText
+        list[i].addEventListener('click', () => {
+          this.$gtag('event', 'click', {
+            event_category: 'add to calendar',
+            event_label: eventLabel,
+            value: 1
+          })
+        })
+      }
+    }
   }
 })
 </script>
@@ -451,10 +460,11 @@ export default Vue.extend({
 }
 
 .explorer__lang-switcher {
-  display: flex;
-  justify-content: flex-end;
-  min-height: 32px;
-  text-align: right;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+  margin-top: 20px;
 }
 
 .explorer__logo {
@@ -492,23 +502,43 @@ export default Vue.extend({
 
 .explorer__search_result {
   position: relative;
+  z-index: 2;
 }
 
 .explorer__search_result__list {
   position: absolute;
   width: 100%;
-  margin-top: 12px;
-  margin-bottom: 20px;
+  margin-top: 16px;
+  box-shadow: $option-outer-box-shadow;
 }
 
 .explorer__faq {
-  position: absolute;
-  bottom: 5%;
+  position: relative;
+  top: 12%;
   transform: translateX(-50%);
   color: $assist-font-color;
 
   &:hover {
     color: $link-font-color
+  }
+}
+
+.explorer__faq__mobile {
+  height: 39px;
+  padding: 0 10px;
+  background: $normal-color;
+  border-radius: 8px;
+  display: inline-grid;
+  align-items: center;
+  justify-content: flex-start;
+  grid-auto-flow: column;
+  grid-column-gap: 5px;
+  font-size: $font-size-14;
+  font-weight: 600;
+  color: $primary-font-color;
+
+  &:hover {
+    background: $normal-hover-color;
   }
 }
 
@@ -564,5 +594,15 @@ export default Vue.extend({
 
 .explorer_mobile {
   padding: 16px 16px 0 16px;
+}
+
+.explorer__add-to-calendar,
+.explorer__twitter {
+  color: $link-font-color;
+  cursor: pointer;
+
+  &:hover {
+    color: $link-hover-font-color
+  }
 }
 </style>

@@ -12,33 +12,33 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: '.bit - Web3 identities for you and your community.',
+    title: '.bit - Cross-chain Web3 identities for you and your community.',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover' },
       { name: 'apple-mobile-web-app-capable', content: 'yes' },
       { hid: 'description', name: 'description', content: '.bit is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. .bit can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
-      { hid: 'keyword', name: 'keywords', content: 'domain, domain name, blockchain domain, nervos, ckb, .bit, domain name registration, purchase domain name, website domain, domain name service, domain name hosting, timyang, .bit, domain investment, DNS, buy domain name' },
+      { hid: 'keyword', name: 'keywords', content: '.bit, dotbit, did, .bit did, .bit domain, web3 domains, .bit web3, crypto domain, domain crypto, crypto domain name, web3 did, das, decentralized domain, buy domain with crypto, domain eth, domain bnb, domain sol, namedao, cross-chain did, bit das, .bit account, did id, nervos, ckb' },
       // The Open Graph protocol
       { hid: 'og:description', property: 'og:description', content: '.bit is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. .bit can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
-      { hid: 'og:title', property: 'og:title', content: '.bit - Web3 identities for you and your community.' },
-      { hid: 'og:site_name', property: 'og:site_name', content: '.bit - Web3 identities for you and your community.' },
+      { hid: 'og:title', property: 'og:title', content: '.bit - Cross-chain Web3 identities for you and your community.' },
+      { hid: 'og:site_name', property: 'og:site_name', content: '.bit - Cross-chain Web3 identities for you and your community.' },
       { hid: 'og:type', property: 'og:type', content: 'article' },
       { hid: 'og:url', property: 'og:url', content: 'https://did.id/' },
-      { hid: 'og:image', property: 'og:image', content: `https://${abcConfig.hostname}/images/seo-thumbnail-image.png` },
+      { hid: 'og:image', property: 'og:image', content: `https://${abcConfig.hostname}/images/seo-thumbnail-image-v2.png` },
       // Twitter
       { hid: 'twitter:card', name: 'twitter:card', content: 'summary_large_image' },
-      { hid: 'twitter:site', name: 'twitter:site', content: '.bit - Web3 identities for you and your community.' },
-      { hid: 'twitter:title', name: 'twitter:title', content: '.bit - Web3 identities for you and your community.' },
+      { hid: 'twitter:site', name: 'twitter:site', content: '.bit - Cross-chain Web3 identities for you and your community.' },
+      { hid: 'twitter:title', name: 'twitter:title', content: '.bit - Cross-chain Web3 identities for you and your community.' },
       { hid: 'twitter:description', name: 'twitter:description', content: '.bit is a blockchain-based, decentralized and open sourced account system. It is the first account system with broad compatibility and complete ownership and control by users. .bit can be used as a cryptocurrency collection account, as a domain name, or as an account for accessing general Internet services.' },
-      { hid: 'twitter:image', name: 'twitter:image', content: `https://${abcConfig.hostname}/images/seo-thumbnail-image.png` },
-      { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: '.bit - Web3 identities for you and your community.' }
+      { hid: 'twitter:image', name: 'twitter:image', content: `https://${abcConfig.hostname}/images/seo-thumbnail-image-v2.png` },
+      { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: '.bit - Cross-chain Web3 identities for you and your community.' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [{
-      src: 'https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/svg_15353_41.8c4938c03c232d45c4a8c5af1812e298.js',
+      src: 'https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/svg_15353_47.f9b9291bb40647667c87c916e551b74e.js',
       async: true
     }]
   },
@@ -65,6 +65,7 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    '@nuxtjs/composition-api/module',
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     ['@nuxtjs/google-gtag', {

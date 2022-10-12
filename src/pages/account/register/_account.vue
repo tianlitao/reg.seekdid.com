@@ -103,7 +103,7 @@
       </div>
       <Button
         shape="round"
-        :disabled="onRegisterLoading"
+        :loading="onRegisterLoading"
         block
         status="success"
         @click="onRegister"
@@ -119,30 +119,32 @@
         v-model="paymentToken"
         class="account-register__payment-token-select"
         :currentChain="chainType"
-        :options="common.tokens"
+        :options="paymentTokens"
       />
-      <a
-        class="account-register__deposit-ckb"
-        :href="config.dasBalance"
-        :target="isMobile ? '_self' : '_blank'"
-      >
-        <span>{{ $tt('Deposit CKB to DAS Balance') }}</span>
-        <Iconfont name="arrow-right" color="#C4D0CD" size="16" />
-      </a>
-      <a
-        class="account-register__register-with-ckb"
-        :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/ckb-das-das-0-gas-ckb/284' : 'https://talk.did.id/t/how-do-i-register-das-account-with-ckb-0-gas-no-ckb-wallet-needed/285'"
-        target="_blank"
-      >
-        <span>
-          <Iconfont
-            name="info"
-            color="#3D66B3"
-            size="14"
-          />
-        </span>
-        <span>{{ $tt('How to register with CKB (DAS Balance)?') }}</span>
-      </a>
+      <template v-if="!mintNft">
+        <a
+          class="account-register__deposit-ckb"
+          :href="dotbitBalanceUrl"
+          :target="isMobile ? '_self' : '_blank'"
+        >
+          <span>{{ $tt('Deposit CKB to DAS Balance') }}</span>
+          <Iconfont name="arrow-right" color="#C4D0CD" size="16" />
+        </a>
+        <a
+          class="account-register__register-with-ckb"
+          :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/ckb-das-das-0-gas-ckb/284' : 'https://talk.did.id/t/how-do-i-register-das-account-with-ckb-0-gas-no-ckb-wallet-needed/285'"
+          target="_blank"
+        >
+          <span>
+            <Iconfont
+              name="info"
+              color="#3D66B3"
+              size="14"
+            />
+          </span>
+          <span>{{ $tt('How to register with CKB (DAS Balance)?') }}</span>
+        </a>
+      </template>
       <div class="account-register__confirm-register__paid-amount__value">
         {{ `${thousandSplit(paidTokenAmount)} ${paymentToken.symbol}` }}
       </div>
@@ -202,7 +204,7 @@ import {
   isTokenPocket,
   mmJsonHashAndChainIdHex,
   sleep,
-  thousandSplit, isMobile, toHashedStyle, toDottedStyle
+  thousandSplit, isMobile, toHashedStyle, toDottedStyle, digitalEmojiHandle
 } from '~/modules/tools'
 import {
   ACCOUNT_STATUS,
@@ -222,8 +224,9 @@ import Iconfont from '~/components/icon/Iconfont.vue'
 import {
   ChainType,
   CKB,
+  CoinType,
   CoinTypeToChainTypeMap,
-  DASBalanceTokenId,
+  DASBalanceTokenId, ETH,
   EvmCoinTypes,
   NEW_LOCK_SCRIPT_TYPE,
   TRON
@@ -360,6 +363,27 @@ export default Vue.extend({
         _chainType = CoinTypeToChainTypeMap[_coinType]
       }
       return _chainType
+    },
+    mintNft (): boolean {
+      return this.$route.query.action === 'mintNft'
+    },
+    loggedIn (): boolean {
+      return !!this.me.connectedAccount.address
+    },
+    paymentTokens (): IToken[] {
+      if (this.mintNft) {
+        return this.common.tokens.filter((token: IToken) => {
+          return token.token_id === ETH.tokenId
+        })
+      }
+      else {
+        return this.common.tokens
+      }
+    },
+    dotbitBalanceUrl (): string {
+      const address = this.connectedAccount?.address
+      const chainName = this.connectedAccount?.chain?.name
+      return `${config.dasBalance}?originAddress=${address}&originChainName=${chainName}`
     }
   },
   watch: {
@@ -384,7 +408,7 @@ export default Vue.extend({
       if (this.orderInfo.channel_account && !this.me.channel) {
         this.$store.commit(ME_KEYS.setChannel, this.orderInfo.channel_account)
       }
-      const _token = this.common.tokens.find((token: IToken) => {
+      const _token = this.paymentTokens.find((token: IToken) => {
         return this.orderInfo.pay_token_id === token.token_id
       })
       if (_token) {
@@ -502,7 +526,8 @@ export default Vue.extend({
           register_years: this.registrationPeriod,
           coin_type: this.connectedAccount.chain.coinType,
           inviter_account: this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : '',
-          channel_account: this.me.channel
+          channel_account: this.me.channel,
+          cross_coin_type: this.mintNft ? CoinType.eth : ''
         })
       }
       catch (err) {
@@ -515,7 +540,21 @@ export default Vue.extend({
         return
       }
       this.onRegisterLoading = true
-      await this.$walletSdk.onConnect(true)
+      if (this.loggedIn) {
+        if (this.mintNft && this.connectedAccount.chain.coinType !== ETH.coinType) {
+          this.$walletSdk.walletsConnect(true)
+          this.onRegisterLoading = false
+          return
+        }
+        else {
+          await this.$walletSdk.onConnect(true)
+        }
+      }
+      else {
+        await this.$walletSdk.walletsConnect(this.mintNft)
+        this.onRegisterLoading = false
+        return
+      }
       if (this.isSafePalWallet && EvmCoinTypes.includes(this.connectedAccount.chain?.coinType)) {
         this.$alert({
           title: this.$tt('Tips'),
@@ -548,6 +587,7 @@ export default Vue.extend({
       // todo split this function
       this.confirmRegisterLoading = true
       await this.$walletSdk.onConnect(true)
+
       const checkAccountStatusRes = await this.checkAccountStatus()
       if (!checkAccountStatusRes) {
         this.confirmRegisterLoading = false
@@ -563,7 +603,7 @@ export default Vue.extend({
       try {
         await this.getOrderInfo()
         if (this.orderInfo.order_id) {
-          if (this.orderInfo.register_years !== this.registrationPeriod || this.orderInfo.inviter_account !== (this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : this.inviter) || this.orderInfo.channel_account !== this.me.channel || this.orderInfo.pay_token_id !== this.paymentToken.token_id || this.orderInfo.coin_type !== this.connectedAccount.chain.coinType) {
+          if (this.orderInfo.register_years !== this.registrationPeriod || this.orderInfo.inviter_account !== (this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : this.inviter) || this.orderInfo.channel_account !== this.me.channel || this.orderInfo.pay_token_id !== this.paymentToken.token_id || this.orderInfo.coin_type !== this.connectedAccount.chain.coinType || this.mintNft !== !!this.orderInfo.cross_coin_type) {
             await this.changeOrder()
             await this.getOrderInfo()
           }
@@ -608,7 +648,8 @@ export default Vue.extend({
                 this.$router.push({
                   path: `/account/register/status/${this.accountName}`,
                   query: {
-                    paid: '1'
+                    paid: '1',
+                    action: this.mintNft ? 'mintNft' : ''
                   }
                 })
               }
@@ -635,7 +676,8 @@ export default Vue.extend({
               this.$router.push({
                 path: `/account/register/status/${this.accountName}`,
                 query: {
-                  paid: '1'
+                  paid: '1',
+                  action: this.mintNft ? 'mintNft' : ''
                 }
               })
             }
@@ -653,7 +695,8 @@ export default Vue.extend({
             register_years: this.registrationPeriod,
             coin_type: this.connectedAccount.chain.coinType,
             inviter_account: this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : '',
-            channel_account: this.me.channel
+            channel_account: this.me.channel,
+            cross_coin_type: this.mintNft ? CoinType.eth : ''
           })
 
           if (!applyRegisterRes) {
@@ -705,7 +748,8 @@ export default Vue.extend({
                 this.$router.push({
                   path: `/account/register/status/${this.accountName}`,
                   query: {
-                    paid: '1'
+                    paid: '1',
+                    action: this.mintNft ? 'mintNft' : ''
                   }
                 })
               }
@@ -732,7 +776,8 @@ export default Vue.extend({
               this.$router.push({
                 path: `/account/register/status/${this.accountName}`,
                 query: {
-                  paid: '1'
+                  paid: '1',
+                  action: this.mintNft ? 'mintNft' : ''
                 }
               })
             }
@@ -778,6 +823,12 @@ export default Vue.extend({
               message: this.$tt('DAS is a smart contract that runs on the Nervos. Due to the underlying logic of the contract, the remaining amount is too low (less than 116 CKB) to send a transaction.')
             })
           }
+          else if (err.code === errno.apiErrorCodeResolveFailed) {
+            this.$alert({
+              title: this.$tt('Tips'),
+              message: this.$tt('Frequent operations. There are still transactions being processed in your wallet address, please try again after 30s.')
+            })
+          }
           else if (err.code === errno.rpcApiErrSignatureError) {
             this.signatureErrorDialogShowing = true
           }
@@ -808,12 +859,14 @@ export default Vue.extend({
 
       try {
         const res = await this.$services.account.accountInfo(toDottedStyle(this.inviter + ACCOUNT_SUFFIX))
-        if ([ACCOUNT_STATUS.registered, ACCOUNT_STATUS.onePriceSell, ACCOUNT_STATUS.auctionSell].includes(res.status)) {
+        if ([ACCOUNT_STATUS.registered, ACCOUNT_STATUS.onePriceSell, ACCOUNT_STATUS.auctionSell, ACCOUNT_STATUS.onCross].includes(res.status)) {
           this.inviterErrorTipShowing = false
-          this.inviterOnCross = false
-        }
-        else if (ACCOUNT_STATUS.onCross) {
-          this.inviterOnCross = true
+          if (res.status === ACCOUNT_STATUS.onCross) {
+            this.inviterOnCross = true
+          }
+          else {
+            this.inviterOnCross = false
+          }
         }
         else {
           this.inviterErrorTipShowing = true
@@ -825,6 +878,7 @@ export default Vue.extend({
       }
     },
     onInputInviter () {
+      this.inviter = digitalEmojiHandle(this.inviter)
       this.inviterErrorTipShowing = false
       this.inviterOnCross = false
     },

@@ -30,9 +30,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import Dialog from '~/components/Dialog.vue'
 import Button from '~/components/Button.vue'
 import { homepage } from '~~/config'
+import { isMobile } from '~/modules/tools'
+import { COMMON_KEYS } from '~/store/common'
+import { IConnectedAccount, ME_KEYS } from '~/store/me'
 
 export default Vue.extend({
   name: 'CanNotBeLockedTips',
@@ -54,12 +58,30 @@ export default Vue.extend({
       default: ''
     }
   },
+  computed: {
+    isMobile,
+    ...mapState({
+      common: COMMON_KEYS.namespace,
+      me: ME_KEYS.namespace
+    }),
+    connectedAccount (): IConnectedAccount {
+      return this.me.connectedAccount
+    }
+  },
   methods: {
     onClose () {
       this.$emit('close', false)
     },
     onRenew () {
-      window.location.href = `${homepage}/${this.account}`
+      const address = this.connectedAccount?.address
+      const chainName = this.connectedAccount?.chain?.name
+      const link = `${homepage}/${this.account}?originAddress=${address}&originChainName=${chainName}`
+      if (this.isMobile) {
+        window.location.href = link
+      }
+      else {
+        window.open(link)
+      }
     }
   }
 })

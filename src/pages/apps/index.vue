@@ -64,6 +64,11 @@ export default Vue.extend({
             href: 'https://did.top/',
             title: 'DIDTop',
             desc: this.$tt('The decentralized marketplace for .bit. (Trade with $CKB)')
+          }, {
+            icon: '/images/apps/element.svg',
+            href: 'https://element.market/collections/dotbit?ref=ECLN',
+            title: 'Element',
+            desc: this.$tt('Best aggregated NFT Marketplace for .bit, bulk trading, gas saving.')
           }]
         },
         tools: {
@@ -82,7 +87,12 @@ export default Vue.extend({
             icon: '/images/apps/link3.svg',
             href: 'https://link3.io',
             title: 'Link3',
-            desc: this.$tt('Link your .bit to Web3 World.')
+            desc: this.$tt('Build your web3 space in one link.')
+          }, {
+            icon: '/images/apps/web3did.svg',
+            href: 'https://web3did.io/',
+            title: 'Web3DID',
+            desc: this.$tt('Register and renew .bit accounts in bulk.')
           }, {
             icon: '/images/apps/about3.svg',
             href: 'https://about3.me',
@@ -93,15 +103,10 @@ export default Vue.extend({
         registrars: {
           title: this.$tt('Registrars'),
           list: [{
-            icon: '/images/apps/dename.svg',
-            href: 'https://app.dename.com/',
-            title: 'DeName',
-            desc: this.$tt('Supports bulk registration and payments in USDT, BNB, TRX, CKB.')
-          }, {
-            icon: '/images/apps/gogodas.svg',
-            href: 'https://app.gogodas.com/',
-            title: 'GoGoDAS',
-            desc: this.$tt('Supports payments in ETH, TRX, CKB, BNB, MATIC.')
+            icon: '/images/apps/superdid.svg',
+            href: 'https://superdid.id/',
+            title: 'SuperDID',
+            desc: this.$tt('SuperDID is a decentralized management service for .bit DID ecosystem.')
           }]
         }
       }

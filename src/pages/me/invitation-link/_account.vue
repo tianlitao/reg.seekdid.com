@@ -127,7 +127,7 @@ export default Vue.extend({
         }
         qrcodeImg.src = qrcodeBase64
       }
-      bgImg.src = `${config.domain}/images/me/invitation-link-bg-${this.$i18n.locale}.png`
+      bgImg.src = `${config.domain}images/me/invitation-link-bg-${this.$i18n.locale}.png`
     }
   }
 })

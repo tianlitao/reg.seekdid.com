@@ -199,6 +199,14 @@ export default Vue.extend({
   },
   mounted () {
     this.getMyAccounts()
+    const mintNft = this.$route.query.mintNft
+    if (mintNft) {
+      this.selectAccount.account = (mintNft as string)
+      this.mintNftDialogShowing = true
+      this.$router.replace({
+        query: {}
+      })
+    }
   },
   methods: {
     onSearch (value: string) {

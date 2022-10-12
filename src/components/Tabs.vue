@@ -14,15 +14,24 @@
         color="#FE61A0"
       />
       {{ item.text }}
+      <Iconfont
+        v-if="item.outlink"
+        class="tabs__button__out-link-icon"
+        name="arrow-right-up"
+        size="8"
+        color="#121314"
+      />
     </button>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { isMobile } from '~/modules/tools'
 import { dasBalance } from '~~/config'
+import { IConnectedAccount, ME_KEYS } from '~/store/me'
 
 export default Vue.extend({
   name: 'Tabs',
@@ -44,16 +53,25 @@ export default Vue.extend({
     }
   },
   computed: {
-    isMobile
+    isMobile,
+    ...mapState({
+      me: ME_KEYS.namespace
+    }),
+    connectedAccount (): IConnectedAccount {
+      return this.me.connectedAccount
+    }
   },
   methods: {
     onChange (value: string) {
       if (value === 'balance') {
+        const address = this.connectedAccount?.address
+        const chainName = this.connectedAccount?.chain?.name
+        const link = `${dasBalance}?originAddress=${address}&originChainName=${chainName}`
         if (this.isMobile) {
-          window.location.href = dasBalance
+          window.location.href = link
         }
         else {
-          window.open(dasBalance)
+          window.open(link)
         }
         return
       }
@@ -94,5 +112,11 @@ export default Vue.extend({
 
 .tabs__button__icon {
   margin-bottom: 1px;
+}
+
+.tabs__button__out-link-icon {
+  position: relative;
+  top: -10px;
+  right: -3px;
 }
 </style>

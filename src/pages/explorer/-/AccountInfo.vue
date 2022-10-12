@@ -60,7 +60,10 @@ export default Vue.extend({
       try {
         this.accountInfo = await this.$services.account.accountInfo(this.accountName)
         if (this.accountInfo.owner_chain_type === this.computedChainId && this.accountInfo.owner.toUpperCase() === this.connectedAccount.address.toUpperCase()) {
-          window.location.href = `${config.homepage}/${this.accountInfo.account}`
+          const address = this.connectedAccount?.address
+          const chainName = this.connectedAccount?.chain?.name
+          const link = `${config.homepage}/${this.accountInfo.account}?originAddress=${address}&originChainName=${chainName}`
+          window.location.href = link
         }
       }
       catch (err: any) {

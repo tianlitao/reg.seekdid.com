@@ -6,7 +6,11 @@
       closeButton
       @close="onClose"
     >
-      <div class="wallets-connect__cross-chain-tips">
+      <div v-if="mintNft">{{ $tt('You are registering a .bit NFT on Ethereum.') }}</div>
+      <div
+        v-else
+        class="wallets-connect__cross-chain-tips"
+      >
         {{ $tt('Powerful cross-chain capability is a unique feature of .bit, which means you can register and use .bit in multiple public chain environments.') }}
       </div>
       <ul class="wallets-connect__select-wallet-list">
@@ -60,7 +64,10 @@
           </span>
         </li>
       </ul>
-      <div class="wallets-connect__select-wallet-list__torus-label">
+      <div
+        v-if="!mintNft"
+        class="wallets-connect__select-wallet-list__torus-label"
+      >
         {{ $tt('Connect with social.') }}
         <a
           class="wallets-connect__select-wallet-list__torus-faq"
@@ -68,7 +75,10 @@
           target="_blank"
         >{{ $tt('Guide') }}</a>
       </div>
-      <div class="wallets-connect__select-wallet-list__torus-container">
+      <div
+        v-if="!mintNft"
+        class="wallets-connect__select-wallet-list__torus-container"
+      >
         <span
           v-for="(item, index) in torusList"
           :key="index"
@@ -179,38 +189,25 @@ export default Vue.extend({
     $gtag: {
       type: Function as PropType<(type: string, action: string, option: { [key: string]: any }) => void>,
       required: true
+    },
+    mintNft: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     const torusList = ['google', 'twitter', 'discord', 'facebook', 'torus']
 
-    const walletList = [{
-      ...ETH,
-      title: (this.$tt('Connect ETH environment') as string),
-      protocol: WalletProtocol.metaMask
-    }, {
-      ...BSC,
-      title: (this.$tt('Connect BSC environment') as string),
-      protocol: WalletProtocol.metaMask
-    }, {
-      ...Polygon,
-      title: (this.$tt('Connect Polygon environment') as string),
-      protocol: WalletProtocol.metaMask
-    }, {
-      ...TRON,
-      title: (this.$tt('Connect Tron environment') as string),
-      protocol: WalletProtocol.tronLink
-    }]
-
     return {
       ETH,
       BSC,
       LANGUAGE,
-      walletList,
       torusList,
       WalletProtocol,
       config,
-      currentLogin: ''
+      currentLogin: '',
+      hardwareWalletTipsShowing: false,
+      currentWallet: null
     }
   },
   computed: {
@@ -221,14 +218,34 @@ export default Vue.extend({
     loggedIn (): boolean {
       return !!this.me.connectedAccount.address
     },
-    hardwareWalletTipsShowing (): boolean {
-      return this.common.hardwareWalletTipsShow
-    },
     torusLoginSuccessTipsShowing (): boolean {
       return !!this.common.torusLoginSuccessTipsShow
     },
     connectedAccount (): IConnectedAccount {
       return this.me.connectedAccount
+    },
+    walletList (): any {
+      return this.mintNft ? [{
+        ...ETH,
+        title: (this.$tt('Connect ETH environment') as string),
+        protocol: WalletProtocol.metaMask
+      }] : [{
+        ...ETH,
+        title: (this.$tt('Connect ETH environment') as string),
+        protocol: WalletProtocol.metaMask
+      }, {
+        ...BSC,
+        title: (this.$tt('Connect BSC environment') as string),
+        protocol: WalletProtocol.metaMask
+      }, {
+        ...Polygon,
+        title: (this.$tt('Connect Polygon environment') as string),
+        protocol: WalletProtocol.metaMask
+      }, {
+        ...TRON,
+        title: (this.$tt('Connect Tron environment') as string),
+        protocol: WalletProtocol.tronLink
+      }]
     }
   },
   beforeDestroy () {
@@ -239,6 +256,13 @@ export default Vue.extend({
       if (this.currentLogin) {
         return
       }
+
+      if (this.common.hardwareWalletTipsShow) {
+        this.hardwareWalletTipsShowing = true
+        this.currentWallet = wallet
+        return
+      }
+
       this.$gtag('event', 'click', {
         event_category: 'connect wallet',
         event_label: wallet.symbol,
@@ -275,6 +299,10 @@ export default Vue.extend({
     },
     closeHardwareWalletTips () {
       this.$store?.commit(COMMON_KEYS.setHardwareWalletTipsShow, false)
+      this.hardwareWalletTipsShowing = false
+      if (this.currentWallet) {
+        this.onConnect(this.currentWallet)
+      }
     },
     closeTorusLoginSuccessTips () {
       this.$store?.commit(COMMON_KEYS.setTorusLoginSuccessTipsShow, false)

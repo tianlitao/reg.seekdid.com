@@ -29,6 +29,7 @@ import config from '~~/config'
 import Dialog from '~/components/Dialog.vue'
 import { TOKEN_DECIMAL_PLACES } from '~/constant'
 import Button from '~/components/Button.vue'
+import { IConnectedAccount, ME_KEYS } from '~/store/me'
 
 export default Vue.extend({
   name: 'DasBalanceInsufficientDialog',
@@ -58,10 +59,14 @@ export default Vue.extend({
   computed: {
     isMobile,
     ...mapState({
-      common: COMMON_KEYS.namespace
+      common: COMMON_KEYS.namespace,
+      me: ME_KEYS.namespace
     }),
     recommendedDepositAmount (): string {
       return thousandSplit(new Decimal(this.registrationFees).add(200), TOKEN_DECIMAL_PLACES)
+    },
+    connectedAccount (): IConnectedAccount {
+      return this.me.connectedAccount
     }
   },
   methods: {
@@ -70,11 +75,14 @@ export default Vue.extend({
       this.$emit('close', false)
     },
     onManageBalance () {
+      const address = this.connectedAccount?.address
+      const chainName = this.connectedAccount?.chain?.name
+      const link = `${config.dasBalance}?originAddress=${address}&originChainName=${chainName}`
       if (this.isMobile) {
-        window.location.href = config.dasBalance
+        window.location.href = link
       }
       else {
-        window.open(config.dasBalance)
+        window.open(link)
       }
       this.onClose()
     }

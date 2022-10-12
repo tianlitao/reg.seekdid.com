@@ -39,6 +39,7 @@
                 color="#FF6B6B"
               />
               {{ $tt('账号回收提示', { days: countdownToRecoveryDays }) }}
+              <a class="account-status__status-text__renew-link">{{ $tt('Renew now')}}</a>
             </span>
             <span
               v-else-if="accountInfo.status === ACCOUNT_STATUS.onePriceSell"
@@ -124,7 +125,7 @@ export default Vue.extend({
     },
     isSubAccount (): boolean {
       return SUB_ACCOUNT_REG_EXP.test(this.accountInfo.account)
-    }
+    },
   }
 })
 </script>
@@ -197,5 +198,12 @@ export default Vue.extend({
 
 .account-status__account-name__sub-account {
   color: $warn-font-color;
+}
+
+.account-status__status-text__renew-link {
+  color: $link-font-color;
+  &:hover {
+    color: $link-hover-font-color;
+  }
 }
 </style>

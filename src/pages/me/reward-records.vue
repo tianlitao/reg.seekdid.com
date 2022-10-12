@@ -29,7 +29,10 @@
             class="reward-records__tbody__tr"
           >
             <td class="reward-records__tbody__td">
-              {{ record.reward }}
+              <div>
+                <div>{{ record.reward }}</div>
+                <div class="reward-records-time">{{ record.invitation_time }}</div>
+              </div>
             </td>
             <td class="reward-records__tbody__td reward-records__thead__th__align-right">
               <nuxt-link
@@ -83,6 +86,7 @@ import { IConnectedAccount, ME_KEYS } from '~/store/me'
 import Breadcrumb from '~/components/Breadcrumb.vue'
 import { DEFAULT_PAGE_SIZE } from '~/constant'
 import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
+import { formatDateTime } from '~/modules/tools'
 
 export default Vue.extend({
   name: 'RewardRecord',
@@ -152,7 +156,8 @@ export default Vue.extend({
         this.rewardRecords = res.list && res.list.map((item: IMyRewardsResInviteList) => {
           return {
             ...item,
-            reward: thousandSplit(shrinkUnit(item.reward, CKB.decimals))
+            reward: thousandSplit(shrinkUnit(item.reward, CKB.decimals)),
+            invitation_time: formatDateTime(item.invitation_time)
           }
         })
         this.loadingShowing = false
@@ -269,5 +274,10 @@ export default Vue.extend({
 
 .reward-records__table__link__sub-account {
   color: $warn-font-color;
+}
+
+.reward-records-time {
+  font-size: 12px;
+  color: $third-font-color;
 }
 </style>

@@ -39,6 +39,7 @@ export default Vue.extend({
   bottom: 0;
   display: flex;
   width: 100%;
+  z-index: 3;
   height: calc(48px + constant(safe-area-inset-bottom));
   height: calc(48px + env(safe-area-inset-bottom));
   background-color: $white;

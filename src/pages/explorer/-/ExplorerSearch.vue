@@ -24,6 +24,7 @@
       <Button
         v-show="value"
         class="explorer-search__button"
+        :loading="loading"
         status="primary"
         type="submit"
       >
@@ -37,6 +38,7 @@
 import Vue from 'vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import Button from '~/components/Button.vue'
+import { digitalEmojiHandle } from '~/modules/tools'
 
 export default Vue.extend({
   name: 'ExplorerSearch',
@@ -53,6 +55,11 @@ export default Vue.extend({
     value: {
       type: String,
       default: ''
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+      required: true
     }
   },
   computed: {
@@ -61,7 +68,11 @@ export default Vue.extend({
       return {
         ...this.$listeners,
         input (event: Event) {
-          _vm.$emit('input', (event.target as HTMLInputElement).value)
+          const _value = (event.target as HTMLInputElement).value
+          _vm.$emit('input', digitalEmojiHandle(_value))
+        },
+        change (event: Event) {
+          _vm.$emit('change', (event.target as HTMLInputElement).value)
         },
         search (event: Event) {
           const _value = (event.target as HTMLInputElement).value
@@ -69,7 +80,7 @@ export default Vue.extend({
             return
           }
           ;(event.target as HTMLInputElement).blur()
-          _vm.$emit('search', _value)
+          _vm.$emit('search', digitalEmojiHandle(_value))
         }
       }
     }

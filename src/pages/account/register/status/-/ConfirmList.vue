@@ -1,178 +1,188 @@
 <template>
-  <ul class="confirm-list">
-    <li
-      class="confirm-list__confirm-item confirm-list__margin-bottom-12"
-      :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registeringLockedAccount }"
+  <div class="confirm-list">
+    <ul
+      class="confirm-list__container"
+      :class="{ 'confirm-list__container__mini': mini }"
     >
-      <div class="confirm-list__confirm-item__label">
-        <div>1. {{ $tt('Confirm payment') }}</div>
-        <template v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['1']">
+      <li
+        id="1"
+        class="confirm-list__confirm-item confirm-list__margin-bottom-12"
+        :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registeringLockedAccount }"
+      >
+        <div class="confirm-list__confirm-item__label">
+          <div>1. {{ $tt('Confirm payment') }}</div>
+          <template v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['1']">
+            <a
+              class="confirm-list__confirm-item__link"
+              :href="`${TOKEN_ID_TO_CHAIN[accountInfo.register_tx_map['1'].token_id].explorerTrx}${accountInfo.register_tx_map['1'].hash}`"
+              target="_blank"
+            >
+              <span>{{ collapseString(accountInfo.register_tx_map['1'].hash, 8, 8) }}</span>
+              <Iconfont name="arrow-right" color="#57596B" size="12" />
+            </a>
+          </template>
+        </div>
+        <span class="confirm-list__margin-top-3">
+          <Iconfont
+            v-if="accountInfo.status >= ACCOUNT_STATUS.registeringLockedAccount"
+            name="check-strong"
+            color="#22C493"
+          />
+          <span
+            v-else
+            class="confirm-list__loading-icon"
+          >
+            <Iconfont name="loading" color="#D5D5D5" size="18" />
+          </span>
+        </span>
+      </li>
+      <li
+        id="2"
+        class="confirm-list__confirm-item confirm-list__margin-bottom-12"
+        :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registering }"
+      >
+        <div class="confirm-list__confirm-item__label">
+          <div>2. {{ $tt('Apply for registration in private') }}</div>
           <a
+            v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['2']"
             class="confirm-list__confirm-item__link"
-            :href="`${TOKEN_ID_TO_CHAIN[accountInfo.register_tx_map['1'].token_id].explorerTrx}${accountInfo.register_tx_map['1'].hash}`"
+            :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['2'].hash}`"
             target="_blank"
           >
-            <span>{{ collapseString(accountInfo.register_tx_map['1'].hash, 8, 8) }}</span>
+            <span>{{ collapseString(accountInfo.register_tx_map['2'].hash, 8, 8) }}</span>
             <Iconfont name="arrow-right" color="#57596B" size="12" />
           </a>
-        </template>
-      </div>
-      <span class="confirm-list__margin-top-3">
-        <Iconfont
-          v-if="accountInfo.status >= ACCOUNT_STATUS.registeringLockedAccount"
-          name="check-strong"
-          color="#22C493"
-        />
+        </div>
         <span
-          v-else
-          class="confirm-list__loading-icon"
+          v-if="accountInfo.status > ACCOUNT_STATUS.registeringPaymentConfirm"
+          class="confirm-list__margin-top-3"
         >
-          <Iconfont name="loading" color="#D5D5D5" size="18" />
+          <Iconfont
+            v-if="accountInfo.status >= ACCOUNT_STATUS.registering"
+            name="check-strong"
+            color="#22C493"
+          />
+          <span
+            v-else
+            class="confirm-list__loading-icon"
+          >
+            <Iconfont name="loading" color="#D5D5D5" size="18" />
+          </span>
         </span>
-      </span>
-    </li>
-    <li
-      class="confirm-list__confirm-item confirm-list__margin-bottom-12"
-      :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registering }"
-    >
-      <div class="confirm-list__confirm-item__label">
-        <div>2. {{ $tt('Apply for registration in private') }}</div>
-        <a
-          v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['2']"
-          class="confirm-list__confirm-item__link"
-          :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['2'].hash}`"
-          target="_blank"
-        >
-          <span>{{ collapseString(accountInfo.register_tx_map['2'].hash, 8, 8) }}</span>
-          <Iconfont name="arrow-right" color="#57596B" size="12" />
-        </a>
-      </div>
-      <span
-        v-if="accountInfo.status > ACCOUNT_STATUS.registeringPaymentConfirm"
-        class="confirm-list__margin-top-3"
+      </li>
+      <li
+        id="3"
+        class="confirm-list__confirm-item confirm-list__margin-bottom-12"
+        :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registeringIncludeProposal }"
       >
-        <Iconfont
-          v-if="accountInfo.status >= ACCOUNT_STATUS.registering"
-          name="check-strong"
-          color="#22C493"
-        />
+        <div class="confirm-list__confirm-item__label">
+          <div>3. {{ $tt('Reveal the account name on the chain') }}</div>
+          <a
+            v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['3']"
+            class="confirm-list__confirm-item__link"
+            :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['3'].hash}`"
+            target="_blank"
+          >
+            <span>{{ collapseString(accountInfo.register_tx_map['3'].hash, 8, 8) }}</span>
+            <Iconfont name="arrow-right" color="#57596B" size="12" />
+          </a>
+        </div>
         <span
-          v-else
-          class="confirm-list__loading-icon"
+          v-if="accountInfo.status > ACCOUNT_STATUS.registeringLockedAccount"
+          class="confirm-list__margin-top-3"
         >
-          <Iconfont name="loading" color="#D5D5D5" size="18" />
+          <Iconfont
+            v-if="accountInfo.status >= ACCOUNT_STATUS.registeringIncludeProposal"
+            name="check-strong"
+            color="#22C493"
+          />
+          <span
+            v-else
+            class="confirm-list__loading-icon"
+          >
+            <Iconfont name="loading" color="#D5D5D5" size="18" />
+          </span>
         </span>
-      </span>
-    </li>
-    <li
-      class="confirm-list__confirm-item confirm-list__margin-bottom-12"
-      :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registeringIncludeProposal }"
-    >
-      <div class="confirm-list__confirm-item__label">
-        <div>3. {{ $tt('Reveal the account name on the chain') }}</div>
-        <a
-          v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['3']"
-          class="confirm-list__confirm-item__link"
-          :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['3'].hash}`"
-          target="_blank"
-        >
-          <span>{{ collapseString(accountInfo.register_tx_map['3'].hash, 8, 8) }}</span>
-          <Iconfont name="arrow-right" color="#57596B" size="12" />
-        </a>
-      </div>
-      <span
-        v-if="accountInfo.status > ACCOUNT_STATUS.registeringLockedAccount"
-        class="confirm-list__margin-top-3"
+      </li>
+      <li
+        id="4"
+        class="confirm-list__confirm-item confirm-list__margin-bottom-12"
+        :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registeringConfirmProposal }"
       >
-        <Iconfont
-          v-if="accountInfo.status >= ACCOUNT_STATUS.registeringIncludeProposal"
-          name="check-strong"
-          color="#22C493"
-        />
+        <div class="confirm-list__confirm-item__label">
+          <div>4. {{ $tt('Submit a proposal') }}</div>
+          <a
+            v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['4']"
+            class="confirm-list__confirm-item__link"
+            :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['4'].hash}`"
+            target="_blank"
+          >
+            <span>{{ collapseString(accountInfo.register_tx_map['4'].hash, 8, 8) }}</span>
+            <Iconfont name="arrow-right" color="#57596B" size="12" />
+          </a>
+        </div>
         <span
-          v-else
-          class="confirm-list__loading-icon"
+          v-if="accountInfo.status > ACCOUNT_STATUS.registering"
+          class="confirm-list__margin-top-3"
         >
-          <Iconfont name="loading" color="#D5D5D5" size="18" />
+          <Iconfont
+            v-if="accountInfo.status >= ACCOUNT_STATUS.registeringConfirmProposal"
+            name="check-strong"
+            color="#22C493"
+          />
+          <span
+            v-else
+            class="confirm-list__loading-icon"
+          >
+            <Iconfont name="loading" color="#D5D5D5" size="18" />
+          </span>
         </span>
-      </span>
-    </li>
-    <li
-      class="confirm-list__confirm-item confirm-list__margin-bottom-12"
-      :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status >= ACCOUNT_STATUS.registeringConfirmProposal }"
-    >
-      <div class="confirm-list__confirm-item__label">
-        <div>4. {{ $tt('Submit a proposal') }}</div>
-        <a
-          v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['4']"
-          class="confirm-list__confirm-item__link"
-          :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['4'].hash}`"
-          target="_blank"
-        >
-          <span>{{ collapseString(accountInfo.register_tx_map['4'].hash, 8, 8) }}</span>
-          <Iconfont name="arrow-right" color="#57596B" size="12" />
-        </a>
-      </div>
-      <span
-        v-if="accountInfo.status > ACCOUNT_STATUS.registering"
-        class="confirm-list__margin-top-3"
+      </li>
+      <li
+        id="5"
+        class="confirm-list__confirm-item"
+        :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status === ACCOUNT_STATUS.registered || currentStep === MintEthNftStep.two }"
       >
-        <Iconfont
+        <div class="confirm-list__confirm-item__label">
+          <div>5. {{ $tt('Proposal approved') }}</div>
+          <a
+            v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['5']"
+            class="confirm-list__confirm-item__link"
+            :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['5'].hash}`"
+            target="_blank"
+          >
+            <span>{{ collapseString(accountInfo.register_tx_map['5'].hash, 8, 8) }}</span>
+            <Iconfont name="arrow-right" color="#57596B" size="12" />
+          </a>
+        </div>
+        <span
           v-if="accountInfo.status >= ACCOUNT_STATUS.registeringConfirmProposal"
-          name="check-strong"
-          color="#22C493"
-        />
-        <span
-          v-else
-          class="confirm-list__loading-icon"
+          class="confirm-list__margin-top-3"
         >
-          <Iconfont name="loading" color="#D5D5D5" size="18" />
+          <Iconfont
+            v-if="accountInfo.status === ACCOUNT_STATUS.registered || currentStep === MintEthNftStep.two"
+            name="check-strong"
+            color="#22C493"
+          />
+          <span
+            v-else
+            class="confirm-list__loading-icon"
+          >
+            <Iconfont name="loading" color="#D5D5D5" size="18" />
+          </span>
         </span>
-      </span>
-    </li>
-    <li
-      class="confirm-list__confirm-item"
-      :class="{ 'confirm-list__confirm-item_succeed': accountInfo.status === ACCOUNT_STATUS.registered }"
-    >
-      <div class="confirm-list__confirm-item__label">
-        <div>5. {{ $tt('Proposal approved. Registered successfully') }}</div>
-        <a
-          v-if="accountInfo.register_tx_map && accountInfo.register_tx_map['5']"
-          class="confirm-list__confirm-item__link"
-          :href="`${CKB.explorerTrx}${accountInfo.register_tx_map['5'].hash}`"
-          target="_blank"
-        >
-          <span>{{ collapseString(accountInfo.register_tx_map['5'].hash, 8, 8) }}</span>
-          <Iconfont name="arrow-right" color="#57596B" size="12" />
-        </a>
-      </div>
-      <span
-        v-if="accountInfo.status >= ACCOUNT_STATUS.registeringConfirmProposal"
-        class="confirm-list__margin-top-3"
-      >
-        <Iconfont
-          v-if="accountInfo.status === ACCOUNT_STATUS.registered"
-          name="check-strong"
-          color="#22C493"
-        />
-        <span
-          v-else
-          class="confirm-list__loading-icon"
-        >
-          <Iconfont name="loading" color="#D5D5D5" size="18" />
-        </span>
-      </span>
-    </li>
-  </ul>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { ISearchAccount } from '~/services/Explorer'
-import { ACCOUNT_STATUS } from '~/constant'
+import { ACCOUNT_STATUS, MintEthNftStep } from '~/constant'
 import { ChainTypeToChain, BSC, Polygon, CKB, TOKEN_ID_TO_CHAIN } from '~/constant/chain'
-import { collapseString } from '~/modules/tools'
+import { collapseString, sleep } from '~/modules/tools'
 
 export default Vue.extend({
   name: 'ConfirmList',
@@ -183,7 +193,9 @@ export default Vue.extend({
     accountInfo: {
       type: Object as PropType<ISearchAccount>,
       required: true
-    }
+    },
+    currentStep: Number,
+    mini: Boolean
   },
   computed: {
     confirmPaymentExplorerTrx (): string {
@@ -199,8 +211,17 @@ export default Vue.extend({
       return ''
     }
   },
+  watch: {
+    accountInfo () {
+      this.scrollIntoView()
+    }
+  },
+  mounted () {
+    this.scrollIntoView()
+  },
   data () {
     return {
+      MintEthNftStep,
       CKB,
       ACCOUNT_STATUS,
       ChainTypeToChain,
@@ -208,7 +229,31 @@ export default Vue.extend({
     }
   },
   methods: {
-    collapseString
+    collapseString,
+    async scrollIntoView () {
+      let id = '1'
+      const status = this.accountInfo.status
+      if (status >= ACCOUNT_STATUS.registeringLockedAccount) {
+        id = '1'
+      }
+      if (status >= ACCOUNT_STATUS.registering) {
+        id = '2'
+      }
+      if (status >= ACCOUNT_STATUS.registeringIncludeProposal) {
+        id = '3'
+      }
+      if (status >= ACCOUNT_STATUS.registeringConfirmProposal) {
+        id = '4'
+      }
+      if (status === ACCOUNT_STATUS.registered || status === ACCOUNT_STATUS.onCross) {
+        id = '5'
+      }
+      await sleep(500)
+      const rollDom = document.getElementById(id)
+      rollDom?.scrollIntoView({
+        block: 'start'
+      })
+    }
   }
 })
 </script>
@@ -218,9 +263,18 @@ export default Vue.extend({
 
 .confirm-list {
   margin-bottom: 8px;
-  padding: 14px 12px 12px 16px;
+  padding: 14px 2px 12px 16px;
   background: $normal-color;
   border-radius: 12px;
+}
+
+.confirm-list__container {
+  padding-right: 10px;
+}
+
+.confirm-list__container__mini {
+  overflow-y: scroll;
+  height: 104px;
 }
 
 .confirm-list__confirm-item {

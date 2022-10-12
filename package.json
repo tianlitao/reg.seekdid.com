@@ -1,7 +1,6 @@
 {
   "name": "app.did.id",
-  "version": "1.0.4",
-  "private": true,
+  "version": "1.1.4",
   "scripts": {
     "predev": "npm run i18n",
     "dev": "nuxt",
@@ -22,6 +21,7 @@
     "@metamask/eth-sig-util": "^4.0.0",
     "@toruslabs/torus-embed": "^1.22.2",
     "abc-copy": "^0.0.11",
+    "add-to-calendar-button": "^1.14.4",
     "axios": "^0.21.1",
     "blake2b": "^2.1.4",
     "bn.js": "^5.2.0",
@@ -34,7 +34,6 @@
     "decimal.js": "^10.3.1",
     "grapheme-splitter": "^1.0.4",
     "i18n-abc": "^0.5.0",
-    "idna-uts46-hx": "^3.4.0",
     "js-cookie": "^2.2.1",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^2.15.7",
@@ -48,6 +47,7 @@
   "devDependencies": {
     "@nuxt/types": "^2.15.7",
     "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/composition-api": "^0.33.1",
     "@nuxtjs/eslint-config-typescript": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/google-gtag": "^1.0.4",

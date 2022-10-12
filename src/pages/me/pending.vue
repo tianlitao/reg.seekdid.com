@@ -1,9 +1,9 @@
 <template>
-  <div class="conversion-processing">
-    <Breadcrumb class="conversion-processing__breadcrumb" :items="breadcrumbItems" />
-    <div v-if="fetchDataLoading" class="conversion-processing__loading">
+  <div class="pending">
+    <Breadcrumb class="pending__breadcrumb" :items="breadcrumbItems" />
+    <div v-if="fetchDataLoading" class="pending__loading">
       <StatusTip
-        class="conversion-processing__loading__tip"
+        class="pending__loading__tip"
         icon="⏳"
         iconSize="72"
         :tip="$tt('Loading')"
@@ -11,17 +11,18 @@
       />
     </div>
     <template v-else>
-      <ul class="conversion-processing__list">
+      <RegisteringAccounts></RegisteringAccounts>
+      <ul class="pending__list">
         <li
           v-for="account in processingNfts"
           :key="account.account"
-          class="conversion-processing__list__item"
-          :class="{ 'conversion-processing__list__item__disabled': account.cross_direction === CrossDirection.toCKB }"
+          class="pending__list__item"
+          :class="{ 'pending__list__item__disabled': account.cross_direction === CrossDirection.toCKB }"
           @click="onClickAccount(account)"
         >
           <div class="account-status__list__container">
             <IconImage
-              class="conversion-processing__list__logo"
+              class="pending__list__logo"
               :url="`${IDENTICON_SERVE}${account.account}`"
               :alt="account.account"
               :size="44"
@@ -29,7 +30,7 @@
             />
             <span>
 <!--              <template v-if="isSubAccount(account.account)">-->
-<!--                {{ account.account.split('.')[1] }}<span class="conversion-processing__list__sub-account">#{{ account.account.split('.')[0] }}</span>.{{ account.account.split('.')[2] }}-->
+<!--                {{ account.account.split('.')[1] }}<span class="pending__list__sub-account">#{{ account.account.split('.')[0] }}</span>.{{ account.account.split('.')[2] }}-->
 <!--              </template>-->
 <!--              <template v-else>-->
 <!--                {{ account.account }}-->
@@ -38,25 +39,25 @@
               <div>
                 <span
                   v-if="account.cross_direction === CrossDirection.fromCKB"
-                  class="conversion-processing__list__status-text conversion-processing__list__status-text_from-ckb"
+                  class="pending__list__status-text pending__list__status-text_from-ckb"
                 >
                   {{ $tt('Converting to NFT') }}
                 </span>
                 <template v-if="account.cross_direction === CrossDirection.toCKB">
                   <span
-                    class="conversion-processing__list__status-text conversion-processing__list__status-text_to-ckb"
+                    class="pending__list__status-text pending__list__status-text_to-ckb"
                   >
                     {{ $tt('Converting to a normal .bit') }}
                   </span>
                   <a
                     v-if="account.recycle_hash"
-                    class="conversion-processing__list__trx-id"
+                    class="pending__list__trx-id"
                     :href="`${ETH.explorerTrx}${account.recycle_hash}`"
                     target="_blank"
                   >
                     {{ collapseString(account.recycle_hash, 5, 5) }}
                     <Iconfont
-                      class="conversion-processing__list__trx-id__icon"
+                      class="pending__list__trx-id__icon"
                       name="arrow-right"
                       color="#B0B8BF"
                       size="14"
@@ -68,9 +69,9 @@
           </div>
           <div
             v-if="account.cross_direction === CrossDirection.fromCKB"
-            class="conversion-processing__list__status"
+            class="pending__list__status"
           >
-            <span class="conversion-processing__list__mint">{{ $tt('Mint now') }}</span>
+            <span class="pending__list__mint">{{ $tt('Mint now') }}</span>
             <Iconfont
               name="arrow-right"
               color="#121314"
@@ -79,7 +80,7 @@
           </div>
         </li>
       </ul>
-      <div class="conversion-processing__no-more">
+      <div class="pending__no-more">
         {{ $tt('No more') }}
       </div>
     </template>
@@ -111,6 +112,7 @@ import MintCompleted from '~/pages/me/-/MintCompleted.vue'
 import MintNft from '~/pages/me/-/MintNft.vue'
 import { ETH } from '~/constant/chain'
 import { SUB_ACCOUNT_REG_EXP } from '~/constant/subAccount'
+import RegisteringAccounts from '~/pages/me/-/RegisteringAccounts.vue'
 
 export default Vue.extend({
   name: 'ConversionProcessing',
@@ -120,7 +122,8 @@ export default Vue.extend({
     Iconfont,
     Breadcrumb,
     MintCompleted,
-    MintNft
+    MintNft,
+    RegisteringAccounts
   },
   computed: {
     ...mapState({
@@ -134,7 +137,7 @@ export default Vue.extend({
         text: this.$tt('My'),
         href: '/me'
       }, {
-        text: this.$tt('Converting')
+        text: this.$tt('Pending')
       }]
     }
   },
@@ -203,11 +206,11 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import "src/assets/variables";
 
-.conversion-processing {
+.pending {
   flex: 1;
 }
 
-.conversion-processing__loading {
+.pending__loading {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -215,15 +218,15 @@ export default Vue.extend({
   margin: 0;
 }
 
-.conversion-processing__loading__tip {
+.pending__loading__tip {
   font-weight: 600;
 }
 
-.conversion-processing__list {
-  padding: 12px 12px 0 12px;
+.pending__list {
+  padding: 0 12px;
 }
 
-.conversion-processing__list__item {
+.pending__list__item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -241,7 +244,7 @@ export default Vue.extend({
   }
 }
 
-.conversion-processing__list__item__disabled {
+.pending__list__item__disabled {
   cursor: no-drop;
   background: $white !important;
 }
@@ -258,11 +261,11 @@ export default Vue.extend({
   line-height: 21px;
 }
 
-.conversion-processing__list__logo {
+.pending__list__logo {
   margin-right: 12px;
 }
 
-.conversion-processing__list__status {
+.pending__list__status {
   display: flex;
   align-items: center;
   flex: none;
@@ -275,29 +278,29 @@ export default Vue.extend({
   }
 }
 
-.conversion-processing__list__status-text {
+.pending__list__status-text {
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: 500;
   font-size: $font-size-12;
 }
 
-.conversion-processing__list__status-text_to-ckb {
+.pending__list__status-text_to-ckb {
   color: $success-font-color;
   background: #D6EFE7;
 }
 
-.conversion-processing__list__status-text_from-ckb {
+.pending__list__status-text_from-ckb {
   color: $primary-color;
   background: rgba(192, 203, 246, 0.57);
 }
 
-.conversion-processing__list__mint {
+.pending__list__mint {
   display: flex;
   margin-right: -8px;
 }
 
-.conversion-processing__no-more {
+.pending__no-more {
   padding: 16px 0;
   text-align: center;
   font-size: 13px;
@@ -305,11 +308,11 @@ export default Vue.extend({
   color: $assist-font-color;
 }
 
-.conversion-processing__breadcrumb {
+.pending__breadcrumb {
   padding: 16px 12px 4px 12px;
 }
 
-.conversion-processing__list__trx-id {
+.pending__list__trx-id {
   display: flex;
   align-items: center;
   justify-content: left;
@@ -320,11 +323,11 @@ export default Vue.extend({
   margin-top: 2px;
 }
 
-.conversion-processing__list__trx-id__icon {
+.pending__list__trx-id__icon {
   margin-left: -2px;
 }
 
-.conversion-processing__list__sub-account {
+.pending__list__sub-account {
   color: $warn-font-color;
 }
 </style>

@@ -17,7 +17,15 @@
         <div class="mint-nft__desc__rule">
           <span>2.</span>
           <span>
-            {{ $tt('After Step1, the data stored in the .bit will be cleared, and it can’t be cancelled. You can see it in the list of "Converting".') }}
+            <i18n
+              tag="span"
+              path="转换提示"
+              :i18nkey="$tt('转换提示')"
+            >
+              <span slot="tips" class="mint-nft__desc__rule__step2__tips">
+                {{ $tt("After Step1, it can't be cancelled.") }}
+              </span>
+            </i18n>
             <a
               class="mint-nft__faq"
               :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit-ethereum-nft/482' : 'https://talk.did.id/t/convert-your-bit-to-nft-on-ethereum-now/481'"
@@ -30,7 +38,7 @@
         <div class="mint-nft__setp__title">
           <span class="mint-nft__setp__tag">{{ $tt('Step1') }}</span>
         </div>
-        <template v-if="currentStep === Step.one">
+        <template v-if="currentStep === MintEthNftStep.one">
           <template v-if="!locking">
             <Button
               block
@@ -93,7 +101,7 @@
         <template v-if="!minting">
           <Button
             block
-            :disabled="currentStep === Step.one"
+            :disabled="currentStep === MintEthNftStep.one"
             :loading="mintLoading"
             shape="round"
             status="primary"
@@ -114,6 +122,12 @@
             />
           </span>
           <span class="mint-nft__setp__processing__title">{{ $tt('Processing') }}</span>
+        </div>
+        <div
+          v-if="mintHash"
+          class="mint-nft__try-again"
+        >
+          <span @click="mintNft">{{ $tt('Exceed 24 hours? Try again') }}</span>
         </div>
         <div
           v-if="mintHash"
@@ -154,27 +168,11 @@ import errno from '~/constant/errno'
 import { IConnectedAccount, ME_KEYS } from '~/store/me'
 import { CKB, ETH, NEW_LOCK_SCRIPT_TYPE } from '~/constant/chain'
 import { collapseString, mmJsonHashAndChainIdHex, sleep } from '~/modules/tools'
-import { CrossDirection, CYCLE_CALL_FUNCTION_TIME } from '~/constant'
+import { CrossDirection, CYCLE_CALL_FUNCTION_TIME, MintEthNftStatus, MintEthNftStep } from '~/constant'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import CanNotBeLockedTips from '~/pages/me/-/CanNotBeLockedTips.vue'
 import NotOwnerTips from '~/components/NotOwnerTips.vue'
 import NoEthereumTips from '~/pages/me/-/NoEthereumTips.vue'
-
-enum Step {
-  one = 1,
-  two = 2,
-  succeed = 3,
-}
-
-enum MintStatus {
-  lockPending = 0,
-  lockConfirm = 1,
-  lockRejected = 2,
-  mintSign = 3,
-  mintPending = 4,
-  mintConfirm = 5,
-  mintFailed = 6
-}
 
 export default Vue.extend({
   name: 'MintNft',
@@ -204,10 +202,10 @@ export default Vue.extend({
     return {
       CKB,
       ETH,
-      Step,
+      MintEthNftStep,
       LANGUAGE,
       disabled: true,
-      currentStep: Step.one,
+      currentStep: MintEthNftStep.one,
       locking: false,
       minting: false,
       lockLoading: false,
@@ -239,7 +237,7 @@ export default Vue.extend({
   methods: {
     collapseString,
     onClose () {
-      this.currentStep = Step.one
+      this.currentStep = MintEthNftStep.one
       this.locking = false
       this.minting = false
       this.lockLoading = false
@@ -271,39 +269,39 @@ export default Vue.extend({
             this.mintHash = res.mint_hash
           }
           switch (res.status) {
-            case MintStatus.lockPending:
-              this.currentStep = Step.one
+            case MintEthNftStatus.lockPending:
+              this.currentStep = MintEthNftStep.one
               this.locking = true
               break
-            case MintStatus.lockConfirm:
-              this.currentStep = Step.one
+            case MintEthNftStatus.lockConfirm:
+              this.currentStep = MintEthNftStep.one
               this.locking = true
               this.$emit('updateDirectionList')
               break
-            case MintStatus.lockRejected:
-              this.currentStep = Step.one
+            case MintEthNftStatus.lockRejected:
+              this.currentStep = MintEthNftStep.one
               this.locking = false
               clearTimeout(this.checkMintStatusTimer)
               break
-            case MintStatus.mintSign:
-              this.currentStep = Step.two
+            case MintEthNftStatus.mintSign:
+              this.currentStep = MintEthNftStep.two
               this.locking = false
               this.$emit('updateDirectionList')
               clearTimeout(this.checkMintStatusTimer)
               break
-            case MintStatus.mintPending:
-              this.currentStep = Step.two
+            case MintEthNftStatus.mintPending:
+              this.currentStep = MintEthNftStep.two
               this.minting = true
               break
-            case MintStatus.mintConfirm:
-              this.currentStep = Step.succeed
+            case MintEthNftStatus.mintConfirm:
+              this.currentStep = MintEthNftStep.succeed
               this.minting = false
               clearTimeout(this.checkMintStatusTimer)
               this.$emit('completed')
               this.onClose()
               break
-            case MintStatus.mintFailed:
-              this.currentStep = Step.two
+            case MintEthNftStatus.mintFailed:
+              this.currentStep = MintEthNftStep.two
               this.minting = false
               clearTimeout(this.checkMintStatusTimer)
               break
@@ -448,6 +446,12 @@ export default Vue.extend({
               message: this.$tt('Other requests for the wallet are not processed, please try again after processing')
             })
           }
+          else if (err.message.includes('execution reverted: GS026')) {
+            this.$alert({
+              title: this.$tt('Tips'),
+              message: this.$tt('The transaction is still processing. Please try again after 24 hours.')
+            })
+          }
           else {
             this.$alert({
               title: this.$tt('Error'),
@@ -459,7 +463,7 @@ export default Vue.extend({
       finally {
         this.mintLoading = false
       }
-    },
+    }
     // async mintNft () {
     //   this.mintLoading = true
     //   await this.$walletSdk.onConnect(true)
@@ -612,6 +616,10 @@ export default Vue.extend({
   hyphens: auto;
 }
 
+.mint-nft__desc__rule__step2__tips {
+  color: $error-font-color;
+}
+
 .mint-nft__setp__trx-hash {
   display: flex;
   justify-content: center;
@@ -630,5 +638,19 @@ export default Vue.extend({
 
 .mint-nft__setp__trx-id__icon {
   margin-left: -2px;
+}
+
+.mint-nft__try-again {
+  text-align: center;
+  margin-top: 12px;
+
+  span {
+    color: $link-font-color;
+    cursor: pointer;
+
+    &:hover {
+      color: $link-hover-font-color;
+    }
+  }
 }
 </style>

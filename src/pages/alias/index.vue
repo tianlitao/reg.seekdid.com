@@ -113,7 +113,7 @@
     </div>
     <a
       class="reverse__action__faq"
-      :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit/400' : ' https://talk.did.id/t/bit-alias-comes/401'"
+      :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit/400#h-8' : ' https://talk.did.id/t/bit-alias-comes/401#reasons-for-failure-8'"
     >
       <span class="reverse__action__faq__text">
         <span class="reverse__action__faq__icon">📖</span>
@@ -191,7 +191,7 @@
         class="reverse__ineffective-faq__link"
         :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit/400#h-8' : 'https://talk.did.id/t/bit-alias-comes/401#reasons-for-failure-8'"
       >
-        {{ $tt('Learn more') }}
+        {{ $tt('For more details and solutions') }}
       </a>
     </Dialog>
     <TxPendingDialog v-model="trxPendingDialogShowing" />

@@ -8,6 +8,27 @@
     >
       <ul>
         <li
+          class="manage-bit-account__item manage-bit-account__manage"
+          @click="manageData"
+        >
+          <span class="manage-bit-account__info">
+            <span>
+              <Iconfont
+                class="manage-bit-account__info__icon"
+                name="manage"
+                size="32"
+              />
+            </span>
+            <span>
+              <h2 class="manage-bit-account__title">{{ $tt('Manage') }}</h2>
+              <span class="manage-bit-account__info__desc">{{ $tt('Manage data, mint sub-accounts, renew, change permissions...') }}</span>
+            </span>
+          </span>
+          <span>
+            <Iconfont name="arrow-right" color="#121314" size="18" />
+          </span>
+        </li>
+        <li
           class="manage-bit-account__item manage-bit-account__convert-to-eth"
           @click="convertToEth"
         >
@@ -24,20 +45,19 @@
           </span>
         </li>
         <li
-          class="manage-bit-account__item manage-bit-account__manage"
+          class="manage-bit-account__item manage-bit-account__renew"
           @click="manageData"
         >
           <span class="manage-bit-account__info">
             <span>
               <Iconfont
                 class="manage-bit-account__info__icon"
-                name="manage"
+                name="renew"
                 size="32"
               />
             </span>
             <span>
-              <h2 class="manage-bit-account__title">{{ $tt('Manage') }}</h2>
-              <span class="manage-bit-account__info__desc">{{ $tt('Manage data, mint sub-accounts, renew, change permissions...') }}</span>
+              <h2 class="manage-bit-account__title">{{ $tt('Renew') }}</h2>
             </span>
           </span>
           <span>
@@ -158,7 +178,9 @@ export default Vue.extend({
       this.onClose(false)
     },
     manageData () {
-      const link = `${homepage}/${this.accountInfo.account}`
+      const address = this.connectedAccount?.address
+      const chainName = this.connectedAccount?.chain?.name
+      const link = `${homepage}/${this.accountInfo.account}?originAddress=${address}&originChainName=${chainName}`
       if (this.isMobile) {
         window.location.href = link
       }
@@ -202,6 +224,15 @@ export default Vue.extend({
 
   &:hover {
     background: rgba(205, 249, 204, 0.5);
+  }
+}
+
+.manage-bit-account__renew {
+  background: #CCEAF9;
+  border: 1px solid rgba(98, 126, 234, 0.1);
+
+  &:hover {
+    background: rgba(204, 234, 249, 0.5);
   }
 }
 

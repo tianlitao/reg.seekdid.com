@@ -9,7 +9,7 @@ import { SignTypedDataVersion, TypedMessage, TypedDataUtils } from '@metamask/et
 import Das from 'das-sdk'
 // @ts-ignore
 import blake2b from 'blake2b'
-import { ACCOUNT_SUFFIX, CHAR_TYPE, TIME_FORMAT, TOKEN_DECIMAL_PLACES } from '~/constant'
+import { ACCOUNT_SUFFIX, CHAR_TYPE, DigitalEmojiMap, TIME_FORMAT, TOKEN_DECIMAL_PLACES } from '~/constant'
 import { CKB } from '~/constant/chain'
 // @ts-ignore
 import emojiList from '~/modules/char_set/emoji_list.json'
@@ -127,7 +127,7 @@ export function copyText (text: string, el?: Element): Promise<void> {
 export function collapseString (inputString = '', head = 4, tail = 4, tokenStr = '...'): string {
   const splitter = new GraphemeSplitter()
   const split = splitter.splitGraphemes(inputString)
-  if (inputString.length > 12) {
+  if (split.length > 12) {
     return split.slice(0, head).join('') + tokenStr + split.slice(split.length - tail, split.length).join('')
   }
   else {
@@ -165,7 +165,19 @@ export interface ICharInfo {
 
 export function accountChars (account: string): ICharInfo[] {
   const splitter = new GraphemeSplitter()
-  const split = splitter.splitGraphemes(account)
+  let split = splitter.splitGraphemes(account)
+
+  split = split.map((item) => {
+    // @ts-ignore
+    if (DigitalEmojiMap[item]) {
+      // @ts-ignore
+      return DigitalEmojiMap[item]
+    }
+    else {
+      return item
+    }
+  })
+
   const chars: ICharInfo[] = split.map((char) => {
     let _charType: number = CHAR_TYPE.unknown
     if (emojiList.includes(char)) {
@@ -201,7 +213,18 @@ export function accountChars (account: string): ICharInfo[] {
 
 export function splitAccount (account: string, addSuffix = false): ICharInfo[] {
   const splitter = new GraphemeSplitter()
-  const split = splitter.splitGraphemes(account)
+  let split = splitter.splitGraphemes(account)
+
+  split = split.map((item) => {
+    // @ts-ignore
+    if (DigitalEmojiMap[item]) {
+      // @ts-ignore
+      return DigitalEmojiMap[item]
+    }
+    else {
+      return item
+    }
+  })
 
   const englishSplitArr: ICharInfo[] = split.map((char: string) => {
     let _charType: number = CHAR_TYPE.unknown
@@ -594,4 +617,20 @@ export function nftTokenIdHex (account: string): string {
   const hashBuffer = hasher.digest('binary') as Uint8Array
   const first20Bytes = Buffer.from(hashBuffer.slice(0, 20))
   return '0x' + first20Bytes.toString('hex')
+}
+
+export function digitalEmojiHandle (account: string): string {
+  const splitter = new GraphemeSplitter()
+  const split = splitter.splitGraphemes(account)
+  const list = split.map((item) => {
+    // @ts-ignore
+    if (DigitalEmojiMap[item]) {
+      // @ts-ignore
+      return DigitalEmojiMap[item]
+    }
+    else {
+      return item
+    }
+  })
+  return list.join('')
 }

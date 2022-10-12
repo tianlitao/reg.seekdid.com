@@ -63,7 +63,8 @@ export default Vue.extend({
         },
         {
           text: this.$tt('Balance'),
-          value: ME_TABS.balance
+          value: ME_TABS.balance,
+          outlink: true
         }
       ],
       currentTab: this.$route.query.tab || ME_TABS.myDAS
@@ -86,7 +87,8 @@ export default Vue.extend({
       }
     }
   },
-  mounted () {
+  async mounted () {
+    await this.$walletSdk.onConnect(true)
     this.$store.dispatch(COMMON_KEYS.fetchConfig)
     this.$store.dispatch(REVERSE_KEYS.fetchDasReverse)
   }

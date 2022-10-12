@@ -34,7 +34,7 @@ import Vue from 'vue'
 import debounce from 'lodash.debounce'
 // @ts-ignore
 import vClickOutside from 'v-click-outside'
-import { toDottedStyle } from '~/modules/tools'
+import { digitalEmojiHandle, toDottedStyle } from '~/modules/tools'
 import Iconfont from '~/components/icon/Iconfont.vue'
 import { ACCOUNT_SUFFIX, DEBOUNCE_WAIT_TIME } from '~/constant'
 
@@ -64,7 +64,11 @@ export default Vue.extend({
         ;(this.$refs.input as HTMLInputElement).focus()
       })
     },
-    onSearch: debounce(function (this: any) {
+    onSearch () {
+      this.query = digitalEmojiHandle(this.query)
+      this.onDebounceSearch()
+    },
+    onDebounceSearch: debounce(function (this: any) {
       let account = this.query
       account = account.replace(/\s+/g, '')
       account = account.toLowerCase()

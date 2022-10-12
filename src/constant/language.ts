@@ -1,5 +1,6 @@
 export interface ILanguageOption {
   text: string,
+  symbol: string,
   value: string,
   matcher: RegExp,
 }
@@ -10,11 +11,13 @@ export const LANGUAGE = {
 }
 
 export const LanguageOptions: ILanguageOption[] = [{
-  text: 'EN',
+  text: 'English',
+  symbol: 'EN',
   value: LANGUAGE.en,
   matcher: /en/i
 }, {
-  text: 'CN',
+  text: '简体中文',
+  symbol: 'CN',
   value: LANGUAGE.zhCN,
   matcher: /(^zh$|cn|hans)/i
 }]

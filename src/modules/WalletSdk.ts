@@ -47,7 +47,8 @@ export default class WalletSdk {
           $alert: this.context.app.$alert,
           $toast: this.context.app.$toast,
           $store: this.context.app.store,
-          $gtag: this.context.app.$gtag
+          $gtag: this.context.app.$gtag,
+          mintNft: false
         }
       })
 
@@ -147,7 +148,7 @@ export default class WalletSdk {
   async onConnect (ignoreNoLoginPage = false) {
     const { $tt, $alert, store } = this.context.app
     // no login page
-    const noLoginPage = ['index', 'apps', 'explorer', 'explorer-account-account', 'debug', 'me-award-ranking', 'me-invitation-link-account']
+    const noLoginPage = ['index', 'apps', 'explorer', 'explorer-account-account', 'debug', 'me-award-ranking', 'me-invitation-link-account', 'account-register-account', 'me']
     if (!ignoreNoLoginPage && noLoginPage.includes(this.context.route.name as string)) {
       this.walletsConnectResetCurrentLogin()
       return
@@ -349,14 +350,16 @@ export default class WalletSdk {
     }
   }
 
-  walletsConnect () {
+  walletsConnect (mintNft = false) {
     if (this.walletsConnectInstance) {
+      ;(this.walletsConnectInstance as any).mintNft = mintNft
       ;(this.walletsConnectInstance as any).showing = true
     }
   }
 
   closeWalletsConnect () {
     if (this.walletsConnectInstance) {
+      ;(this.walletsConnectInstance as any).mintNft = false
       ;(this.walletsConnectInstance as any).showing = false
     }
   }
