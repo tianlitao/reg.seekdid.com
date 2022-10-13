@@ -64,44 +64,6 @@
           </span>
         </li>
       </ul>
-      <div
-        v-if="!mintNft"
-        class="wallets-connect__select-wallet-list__torus-label"
-      >
-        {{ $tt('Connect with social.') }}
-        <a
-          class="wallets-connect__select-wallet-list__torus-faq"
-          :href="i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/twitter-bit/449' : 'https://talk.did.id/t/how-to-register-a-bit-account-using-my-email-twitter-etc/448'"
-          target="_blank"
-        >{{ $tt('Guide') }}</a>
-      </div>
-      <div
-        v-if="!mintNft"
-        class="wallets-connect__select-wallet-list__torus-container"
-      >
-        <span
-          v-for="(item, index) in torusList"
-          :key="index"
-          class="wallets-connect__select-wallet-list__torus-item"
-          @click="onConnectWithTorus(item)"
-        >
-          <span
-            v-if="item === currentLogin"
-            class="wallets-connect__select-wallet-list__loading-icon wallets-connect__select-wallet-list__torus-item__loading"
-          >
-            <Iconfont
-              name="loading"
-              color="#A0A1AB"
-              size="28"
-            />
-          </span>
-          <Iconfont
-            class="wallets-connect__select-wallet-list__torus-item__logo"
-            :name="item"
-            size="28"
-          />
-        </span>
-      </div>
     </Dialog>
     <Dialog
       :showing="hardwareWalletTipsShowing"

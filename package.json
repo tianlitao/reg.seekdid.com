@@ -1,5 +1,5 @@
 {
-  "name": "app.did.id",
+  "name": "reg.seekdid.com",
   "version": "1.1.4",
   "scripts": {
     "predev": "npm run i18n",

@@ -29,22 +29,6 @@
           </span>
         </li>
         <li
-          class="manage-bit-account__item manage-bit-account__convert-to-eth"
-          @click="convertToEth"
-        >
-          <span class="manage-bit-account__info">
-            <Iconfont
-              class="manage-bit-account__info__icon"
-              name="ethereum"
-              size="32"
-            />
-            <h2 class="manage-bit-account__title">{{ $tt('Convert it to NFT on Ethereum') }}</h2>
-          </span>
-          <span :class="{ 'manage-bit-account__info__icon__disabled': isSubAccount || !canManage }">
-            <Iconfont name="arrow-right" color="#121314" size="18" />
-          </span>
-        </li>
-        <li
           class="manage-bit-account__item manage-bit-account__renew"
           @click="manageData"
         >

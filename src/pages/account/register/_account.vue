@@ -406,6 +406,8 @@ export default Vue.extend({
         this.inviter = this.inviter.replace(/\.bit$/, '')
       }
       if (this.orderInfo.channel_account && !this.me.channel) {
+        console.log(this.orderInfo.channel_account);
+        console.log(this.me.channel);
         this.$store.commit(ME_KEYS.setChannel, this.orderInfo.channel_account)
       }
       const _token = this.paymentTokens.find((token: IToken) => {
@@ -525,8 +527,8 @@ export default Vue.extend({
           pay_type: '',
           register_years: this.registrationPeriod,
           coin_type: this.connectedAccount.chain.coinType,
-          inviter_account: this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : '',
-          channel_account: this.me.channel,
+          inviter_account: this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : 'seekdid.bit',
+          channel_account: 'seekdid.bit',//this.me.channel,
           cross_coin_type: this.mintNft ? CoinType.eth : ''
         })
       }
@@ -694,8 +696,8 @@ export default Vue.extend({
             pay_type: '',
             register_years: this.registrationPeriod,
             coin_type: this.connectedAccount.chain.coinType,
-            inviter_account: this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : '',
-            channel_account: this.me.channel,
+            inviter_account: this.inviter ? toDottedStyle(this.inviter + ACCOUNT_SUFFIX) : 'seekdid.bit',
+            channel_account: 'seekdid.bit',//this.me.channel,
             cross_coin_type: this.mintNft ? CoinType.eth : ''
           })
 

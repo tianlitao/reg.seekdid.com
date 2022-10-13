@@ -7,6 +7,6 @@ module.exports = {
   hostname: '127.0.0.1:21000',
   host: '0.0.0.0',
   port: process.env.PORT || 21000,
-  googleAnalyticsId: '',
+  googleAnalyticsId: 'G-GD98YHN2QT',
   sentryDsn: ''
 }

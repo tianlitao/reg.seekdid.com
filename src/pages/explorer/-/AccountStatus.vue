@@ -29,6 +29,7 @@
         v-if="account.status === ACCOUNT_STATUS.registerable || notRegistering"
         class="account-status__button"
         block
+        disabled
         shape="round"
         status="primary"
         @click="registerAndMintNft(account)"

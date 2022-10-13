@@ -33,16 +33,18 @@
         class="eth-nft-list__no-account__tip"
         icon="📂"
         iconSize="55"
-        :tip="$tt('You do not have .bit NFTs on Ethereum ')"
+        
         tipFontSize="14"
       />
+      
       <a
         class="eth-nft-list__no-account__tip__manual__link"
-        :href="$i18n.locale === LANGUAGE.zhCN ? 'https://talk.did.id/t/bit-ethereum-nft/482' : 'https://talk.did.id/t/convert-your-bit-to-nft-on-ethereum-now/481'"
+        href='https://app.did.id/me?subTab=nfts'
         target="_blank"
       >
-        {{ $tt('How to mint .bit NFTs on Ethereum?') }}
+        {{ $tt('查看NFT提醒') }}
       </a>
+
     </div>
     <ul class="eth-nft-list__account-list">
       <li

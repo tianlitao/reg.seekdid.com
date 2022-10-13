@@ -187,13 +187,7 @@
             backgroundColor="#CDF9CC"
             @click.native="goManage"
           />
-          <RegisterGuideCard
-            :title="$tt('Convert it to NFT on Ethereum')"
-            :description="$tt('Trade on Ethereum NFT marketplaces.')"
-            iconName="ethereum"
-            backgroundColor="#DFE5FB"
-            @click.native="goMintNFT"
-          />
+          
           <RegisterGuideCard
             :title="$tt('Set dotbit alias')"
             :description="$tt('Set dotbit name as your unified username in different DApps.')"

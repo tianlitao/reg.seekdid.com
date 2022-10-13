@@ -75,6 +75,17 @@
       </div>
     </div>
     <div
+      class="explorer__goto-seekdid-tips"
+    >
+      {{$tt('引导去查靓号')}}
+      <a
+        target="_blank" 
+        href="https://seekdid.com"
+      >
+        <img class="explorer__seekdid-logo" src="/images/explorer/seekdid-logo.svg" alt="seekdid-logo"/>
+      </a>
+    </div>
+    <div
       class="explorer__open-registration-rules"
     >
       <div class="explorer__open-registration-rules__title">
@@ -473,6 +484,13 @@ export default Vue.extend({
   margin-top: 24px;
 }
 
+
+.explorer__seekdid-logo
+{
+  margin-left: 12px;
+  height: 16px;
+}
+
 .explorer__full-name {
   margin: 10px 0 44px 0;
   color: $primary-font-color;
@@ -548,6 +566,21 @@ export default Vue.extend({
   font-size: $font-size-14;
   font-weight: 400;
   color: $primary-font-color;
+  line-height: 17px;
+  background: rgba(217, 248, 228, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(143, 225, 166, 0.2);
+}
+
+.explorer__goto-seekdid-tips {
+  margin-top: 12px;
+  padding: 16px;
+  text-align: left;
+  font-size: $font-size-14;
+  font-weight: 400;
+  color: $primary-font-color;
+  display: flex;
+  align-items: center;
   line-height: 17px;
   background: rgba(217, 248, 228, 0.5);
   border-radius: 12px;

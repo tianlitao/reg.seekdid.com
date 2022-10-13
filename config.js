@@ -1,15 +1,15 @@
 const packageJson = require('./package.json')
 const isProdData = window.location.host === '127.0.0.1:21000'
-const hostname = isProdData ? '127.0.0.1:21000' : '127.0.0.1:21000'
+const hostname = isProdData ? 'app.seekdid.com' : '127.0.0.1:21000'
 
 module.exports = {
   isProdData,
   appNmae: packageJson.name,
   hostname,
   domain: `https://${hostname}/`,
-  servicesApi: isProdData ? '' : '',
+  servicesApi: isProdData ? 'https://register-api.seekdid.com/v1' : 'https://register-api.seekdid.com/v1',
   crossEthApi: isProdData ? '' : '',
-  identiconServe: '',
+  identiconServe: 'https://display.did.id/identicon/',
   didtop: isProdData ? 'https://did.top' : 'https://test.did.top',
   homepage: isProdData ? 'https://data.did.id' : 'https://testdata.did.id',
   dasBalance: isProdData ? 'https://balance.did.id' : 'https://testbalance.did.id',
