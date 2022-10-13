@@ -2,6 +2,7 @@ const packageJson = require('./package.json')
 const isProdData = window.location.host === '127.0.0.1:21000'
 const hostname = isProdData ? 'app.seekdid.com' : '127.0.0.1:21000'
 
+
 module.exports = {
   isProdData,
   appNmae: packageJson.name,
