@@ -847,9 +847,14 @@ export default Vue.extend({
       }
     },
     getInviter () {
+      console.log('get Inviter' + this.me.inviter)
       const _inviter = this.me.inviter
       if (_inviter) {
         this.inviter = toHashedStyle(_inviter).replace(/\.bit$/, '')
+      }
+      else {
+        this.inviter = 'seekdid';
+        console.log('get Inviter' + this.inviter)
       }
     },
     async checkInviter () {
